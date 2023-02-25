@@ -15,5 +15,8 @@ namespace dae
 		Minigin(Minigin&& other) = delete;
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
+
+	private:
+		static constexpr float MsPerFrame = 16.6f;
 	};
 }
