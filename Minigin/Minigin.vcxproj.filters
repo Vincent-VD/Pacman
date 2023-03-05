@@ -74,6 +74,9 @@
     <ClInclude Include="FPSComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="CircularMoveComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="ResourceManager.cpp">
@@ -122,6 +125,9 @@
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="FPSComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularMoveComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>

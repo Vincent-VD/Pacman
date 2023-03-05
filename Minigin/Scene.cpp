@@ -26,10 +26,26 @@ void Scene::RemoveAll()
 
 void Scene::Update()
 {
-	for(auto& object : m_objects)
+	for(size_t iter = 0; iter < m_objects.size(); ++iter)
+	{
+		const auto& object{ m_objects[iter] };
+		object->Update();
+		if(object->IsMarkedForDeletion())
+		{
+			m_ItersToRemove.emplace_back(iter);
+		}
+	}
+	for (auto iter : m_ItersToRemove)
+	{
+		m_objects[iter] = nullptr;
+		//delete m_objects[iter].get();
+	}
+	m_ItersToRemove.clear();
+
+	/*for(auto& object : m_objects)
 	{
 		object->Update();
-	}
+	}*/
 }
 
 void Scene::FixedUpdate()

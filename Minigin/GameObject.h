@@ -1,11 +1,12 @@
 #pragma once
+#include "MiniginPCH.h"
 #include <memory>
 #include <vector>
-
+#include "TransformComponent.h"
 
 namespace dae
 {
-	class TransformComponent;
+	//class TransformComponent;
 	class RootComponent;
 	class Texture2D;
 
@@ -19,6 +20,9 @@ namespace dae
 		GameObject(GameObject&& other) = delete;
 		GameObject& operator=(const GameObject& other) = delete;
 		GameObject& operator=(GameObject&& other) = delete;
+
+		void Destroy() { m_MarkedForDeletion = true; }
+		const bool IsMarkedForDeletion() const { return m_MarkedForDeletion; }
 
 		virtual void Update();
 		virtual void FixedUpdate();
@@ -36,22 +40,23 @@ namespace dae
 		template<typename Component>
 		void RemoveComponent(std::shared_ptr<Component> pComponent);
 
-		/*void SetParent(GameObject* parent);
+		void SetParent(GameObject* parent, bool keepWorldTransform);
 		GameObject* GetParent() const;
 
-		size_t GetChildCount() const;
-		GameObject* GetChildAt(int index) const;
-
-		void RemoveChild(GameObject* obj);
-		void AddChild(GameObject* obj);*/
+		/*size_t GetChildCount() const;
+		GameObject* GetChildAt(int index) const;*/
 
 	private:
+		bool m_MarkedForDeletion{ false };
 		std::string m_Tag;
 
 		TransformComponent* m_pTransform{};
 		std::vector<std::shared_ptr<RootComponent>> m_pComponents;
-		//std::vector<GameObject*> m_pChildren;
-		//GameObject* m_pParent;
+		std::vector<GameObject*> m_pChildren;
+		GameObject* m_pParent{ nullptr };
+
+		void RemoveChild(GameObject* obj);
+		void AddChild(GameObject* obj);
 	};
 
 	template<typename Component>
@@ -69,7 +74,7 @@ namespace dae
 
 		std::shared_ptr<Component> componentToGet = nullptr;
 
-		for (auto currentComponent : m_pComponents)
+		for (auto& currentComponent : m_pComponents)
 		{
 			std::shared_ptr<Component> curr{ std::dynamic_pointer_cast<Component>(currentComponent) };
 			if (curr)

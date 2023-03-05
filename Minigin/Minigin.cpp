@@ -95,15 +95,12 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	while (doContinue)
 	{
 		timer.Update();
-		//const auto currentTime = std::chrono::high_resolution_clock::now();
-		//const auto deltaTime = std::chrono::duration<float>(currentTime - lastTime).count();
-		//lastTime = currentTime;
 		lag += timer.GetDeltaTime();
 
 		doContinue = input.ProcessInput();
 		while(lag >= Minigin::MsPerFrame)
 		{
-			sceneManager.FixedUpdate();
+			sceneManager.FixedUpdate(); //Don't use the deltaTime in this function, use MsPerFrame instead
 			lag -= Minigin::MsPerFrame;
 		}
 		sceneManager.Update();

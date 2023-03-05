@@ -28,6 +28,8 @@ namespace dae
 		std::string m_name;
 		std::vector<std::shared_ptr<GameObject>> m_objects{};
 
+		std::vector<size_t> m_ItersToRemove{};
+
 		static unsigned int m_idCounter; 
 	};
 

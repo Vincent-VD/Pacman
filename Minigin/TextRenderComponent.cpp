@@ -5,6 +5,7 @@
 #include "Renderer.h"
 #include "Font.h"
 #include "Texture2D.h"
+#include "GameObject.h"
 
 dae::TextRenderComponent::TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font)
 	: RootComponent(pOwner)
@@ -39,7 +40,7 @@ void dae::TextRenderComponent::Render() const
 {
 	if (m_textTexture != nullptr)
 	{
-		const auto& pos = m_pGameObject->GetTransform()->GetPosition();
+		const auto& pos = GetOwner()->GetTransform()->GetPosition();
 		Renderer::GetInstance().RenderTexture(*m_textTexture, pos.x, pos.y);
 	}
 }

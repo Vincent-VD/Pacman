@@ -1,6 +1,6 @@
 #include "MiniginPCH.h"
 #include "FPSComponent.h"
-
+#include "GameObject.h"
 #include "TextRenderComponent.h"
 #include "Time.h"
 
@@ -20,7 +20,7 @@ glm::uint32_t FPSComponent::GetFPS() const
 void FPSComponent::Update()
 {
 	if (!m_pText)
-		m_pText = m_pGameObject->GetComponent<TextRenderComponent>();
+		m_pText = GetOwner()->GetComponent<TextRenderComponent>();
 
 	if(m_pText == nullptr)
 	{
@@ -38,7 +38,6 @@ void FPSComponent::Update()
 			m_pText->SetText("FPS: " + std::to_string(m_FPS));
 		}
 		m_UpdateTimer = 0.f;
-		std::cout << m_FPS << std::endl;
 	}
 }
 

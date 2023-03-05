@@ -6,12 +6,12 @@
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "RootComponent.h"
-#include "TransformComponent.h"
+//#include "TransformComponent.h"
 
 
 dae::GameObject::GameObject(std::string tag)
 	: m_Tag{tag}
-	, m_pTransform{new TransformComponent{}}
+	, m_pTransform{ new TransformComponent{this} }
 {
 }
 
@@ -53,6 +53,44 @@ void dae::GameObject::Render() const
 dae::TransformComponent* dae::GameObject::GetTransform() const
 {
 	return m_pTransform;
+}
+
+void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
+{
+	if(parent == nullptr)
+	{
+		m_pTransform->SetPosition(m_pTransform->GetPosition());
+	}
+	else if(keepWorldTransform)
+	{
+		m_pTransform->SetPosition(m_pTransform->GetPosition() - m_pParent->GetTransform()->GetPosition());
+	}
+	if(m_pParent != nullptr)
+	{
+		m_pParent->RemoveChild(this);
+	}
+	m_pParent = parent;
+	if (m_pParent)
+	{
+		m_pParent->AddChild(this);
+	}
+	m_pTransform->SetDirty();
+	//todo: update pos, rot, scale
+}
+
+dae::GameObject* dae::GameObject::GetParent() const
+{
+	return m_pParent;
+}
+
+void dae::GameObject::RemoveChild(GameObject* obj)
+{
+	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), obj));
+}
+
+void dae::GameObject::AddChild(GameObject* obj)
+{
+	m_pChildren.emplace_back(obj);
 }
 
 //void dae::GameObject::SetTexture(const std::string& filename)

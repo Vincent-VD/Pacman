@@ -4,7 +4,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "GameObject.h"
-#include "TransformComponent.h"
+//#include "TransformComponent.h"
 
 using namespace dae;
 
@@ -33,7 +33,7 @@ void TextureComponent2D::Update()
 {
 	if (m_IsDynamic)
 	{
-		const glm::vec3 pos{ m_pGameObject->GetTransform()->GetPosition() };
+		const glm::vec3 pos{ GetOwner()->GetTransform()->GetPosition() };
 
 		m_Rect.left = pos.x;
 		m_Rect.bottom = pos.y;

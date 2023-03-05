@@ -11,5 +11,7 @@
 
 #pragma warning(push, 0)
 #include <glm/glm.hpp>
+#include "glm/gtc/matrix_transform.hpp"
+#include <glm/gtx/quaternion.hpp>
 #include <SDL.h>
 #pragma warning (pop)

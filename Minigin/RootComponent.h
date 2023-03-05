@@ -20,9 +20,10 @@ namespace dae
 		virtual void FixedUpdate() = 0;
 		virtual void Render() const {}
 
-		const GameObject* GetOwner() const { return m_pGameObject; }
-
 	protected:
+		GameObject* GetOwner() const { return m_pGameObject; }
+
+	private:
 		//todo: when changing this to shared_ptr, everything leaks. why?
 		GameObject* m_pGameObject;
 	};
