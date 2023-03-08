@@ -14,7 +14,7 @@ namespace dae
 	{
 	public:
 		GameObject(std::string tag);
-		virtual ~GameObject();
+		virtual ~GameObject() = default;
 
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -23,6 +23,8 @@ namespace dae
 
 		void Destroy() { m_MarkedForDeletion = true; }
 		const bool IsMarkedForDeletion() const { return m_MarkedForDeletion; }
+
+		std::string GetTag() { return m_Tag; }
 
 		virtual void Update();
 		virtual void FixedUpdate();
@@ -50,9 +52,9 @@ namespace dae
 		bool m_MarkedForDeletion{ false };
 		std::string m_Tag;
 
-		TransformComponent* m_pTransform{};
+		std::unique_ptr<TransformComponent> m_pTransform{};
 		std::vector<std::shared_ptr<RootComponent>> m_pComponents;
-		std::vector<GameObject*> m_pChildren;
+		std::vector<std::unique_ptr<GameObject>> m_pChildren;
 		GameObject* m_pParent{ nullptr };
 
 		void RemoveChild(GameObject* obj);

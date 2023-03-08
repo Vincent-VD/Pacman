@@ -16,10 +16,10 @@ namespace dae
 		TransformComponent& operator=(const TransformComponent& other) = delete;
 		TransformComponent& operator=(TransformComponent&& other) noexcept = delete;
 
-        const glm::vec3& GetPosition() const { return m_Position; }
-        const glm::vec3& GetRotation() const { return m_Rotation; }
-        const glm::vec3& GetScale() const { return m_Scale; }
-        const glm::mat4& GetLocalTransform();
+        const glm::vec3 GetLocalPosition() const; /*{ return glm::vec3{ m_LocalTransform[3][0], m_LocalTransform[3][1], m_LocalTransform[3][2] }; }*/
+        const glm::vec3 GetWorldPosition(); /*{ return glm::vec3{ m_WorldTransform[3][0], m_WorldTransform[3][1], m_WorldTransform[3][2] }; }*/
+        const glm::vec3 GetLocalRotation() const; /*{ return m_Rotation; }*/
+        const glm::vec3 GetLocalScale() const; /*{ return m_Scale; }*/
         const glm::mat4& GetWorldTransform();
 
         void SetPosition(float x, float y, float z);
@@ -38,6 +38,8 @@ namespace dae
         bool m_IsWorldDirty{ true };
 
 		GameObject* m_pOwner;
+
+        const glm::mat4& GetLocalTransform();
 		
 		void UpdateTransforms();
 	};

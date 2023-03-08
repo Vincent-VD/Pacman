@@ -19,17 +19,12 @@ void CircularMoveComponent::Update()
 	const float elapsedTime{ Time::GetInstance().GetDeltaTime() };
 
 	m_CurrAngle += m_MoveSpeed * elapsedTime;
-
-	if(GetOwner()->GetParent())
-	{
-		auto centerTransform = GetOwner()->GetParent()->GetTransform()->GetWorldTransform();
-		m_Center = glm::vec3{ centerTransform[3][0], centerTransform[3][1], centerTransform[3][2] };
-	}
+	m_CurrAngle = fmod(m_CurrAngle, 360.f);
 
 	glm::vec3 currPos{};
 
-	currPos.x = m_Center.x + cos(m_CurrAngle) * m_Radius;
-	currPos.y = m_Center.y + sin(m_CurrAngle) * m_Radius;
+	currPos.x = cos(m_CurrAngle) * m_Radius;
+	currPos.y = sin(m_CurrAngle) * m_Radius;
 
 	GetOwner()->GetTransform()->SetPosition(currPos);
 

@@ -11,19 +11,8 @@
 
 dae::GameObject::GameObject(std::string tag)
 	: m_Tag{tag}
-	, m_pTransform{ new TransformComponent{this} }
+	, m_pTransform{ std::make_unique<TransformComponent>(this) }
 {
-}
-
-dae::GameObject::~GameObject()
-{
-	//Remove all components when object is destroyed
-	/*for (std::shared_ptr<RootComponent> pComponent : m_pComponents)
-	{
-		delete pComponent;
-		pComponent = nullptr;
-	}*/
-	delete m_pTransform;
 }
 
 void dae::GameObject::Update()
@@ -31,6 +20,10 @@ void dae::GameObject::Update()
 	for (auto& pComponent : m_pComponents)
 	{
 		pComponent->Update();
+	}
+	for(auto& pChild : m_pChildren)
+	{
+		pChild->Update();
 	}
 }
 
@@ -52,18 +45,18 @@ void dae::GameObject::Render() const
 
 dae::TransformComponent* dae::GameObject::GetTransform() const
 {
-	return m_pTransform;
+	return m_pTransform.get();
 }
 
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
 {
 	if(parent == nullptr)
 	{
-		m_pTransform->SetPosition(m_pTransform->GetPosition());
+		m_pTransform->SetPosition(m_pTransform->GetWorldPosition());
 	}
 	else if(keepWorldTransform)
 	{
-		m_pTransform->SetPosition(m_pTransform->GetPosition() - m_pParent->GetTransform()->GetPosition());
+		m_pTransform->SetPosition(m_pTransform->GetWorldPosition() - m_pParent->GetTransform()->GetLocalPosition());
 	}
 	if(m_pParent != nullptr)
 	{
@@ -75,7 +68,6 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
 		m_pParent->AddChild(this);
 	}
 	m_pTransform->SetDirty();
-	//todo: update pos, rot, scale
 }
 
 dae::GameObject* dae::GameObject::GetParent() const
@@ -83,9 +75,10 @@ dae::GameObject* dae::GameObject::GetParent() const
 	return m_pParent;
 }
 
-void dae::GameObject::RemoveChild(GameObject* obj)
+void dae::GameObject::RemoveChild([[maybe_unused]]GameObject* obj)
 {
-	m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), obj));
+	//m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), obj));
+	//todo: what happens to child when gameobject is removed?
 }
 
 void dae::GameObject::AddChild(GameObject* obj)
