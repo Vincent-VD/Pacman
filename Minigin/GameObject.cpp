@@ -58,14 +58,15 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
 	{
 		m_pTransform->SetPosition(m_pTransform->GetWorldPosition() - m_pParent->GetTransform()->GetLocalPosition());
 	}
+	auto curr{ std::unique_ptr<GameObject>(this) };
 	if(m_pParent != nullptr)
 	{
-		m_pParent->RemoveChild(this);
+		m_pParent->RemoveChild(curr);
 	}
 	m_pParent = parent;
 	if (m_pParent)
 	{
-		m_pParent->AddChild(this);
+		m_pParent->AddChild(curr);
 	}
 	m_pTransform->SetDirty();
 }
@@ -75,15 +76,21 @@ dae::GameObject* dae::GameObject::GetParent() const
 	return m_pParent;
 }
 
-void dae::GameObject::RemoveChild([[maybe_unused]]GameObject* obj)
+void dae::GameObject::RemoveChild(std::unique_ptr<GameObject>& obj)
 {
 	//m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), obj));
 	//todo: what happens to child when gameobject is removed?
+	for (auto it = m_pChildren.begin(); it != m_pChildren.end(); ++it) {
+		if (it->get() == obj.get()) {
+			m_pChildren.erase(it);
+			break;
+		}
+	}
 }
 
-void dae::GameObject::AddChild(GameObject* obj)
+void dae::GameObject::AddChild(std::unique_ptr<GameObject>& obj)
 {
-	m_pChildren.emplace_back(obj);
+	m_pChildren.emplace_back(std::move(obj));
 }
 
 //void dae::GameObject::SetTexture(const std::string& filename)

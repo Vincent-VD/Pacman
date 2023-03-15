@@ -12,6 +12,7 @@
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "Time.h"
+#include "UIManager.h"
 
 SDL_Window* g_window{};
 
@@ -105,6 +106,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 		sceneManager.Update();
 		renderer.Render();
+
 
 		const auto sleepTime = timer.GetSleepTime();
 		std::this_thread::sleep_for(sleepTime);

@@ -30,7 +30,7 @@ void dae::TransformComponent::SetDirty()
 	m_IsWorldDirty = true;
 }
 
-const glm::vec3 dae::TransformComponent::GetLocalPosition() const
+const glm::vec3 dae::TransformComponent::GetLocalPosition() const 
 {
 	return m_Position;
 }

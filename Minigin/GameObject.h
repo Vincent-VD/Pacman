@@ -14,7 +14,10 @@ namespace dae
 	{
 	public:
 		GameObject(std::string tag);
-		virtual ~GameObject() = default;
+		~GameObject()
+		{
+			std::cout << m_Tag << std::endl;
+		}
 
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;
@@ -26,10 +29,10 @@ namespace dae
 
 		std::string GetTag() { return m_Tag; }
 
-		virtual void Update();
-		virtual void FixedUpdate();
-		virtual void LateUpdate(){}
-		virtual void Render() const;
+		void Update();
+		void FixedUpdate();
+		void LateUpdate(){}
+		void Render() const;
 
 		//Getters
 		TransformComponent* GetTransform() const;
@@ -57,8 +60,8 @@ namespace dae
 		std::vector<std::unique_ptr<GameObject>> m_pChildren;
 		GameObject* m_pParent{ nullptr };
 
-		void RemoveChild(GameObject* obj);
-		void AddChild(GameObject* obj);
+		void RemoveChild(std::unique_ptr<GameObject>& obj);
+		void AddChild(std::unique_ptr<GameObject>& obj);
 	};
 
 	template<typename Component>
