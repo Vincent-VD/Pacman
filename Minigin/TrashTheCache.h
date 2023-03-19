@@ -41,7 +41,7 @@ namespace TrashTheCache
 			for (int sample = 0; sample < iterations; ++sample)
 			{
 				auto start = std::chrono::high_resolution_clock::now();
-				for (int iter = 0; iter < array.size(); iter += stepsize)
+				for (size_t iter = 0; iter < array.size(); iter += stepsize)
 				{
 					array[iter]*= 2;
 				}
@@ -50,7 +50,7 @@ namespace TrashTheCache
 				avgTime += elapsedTime;
 				avgTime /= static_cast<long long>(2.f);
 			}
-			res[entry] = static_cast<float>(avgTime);
+			res[11 - entry] = static_cast<float>(avgTime);
 			++entry;
 		}
 		return res;
@@ -68,7 +68,7 @@ namespace TrashTheCache
 			for (int sample = 0; sample < iterations; ++sample)
 			{
 				auto start = std::chrono::high_resolution_clock::now();
-				for (int iter = 0; iter < array.size(); iter += stepsize)
+				for (size_t iter = 0; iter < array.size(); iter += stepsize)
 				{
 					array[iter].id *= 2;
 				}
@@ -77,7 +77,7 @@ namespace TrashTheCache
 				avgTime += elapsedTime;
 				avgTime /= static_cast<long long>(2.f);
 			}
-			res[entry] = static_cast<float>(avgTime);
+			res[11 - entry] = static_cast<float>(avgTime);
 			++entry;
 		}
 		return res;
