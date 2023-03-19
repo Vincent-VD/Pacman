@@ -28,6 +28,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{8d5e6132-6818-4d80-aea5-26629b1fbc4e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UIWindows\TrashTheCache">
+      <UniqueIdentifier>{cce53358-1403-4b7e-885f-f6cd102f6d16}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -117,8 +120,14 @@
     <ClInclude Include="Font.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="Exercise1.h">
+      <Filter>UIWindows\TrashTheCache</Filter>
+    </ClInclude>
     <ClInclude Include="Exercise2.h">
-      <Filter>UIWindows</Filter>
+      <Filter>UIWindows\TrashTheCache</Filter>
+    </ClInclude>
+    <ClInclude Include="TrashTheCache.h">
+      <Filter>UIWindows\TrashTheCache</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -203,8 +212,14 @@
     <ClCompile Include="Font.cpp">
       <Filter>Core</Filter>
     </ClCompile>
+    <ClCompile Include="Exercise1.cpp">
+      <Filter>UIWindows\TrashTheCache</Filter>
+    </ClCompile>
     <ClCompile Include="Exercise2.cpp">
-      <Filter>UIWindows</Filter>
+      <Filter>UIWindows\TrashTheCache</Filter>
+    </ClCompile>
+    <ClCompile Include="TrashTheCache.cpp">
+      <Filter>UIWindows\TrashTheCache</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

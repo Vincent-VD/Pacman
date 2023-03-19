@@ -5,6 +5,8 @@
 
 #include "imgui.h"
 #include <backends/imgui_impl_sdl2.h>
+
+#include "Exercise1.h"
 #include "backends/imgui_impl_opengl2.h"
 
 #include "UIManager.h"
@@ -39,7 +41,7 @@ void dae::Renderer::Init(SDL_Window* window)
 
 	auto& UIManager = UIManager::GetInstance();
 	UIManager.Init();
-	UIManager.AddWindow(std::make_unique<Exercise2>("Test button"));
+	UIManager.AddWindow(std::make_unique<Exercise2>("Exercise 2", ImGuiWindowFlags_AlwaysAutoResize));
 }
 
 void dae::Renderer::Render() const

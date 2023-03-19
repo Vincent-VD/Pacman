@@ -166,7 +166,6 @@
       <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <EnablePREfast>true</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -189,6 +188,7 @@
     <ClInclude Include="..\3rdParty\imgui-1.89.3\imstb_textedit.h" />
     <ClInclude Include="..\3rdParty\imgui-1.89.3\imstb_truetype.h" />
     <ClInclude Include="CircularMoveComponent.h" />
+    <ClInclude Include="Exercise1.h" />
     <ClInclude Include="Exercise2.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
@@ -207,6 +207,7 @@
     <ClInclude Include="TextureComponent2D.h" />
     <ClInclude Include="Time.h" />
     <ClInclude Include="TransformComponent.h" />
+    <ClInclude Include="TrashTheCache.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIWindow.h" />
   </ItemGroup>
@@ -220,6 +221,7 @@
     <ClCompile Include="..\3rdParty\imgui-1.89.3\imgui_tables.cpp" />
     <ClCompile Include="..\3rdParty\imgui-1.89.3\imgui_widgets.cpp" />
     <ClCompile Include="CircularMoveComponent.cpp" />
+    <ClCompile Include="Exercise1.cpp" />
     <ClCompile Include="Exercise2.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
@@ -237,6 +239,7 @@
     <ClCompile Include="TextureComponent2D.cpp" />
     <ClCompile Include="Time.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
+    <ClCompile Include="TrashTheCache.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIWindow.cpp" />
   </ItemGroup>
