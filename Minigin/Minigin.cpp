@@ -88,6 +88,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Time::GetInstance();
 	timer.Init(MsPerFrame);
+	input.Init();
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
@@ -106,7 +107,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		}
 		sceneManager.Update();
 		renderer.Render();
-
 
 		const auto sleepTime = timer.GetSleepTime();
 		std::this_thread::sleep_for(sleepTime);

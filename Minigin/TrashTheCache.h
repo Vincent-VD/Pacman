@@ -30,6 +30,9 @@ namespace TrashTheCache
 		int id{ 5 };
 	};
 
+	//Before returning, sort, remove highest and lowest
+	//  Can be done by selecting from the second iterator -> second-to-last
+	//  No need to make new vector
 	inline auto Exercise1(const int iterations)
 	{
 		std::vector<float> res(11);
