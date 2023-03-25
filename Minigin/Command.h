@@ -1,4 +1,5 @@
 #pragma once
+#include "GameObject.h"
 #include "MiniginPCH.h"
 
 namespace dae
@@ -47,22 +48,24 @@ namespace dae
 	class MoveCommand : public Command
 	{
 	public:
-		MoveCommand(GameObject* pActor, glm::vec2 direction) : Command(pActor), m_Direction(direction) {}
+		MoveCommand(GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : Command(pActor), m_Speed(speed), m_Direction(direction) {}
 		virtual ~MoveCommand() override = default;
 
 		virtual void Execute(const InputAction& inputAction) override
 		{
+			auto currentPos{ GetActor()->GetTransform()->GetWorldPosition() };
 			if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
 			{
-				std::cout << inputAction.leftStick.x << ", " << inputAction.leftStick.y << std::endl;
+				GetActor()->GetTransform()->SetPosition(currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f));
 			}
 			else
 			{
-				std::cout << m_Direction.x << ", " << m_Direction.y << std::endl;
+				GetActor()->GetTransform()->SetPosition(currentPos + m_Speed * glm::vec3(m_Direction.x, m_Direction.y, 0.f));
 			}
-		};
+		}
 
 	private:
-		glm::vec2 m_Direction{};
+		const float m_Speed{};
+		const glm::vec2 m_Direction{};
 	};
 }

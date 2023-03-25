@@ -25,6 +25,10 @@ public:
 				// Controller is connected
 				std::cout << "Controller not detected\n";
 			}
+			else
+			{
+				++m_ConnectedControllers;
+			}
 		}
 		
 	}
@@ -90,8 +94,8 @@ public:
 	{
 		const float normLX = fmaxf(-1, static_cast<float>(m_CurrentState[playerId].Gamepad.sThumbLX) / 32767);
 		const float normLY = fmaxf(-1, static_cast<float>(m_CurrentState[playerId].Gamepad.sThumbLY) / 32767);
-		float leftStickX = (abs(normLX) < m_TriggerDZ ? 0.f : normLX);	
-		float leftStickY = (abs(normLY) < m_TriggerDZ ? 0.f : normLY);	
+		float leftStickX = (abs(normLX) < m_TriggerDZ ? 0.f : normLX);
+		float leftStickY = (abs(normLY) < m_TriggerDZ ? 0.f : normLY);
 		return { leftStickX, leftStickY };								
 	}																	
 	glm::vec2 GetRightStickValuesThisFrame(int playerId) const			
@@ -103,6 +107,26 @@ public:
 		return { rightStickX, rightStickY };
 	}
 
+	int GetConnectedControllers() const
+	{
+		return m_ConnectedControllers;
+		//int res{};
+		//for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
+		//{
+		//	XINPUT_STATE state;
+		//	ZeroMemory(&state, sizeof(XINPUT_STATE));
+
+		//	// Simply get the state of the controller from XInput.
+		//	const DWORD dwResult = XInputGetState(i, &state);
+
+		//	if (dwResult == ERROR_SUCCESS)
+		//	{
+		//		++res;
+		//	}
+		//}
+		//return res;
+	}
+
 private:
 	XINPUT_STATE m_CurrentState[XUSER_MAX_COUNT]{};
 	XINPUT_STATE m_PreviousState[XUSER_MAX_COUNT]{};
@@ -112,6 +136,8 @@ private:
 
 	float m_TriggerDZ{ .05f }; //Trigger dead zone
 	float m_AnalogueDZ{ .02f }; //Analogue stick dead zone
+
+	int m_ConnectedControllers{};
 };
 
 XInputController::XInputController()
@@ -166,19 +192,5 @@ glm::vec2 XInputController::GetRightStickValues(int playerId) const
 
 int XInputController::GetConnectedControllers() const
 {
-	int res{};
-	for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-	{
-		XINPUT_STATE state;
-		ZeroMemory(&state, sizeof(XINPUT_STATE));
-
-		// Simply get the state of the controller from XInput.
-		const DWORD dwResult = XInputGetState(i, &state);
-
-		if (dwResult == ERROR_SUCCESS)
-		{
-			++res;
-		}
-	}
-	return res;
+	return m_pImpl->GetConnectedControllers();
 }
