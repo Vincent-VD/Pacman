@@ -101,7 +101,6 @@ bool dae::InputManager::ProcessInput()
 			
 		}
 		ImGui_ImplSDL2_ProcessEvent(&e);
-		// etc...
 	}
 
 	return true;
@@ -111,4 +110,20 @@ void dae::InputManager::AddCommand(int playerID, SDL_KeyCode keyboardKey, unsign
 {
 	m_ControllerBindings.emplace_back() = std::make_tuple(playerID, controllerButtons, inputType, command);
 	m_KeyboardBindings.emplace_back() = std::make_tuple(playerID, keyboardKey, inputType, command);
+}
+
+void dae::InputManager::CheckForPlayerJoin()
+{
+	if(!m_CanPlayerJoin)
+	{
+		return;
+	}
+
+	for(int iter = m_NrOfPlayers; iter < m_pController->GetMaxPlayerCount(); ++iter)
+	{
+		if (m_pController->IsPressed(iter, static_cast<unsigned int>(XInputController::ControllerButton::Start)))
+		{
+			//Create new player
+		}
+	}
 }

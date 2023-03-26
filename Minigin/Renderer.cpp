@@ -38,10 +38,6 @@ void dae::Renderer::Init(SDL_Window* window)
 	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(window, SDL_GL_GetCurrentContext());
 	ImGui_ImplOpenGL2_Init();
-
-	auto& UIManager = UIManager::GetInstance();
-	UIManager.Init();
-	UIManager.AddWindow(std::make_unique<Exercise2>("Exercise 2", ImGuiWindowFlags_AlwaysAutoResize));
 }
 
 void dae::Renderer::Render() const

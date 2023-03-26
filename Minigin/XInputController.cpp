@@ -14,10 +14,10 @@ public:
 	XInputControllerImpl()
 	{
 		DWORD dwResult;
+		ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
+		ZeroMemory(&m_PreviousState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
 		for(DWORD  iter = 0; iter < XUSER_MAX_COUNT; ++iter)
 		{
-			ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
-			ZeroMemory(&m_PreviousState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
 			dwResult = XInputGetState(iter, &m_CurrentState[iter]);
 
 			if (dwResult != ERROR_SUCCESS)
@@ -44,10 +44,8 @@ public:
 	{
 		CopyMemory(&m_PreviousState, &m_CurrentState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
 		ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
-		for (DWORD  iter = 0; iter < 4; ++iter)
+		for (DWORD  iter = 0; iter < XUSER_MAX_COUNT; ++iter)
 		{
-			//CopyMemory(&m_PreviousState[iter], &m_CurrentState[iter], sizeof(XINPUT_STATE));
-			//ZeroMemory(&m_CurrentState[iter], sizeof(XINPUT_STATE));
 			XInputGetState(iter, &m_CurrentState[iter]);
 
 			auto buttons = m_CurrentState[iter].Gamepad.wButtons ^ m_PreviousState[iter].Gamepad.wButtons;
@@ -110,21 +108,11 @@ public:
 	int GetConnectedControllers() const
 	{
 		return m_ConnectedControllers;
-		//int res{};
-		//for (DWORD i = 0; i < XUSER_MAX_COUNT; i++)
-		//{
-		//	XINPUT_STATE state;
-		//	ZeroMemory(&state, sizeof(XINPUT_STATE));
+	}
 
-		//	// Simply get the state of the controller from XInput.
-		//	const DWORD dwResult = XInputGetState(i, &state);
-
-		//	if (dwResult == ERROR_SUCCESS)
-		//	{
-		//		++res;
-		//	}
-		//}
-		//return res;
+	int GetMaxPlayerCount() const
+	{
+		return XUSER_MAX_COUNT;
 	}
 
 private:
@@ -193,4 +181,9 @@ glm::vec2 XInputController::GetRightStickValues(int playerId) const
 int XInputController::GetConnectedControllers() const
 {
 	return m_pImpl->GetConnectedControllers();
+}
+
+int XInputController::GetMaxPlayerCount()
+{
+	return m_pImpl->GetMaxPlayerCount();
 }

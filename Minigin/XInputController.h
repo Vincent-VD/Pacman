@@ -40,6 +40,8 @@ namespace dae
 		//Returns amount of controllers connected
 		int GetConnectedControllers() const;
 
+		int GetMaxPlayerCount();
+
 		XInputController();
 		~XInputController();
 		XInputController(const XInputController& other) = delete;

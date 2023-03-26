@@ -24,10 +24,13 @@ namespace dae
 		void AddCommand(int playerID, SDL_KeyCode key, unsigned int buttons, InputType inputType,const std::shared_ptr<Command>& command);
 
 	private:
+		bool m_CanPlayerJoin{ false };
 		int m_NrOfPlayers{ 0 };
 		std::unique_ptr<XInputController> m_pController;
 		std::vector<std::tuple<int, unsigned int, InputType, std::shared_ptr<Command>>> m_ControllerBindings{};
 		std::vector<std::tuple<int, SDL_KeyCode, InputType, std::shared_ptr<Command>>> m_KeyboardBindings{};
+
+		void CheckForPlayerJoin();
 	};
 
 }
