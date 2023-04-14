@@ -1,6 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MiniginPCH.h"
+#include "Time.h"
 
 namespace dae
 {
@@ -20,14 +21,24 @@ namespace dae
 		held = 1,
 		released = 2,
 		leftStick = 3,
-		rightStick = 4
+		rightStick = 4,
+		dpadAxis = 5
 	};
 
 	class Command
 	{
 	public:
-		Command(GameObject* pActor) : m_pActor(pActor) {}
+		Command() = default;
 		virtual ~Command() = default;
+
+		virtual void Execute(const InputAction& inputAction = InputAction{}) = 0;
+	};
+
+	class GameObjectCommand : public Command
+	{
+	public:
+		GameObjectCommand(GameObject* pActor) : Command{}, m_pActor(pActor) {}
+		virtual ~GameObjectCommand() = default;
 
 		const GameObject* GetActor() const { return m_pActor; }
 
@@ -36,36 +47,44 @@ namespace dae
 		GameObject* m_pActor;
 	};
 
-	class FireCommand : public Command
+	class FireCommand : public GameObjectCommand
 	{
 	public:
-		FireCommand(GameObject* pActor) : Command(pActor) {}
+		FireCommand(GameObject* pActor) : GameObjectCommand(pActor) {}
 		virtual ~FireCommand() override = default;
 
 		virtual void Execute([[maybe_unused]] const InputAction& inputAction = InputAction{}) override { std::cout << "Firing\n"; }
 	};
 
-	class MoveCommand : public Command
+	class MoveCommand : public GameObjectCommand
 	{
 	public:
-		MoveCommand(GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : Command(pActor), m_Speed(speed), m_Direction(direction) {}
+		MoveCommand(GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : GameObjectCommand(pActor), m_Speed(speed), m_Direction(direction) {}
 		virtual ~MoveCommand() override = default;
 
-		virtual void Execute(const InputAction& inputAction) override
-		{
-			auto currentPos{ GetActor()->GetTransform()->GetWorldPosition() };
-			if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
-			{
-				GetActor()->GetTransform()->SetPosition(currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f));
-			}
-			else
-			{
-				GetActor()->GetTransform()->SetPosition(currentPos + m_Speed * glm::vec3(m_Direction.x, m_Direction.y, 0.f));
-			}
-		}
+		virtual void Execute(const InputAction& inputAction) override;
 
 	private:
 		const float m_Speed{};
 		const glm::vec2 m_Direction{};
 	};
+
+	class HitCommand : public GameObjectCommand
+	{
+	public:
+		HitCommand(GameObject* pActor) : GameObjectCommand(pActor) {}
+		virtual ~HitCommand() override = default;
+
+		virtual void Execute([[maybe_unused]] const InputAction& inputAction) override;
+	};
+
+	class ScoreCommand : public GameObjectCommand
+	{
+	public:
+		ScoreCommand(GameObject* pActor) : GameObjectCommand(pActor) {}
+		virtual ~ScoreCommand() override = default;
+
+		virtual void Execute([[maybe_unused]] const InputAction& inputAction) override;
+	};
+
 }

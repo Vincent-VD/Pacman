@@ -1,16 +1,18 @@
 #include <stdexcept>
 #define WIN32_LEAN_AND_MEAN 
-#include <windows.h>
+#include <Windows.h>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
 #include "Minigin.h"
 #include <chrono>
+#include <steam_api.h>
 
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
+#include "SoundManager.h"
 #include "Time.h"
 #include "UIManager.h"
 
@@ -74,6 +76,7 @@ dae::Minigin::Minigin(const std::string &dataPath)
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
+	SteamAPI_Shutdown();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
@@ -88,9 +91,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = Time::GetInstance();
 	auto& UIManager = UIManager::GetInstance();
+	auto soundManager = std::make_unique<SoundManager>();
 	timer.Init(MsPerFrame);
 	input.Init();
 	UIManager.Init();
+	soundManager->Init();
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
@@ -101,6 +106,8 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		timer.Update();
 		lag += timer.GetDeltaTime();
 
+		SteamAPI_RunCallbacks();
+
 		doContinue = input.ProcessInput();
 		while(lag >= Minigin::MsPerFrame)
 		{
@@ -108,6 +115,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			lag -= Minigin::MsPerFrame;
 		}
 		sceneManager.Update();
+		soundManager->ProcessAudio();
 		renderer.Render();
 
 		const auto sleepTime = timer.GetSleepTime();

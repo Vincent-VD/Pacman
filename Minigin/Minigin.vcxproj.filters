@@ -31,6 +31,15 @@
     <Filter Include="UIWindows\TrashTheCache">
       <UniqueIdentifier>{cce53358-1403-4b7e-885f-f6cd102f6d16}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{53774d65-6b9a-4304-aca2-2d398b25fb55}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Observer/EventQueue">
+      <UniqueIdentifier>{eb9f50f7-511d-4e46-9bd3-b5758740b3e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Steam">
+      <UniqueIdentifier>{a7acad3e-530b-4048-9d84-cafcd8a4ed53}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -138,6 +147,27 @@
     <ClInclude Include="Command.h">
       <Filter>Input</Filter>
     </ClInclude>
+    <ClInclude Include="SoundManager.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="Observer.h">
+      <Filter>Observer/EventQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="Achievement.h">
+      <Filter>Observer/EventQueue</Filter>
+    </ClInclude>
+    <ClInclude Include="LifeComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="CSteamAchievements.h">
+      <Filter>Steam</Filter>
+    </ClInclude>
+    <ClInclude Include="ScoreComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EventManager.h">
+      <Filter>Observer/EventQueue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -238,6 +268,27 @@
     </ClCompile>
     <ClCompile Include="Command.cpp">
       <Filter>Input</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundManager.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="Observer.cpp">
+      <Filter>Observer/EventQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="Achievement.cpp">
+      <Filter>Observer/EventQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="LifeComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="CSteamAchievements.cpp">
+      <Filter>Steam</Filter>
+    </ClCompile>
+    <ClCompile Include="ScoreComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="EventManager.cpp">
+      <Filter>Observer/EventQueue</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

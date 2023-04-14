@@ -1,6 +1,8 @@
 #include "XInputController.h"
 
 #include <iostream>
+#define WINDOWS_LEAN_AND_MEAN
+#include <map>
 #include <Windows.h>
 #include <Xinput.h>
 
@@ -176,6 +178,19 @@ glm::vec2 XInputController::GetLeftStickValues(int playerId) const
 glm::vec2 XInputController::GetRightStickValues(int playerId) const
 {
 	return m_pImpl->GetRightStickValuesThisFrame(playerId);
+}
+
+glm::vec2 XInputController::GetDPadAxisValues(int playerId) const
+{
+	glm::vec2 res{};
+	for (const auto& [button, direction] : m_DPadDirections)
+	{
+		if (IsHeld(playerId, button))
+		{
+			res += direction;
+		}
+	}
+	return glm::normalize(res);
 }
 
 int XInputController::GetConnectedControllers() const

@@ -51,12 +51,23 @@ bool dae::InputManager::ProcessInput()
 			if (glm::length2(rightStickValues) > FLT_EPSILON * FLT_EPSILON)
 			{
 				InputAction values{};
-				values.leftStick = rightStickValues;
+				values.rightStick = rightStickValues;
+				command->Execute(values);
+			}
+			break;
+		case InputType::dpadAxis:
+			auto dPadAxisValues{m_pController->GetDPadAxisValues(playerID)};
+			if (glm::length2(dPadAxisValues) > FLT_EPSILON * FLT_EPSILON)
+			{
+				InputAction values{};
+				values.leftStick = dPadAxisValues;
 				command->Execute(values);
 			}
 			break;
 		}
 	}
+
+	//std::cout << m_pController->GetDPadAxisValues(0).x << "  " << m_pController->GetDPadAxisValues(0).y << std::endl;
 
 	const Uint8* keystate = SDL_GetKeyboardState(nullptr);
 
@@ -69,8 +80,17 @@ bool dae::InputManager::ProcessInput()
 				command->Execute();
 			}
 		}
+		if(type == InputType::dpadAxis)
+		{
+			auto keyboardAxisValues{ GetKeyboardAxisValues(keystate) };
+			if (glm::length2(keyboardAxisValues) > FLT_EPSILON * FLT_EPSILON)
+			{
+				InputAction values{};
+				values.leftStick = keyboardAxisValues;
+				command->Execute(values);
+			}
+		}
 	}
-
 
 	SDL_Event e;
 	while (SDL_PollEvent(&e)) {
@@ -106,10 +126,23 @@ bool dae::InputManager::ProcessInput()
 	return true;
 }
 
-void dae::InputManager::AddCommand(int playerID, SDL_KeyCode keyboardKey, unsigned int controllerButtons, InputType inputType, const std::shared_ptr<Command>& command)
+void dae::InputManager::AddControllerCommand(int playerID, unsigned buttons, InputType inputType, const std::shared_ptr<Command>& command)
 {
-	m_ControllerBindings.emplace_back() = std::make_tuple(playerID, controllerButtons, inputType, command);
-	m_KeyboardBindings.emplace_back() = std::make_tuple(playerID, keyboardKey, inputType, command);
+	m_ControllerBindings.emplace_back() = std::make_tuple(playerID, buttons, inputType, command);
+}
+
+void dae::InputManager::AddKeyboardCommand(int playerID, SDL_KeyCode key, InputType inputType, const std::shared_ptr<Command>& command)
+{
+	m_KeyboardBindings.emplace_back() = std::make_tuple(playerID, key, inputType, command);
+}
+
+void dae::InputManager::AddAxisCommand(int playerID, InputType inputType, const std::shared_ptr<Command>& command, bool bEnableKeyboard)
+{
+	m_ControllerBindings.emplace_back() = std::make_tuple(playerID, 0, inputType, command);
+	if(bEnableKeyboard)
+	{
+		m_KeyboardBindings.emplace_back() = std::make_tuple(playerID, SDLK_INSERT, inputType, command);
+	}
 }
 
 void dae::InputManager::CheckForPlayerJoin()
@@ -126,4 +159,17 @@ void dae::InputManager::CheckForPlayerJoin()
 			//Create new player
 		}
 	}
+}
+
+glm::vec2 dae::InputManager::GetKeyboardAxisValues(const Uint8* keystate) const
+{
+	glm::vec2 res{};
+	for (const auto& [button, direction] : m_KeyboardAxis)
+	{
+		if (keystate[SDL_GetScancodeFromKey(button)])
+		{
+			res += direction;
+		}
+	}
+	return glm::normalize(res);
 }

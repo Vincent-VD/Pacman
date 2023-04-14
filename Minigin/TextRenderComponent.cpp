@@ -6,14 +6,17 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "GameObject.h"
+#include "LifeComponent.h"
 
 dae::TextRenderComponent::TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font)
 	: RootComponent(pOwner)
+	, Observer()
 	, m_needsUpdate(true)
 	, m_text(text)
 	, m_font(font)
 	, m_textTexture(nullptr)
-{ }
+{
+}
 
 void dae::TextRenderComponent::Update()
 {
@@ -50,6 +53,15 @@ void dae::TextRenderComponent::SetText(const std::string& text)
 {
 	m_text = text;
 	m_needsUpdate = true;
+}
+
+void dae::TextRenderComponent::OnNotify(const std::string& msg, const GameObject* gameObject)
+{
+	if(msg == "player hit")
+	{
+		const int livesLeft(gameObject->GetComponent<LifeComponent>()->GetLivesLeft());
+		SetText("Lives: " + std::to_string(livesLeft));
+	}
 }
 
 //void dae::TextRenderComponent::SetPosition(const float x, const float y)

@@ -1,4 +1,6 @@
 #pragma once
+#include <map>
+
 #include "MiniginPCH.h"
 #include <memory>
 #include <utility>
@@ -27,6 +29,7 @@ namespace dae
 			ButtonX = 0x4000,
 			ButtonY = 0x8000,
 		};
+
 		void Update() const;
 		bool IsHeld(int playerId, unsigned int button) const;
 		bool IsPressed(int playerId, unsigned int button) const;
@@ -36,6 +39,7 @@ namespace dae
 		float GetRightTriggerPressure(int playerId) const;
 		glm::vec2 GetLeftStickValues(int playerId) const;
 		glm::vec2 GetRightStickValues(int playerId) const;
+		glm::vec2 GetDPadAxisValues(int playerId) const;
 
 		//Returns amount of controllers connected
 		int GetConnectedControllers() const;
@@ -48,6 +52,14 @@ namespace dae
 		XInputController(XInputController&& other) noexcept = delete;
 		XInputController& operator=(const XInputController& other) = delete;
 		XInputController& operator=(XInputController&& other) noexcept = delete;
+
+	private:
+		const std::map<unsigned int, glm::vec2> m_DPadDirections  {
+		   { static_cast<unsigned>(ControllerButton::DPadUp), { 0, 1 } },
+		   { static_cast<unsigned>(ControllerButton::DPadDown), { 0, -1 } },
+		   { static_cast<unsigned>(ControllerButton::DPadLeft), { -1, 0 } },
+		   { static_cast<unsigned>(ControllerButton::DPadRight), { 1, 0 } }
+		};
 	};
 
 

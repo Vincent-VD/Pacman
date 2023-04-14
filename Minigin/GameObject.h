@@ -1,4 +1,6 @@
 #pragma once
+#include <list>
+
 #include "MiniginPCH.h"
 #include <memory>
 #include <vector>
@@ -6,6 +8,7 @@
 
 namespace dae
 {
+	class Observer;
 	//class TransformComponent;
 	class RootComponent;
 	class Texture2D;
@@ -31,7 +34,7 @@ namespace dae
 
 		void Update();
 		void FixedUpdate();
-		void LateUpdate(){}
+		void LateUpdate();
 		void Render() const;
 
 		//Getters
@@ -48,6 +51,10 @@ namespace dae
 		void SetParent(GameObject* parent, bool keepWorldTransform);
 		GameObject* GetParent() const;
 
+		void AddObserver(Observer* pObserver);
+		void RemoveObserver(const Observer* pObserver);
+		void NotifyObservers(const std::string& event);
+
 		/*size_t GetChildCount() const;
 		GameObject* GetChildAt(int index) const;*/
 
@@ -58,10 +65,8 @@ namespace dae
 		std::unique_ptr<TransformComponent> m_pTransform{};
 		std::vector<std::shared_ptr<RootComponent>> m_pComponents;
 		std::vector<std::unique_ptr<GameObject>> m_pChildren;
+		std::list<Observer*> m_pObservers;
 		GameObject* m_pParent{ nullptr };
-
-		void RemoveChild(std::unique_ptr<GameObject>& obj);
-		void AddChild(std::unique_ptr<GameObject>& obj);
 	};
 
 	template<typename Component>

@@ -2,12 +2,13 @@
 #include <string>
 #include <memory>
 #include "RootComponent.h"
+#include "Observer.h"
 
 namespace dae
 {
 	class Font;
 	class Texture2D;
-	class TextRenderComponent final : public RootComponent
+	class TextRenderComponent final : public RootComponent, public Observer
 	{
 	public:
 		TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font);
@@ -20,6 +21,8 @@ namespace dae
 
 		void SetText(const std::string& text);
 		//void SetPosition(float x, float y);
+
+		void OnNotify(const std::string& msg, const GameObject* gameObject) override;
 
 		virtual void Update() override;
 		virtual void FixedUpdate() override {}

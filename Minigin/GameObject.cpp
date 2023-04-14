@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+#include "Observer.h"
 #include "ResourceManager.h"
 #include "Renderer.h"
 #include "RootComponent.h"
@@ -35,6 +36,11 @@ void dae::GameObject::FixedUpdate()
 	}
 }
 
+void dae::GameObject::LateUpdate()
+{
+
+}
+
 void dae::GameObject::Render() const
 {
 	for (auto& pComponent : m_pComponents)
@@ -50,25 +56,35 @@ dae::TransformComponent* dae::GameObject::GetTransform() const
 
 void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
 {
-	if(parent == nullptr)
-	{
-		m_pTransform->SetPosition(m_pTransform->GetWorldPosition());
+	if (parent == nullptr)
+		GetTransform()->SetPosition(GetTransform()->GetWorldPosition());
+	else {
+		if (keepWorldTransform)
+			GetTransform()->SetPosition(GetTransform()->GetWorldPosition() - GetParent()->GetTransform()->GetWorldPosition());
+		GetTransform()->SetDirty();
 	}
-	else if(keepWorldTransform)
+	std::unique_ptr<GameObject> child;
+	if (m_pParent != nullptr)
 	{
-		m_pTransform->SetPosition(m_pTransform->GetWorldPosition() - m_pParent->GetTransform()->GetLocalPosition());
-	}
-	auto curr{ std::unique_ptr<GameObject>(this) };
-	if(m_pParent != nullptr)
-	{
-		m_pParent->RemoveChild(curr);
+		for (auto it = m_pParent->m_pChildren.begin(); it != m_pParent->m_pChildren.end(); ++it)
+		{
+			if (it->get() == this)
+			{
+				child = std::move(*it);
+				m_pParent->m_pChildren.erase(it);
+				break;
+			}
+		}
 	}
 	m_pParent = parent;
-	if (m_pParent)
+	if (parent != nullptr)
 	{
-		m_pParent->AddChild(curr);
+		if (child == nullptr)
+		{
+			child = std::unique_ptr<GameObject>(this);
+			m_pParent->m_pChildren.emplace_back(std::move(child));
+		}
 	}
-	m_pTransform->SetDirty();
 }
 
 dae::GameObject* dae::GameObject::GetParent() const
@@ -76,29 +92,28 @@ dae::GameObject* dae::GameObject::GetParent() const
 	return m_pParent;
 }
 
-void dae::GameObject::RemoveChild(std::unique_ptr<GameObject>& obj)
+void dae::GameObject::AddObserver(Observer* pObserver)
 {
-	//m_pChildren.erase(std::remove(m_pChildren.begin(), m_pChildren.end(), obj));
-	//todo: what happens to child when gameobject is removed?
-	for (auto it = m_pChildren.begin(); it != m_pChildren.end(); ++it) {
-		if (it->get() == obj.get()) {
-			m_pChildren.erase(it);
+	m_pObservers.push_back(pObserver);
+}
+
+void dae::GameObject::RemoveObserver(const Observer* pObserver)
+{
+	
+	for (auto it = m_pObservers.begin(); it != m_pObservers.end(); ++it)
+	{
+		if (*it == pObserver)
+		{
+			m_pObservers.erase(it);
 			break;
 		}
 	}
 }
 
-void dae::GameObject::AddChild(std::unique_ptr<GameObject>& obj)
+void dae::GameObject::NotifyObservers(const std::string& event)
 {
-	m_pChildren.emplace_back(std::move(obj));
+	for (auto observer : m_pObservers)
+	{
+		observer->OnNotify(event, this);
+	}
 }
-
-//void dae::GameObject::SetTexture(const std::string& filename)
-//{
-//	m_texture = ResourceManager::GetInstance().LoadTexture(filename);
-//}
-//
-//void dae::GameObject::SetPosition(float x, float y)
-//{
-//	m_transform.SetPosition(x, y, 0.0f);
-//}
