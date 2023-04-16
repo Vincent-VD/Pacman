@@ -16,7 +16,7 @@ namespace dae
 	class GameObject final
 	{
 	public:
-		GameObject(std::string tag);
+		GameObject(const std::string& tag);
 		~GameObject()
 		{
 			std::cout << m_Tag << std::endl;
@@ -53,7 +53,7 @@ namespace dae
 
 		void AddObserver(Observer* pObserver);
 		void RemoveObserver(const Observer* pObserver);
-		void NotifyObservers(const std::string& event);
+		void NotifyObservers(const std::string& event) const;
 
 		/*size_t GetChildCount() const;
 		GameObject* GetChildAt(int index) const;*/

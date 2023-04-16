@@ -1,9 +1,12 @@
 #include "CSteamAchievements.h"
+
 #include <Windows.h>
 using namespace dae;
 
-CSteamAchievements::CSteamAchievements(Achievement_t* Achievements, int NumAchievements) :
-    m_iAppID(0),
+CSteamAchievements* CSteamAchievements::m_Instance = nullptr;
+
+CSteamAchievements::CSteamAchievements(Achievement_t* Achievements, int NumAchievements)
+	: m_iAppID(0),
     m_bInitialized(false),
     m_CallbackUserStatsReceived(this, &CSteamAchievements::OnUserStatsReceived),
     m_CallbackUserStatsStored(this, &CSteamAchievements::OnUserStatsStored),
@@ -14,6 +17,20 @@ CSteamAchievements::CSteamAchievements(Achievement_t* Achievements, int NumAchie
     m_iNumAchievements = NumAchievements;
     RequestStats();
 }
+
+CSteamAchievements* CSteamAchievements::GetInstance()
+{
+	if(m_Instance)
+	{
+		return m_Instance;
+	}
+	else
+	{
+		m_Instance = new CSteamAchievements(m_Achievements, 4);
+		return m_Instance;
+	}
+}
+
 
 bool CSteamAchievements::RequestStats()
 {

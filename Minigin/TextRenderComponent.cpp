@@ -7,6 +7,7 @@
 #include "Texture2D.h"
 #include "GameObject.h"
 #include "LifeComponent.h"
+#include "ScoreComponent.h"
 
 dae::TextRenderComponent::TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font)
 	: RootComponent(pOwner)
@@ -57,10 +58,15 @@ void dae::TextRenderComponent::SetText(const std::string& text)
 
 void dae::TextRenderComponent::OnNotify(const std::string& msg, const GameObject* gameObject)
 {
-	if(msg == "player hit")
+	if(msg == "player hit" && GetOwner()->GetTag() == "lives")
 	{
-		const int livesLeft(gameObject->GetComponent<LifeComponent>()->GetLivesLeft());
+		const int livesLeft{ gameObject->GetComponent<LifeComponent>()->GetLivesLeft() };
 		SetText("Lives: " + std::to_string(livesLeft));
+	}
+	if(msg == "score" && GetOwner()->GetTag() == "score")
+	{
+		const int score{ gameObject->GetComponent<ScoreComponent>()->GetScore() };
+		SetText("Score: " + std::to_string(score));
 	}
 }
 

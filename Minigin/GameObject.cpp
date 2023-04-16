@@ -1,16 +1,11 @@
 #include <string>
 #include "GameObject.h"
 
-#include <iostream>
-
 #include "Observer.h"
-#include "ResourceManager.h"
-#include "Renderer.h"
 #include "RootComponent.h"
-//#include "TransformComponent.h"
 
 
-dae::GameObject::GameObject(std::string tag)
+dae::GameObject::GameObject(const std::string& tag)
 	: m_Tag{tag}
 	, m_pTransform{ std::make_unique<TransformComponent>(this) }
 {
@@ -110,9 +105,9 @@ void dae::GameObject::RemoveObserver(const Observer* pObserver)
 	}
 }
 
-void dae::GameObject::NotifyObservers(const std::string& event)
+void dae::GameObject::NotifyObservers(const std::string& event) const
 {
-	for (auto observer : m_pObservers)
+	for (auto& observer : m_pObservers)
 	{
 		observer->OnNotify(event, this);
 	}

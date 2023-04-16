@@ -20,8 +20,8 @@ namespace dae
 		FPSComponent& operator=(FPSComponent&& other) noexcept = delete;
 
 		glm::uint32_t GetFPS() const;
-		void Update() override;
-		void FixedUpdate() override;
+		virtual void Update() override;
+		virtual void FixedUpdate() override;
 
 	private:
 		float m_ElapsedSec{};

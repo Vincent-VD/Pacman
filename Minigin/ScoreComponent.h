@@ -9,7 +9,7 @@ namespace dae
 	class ScoreComponent : public RootComponent
 	{
 	public:
-		ScoreComponent(GameObject* pOwner, TextRenderComponent* pTextRenderComponent);
+		ScoreComponent(GameObject* pOwner);
 		virtual ~ScoreComponent() override = default;
 		ScoreComponent(const ScoreComponent& other) = delete;
 		ScoreComponent(ScoreComponent&& other) noexcept = delete;
@@ -19,15 +19,14 @@ namespace dae
 		void IncreaseScore(const std::string& tag);
 		void ResetScore();
 
+		int GetScore() const { return m_Score; }
+
 		virtual void Update() override {}
 		virtual void FixedUpdate() override {}
 		virtual void Render() const override {}
 
 	private:
 		int m_Score;
-		TextRenderComponent* m_pTextRenderComponent;
-
-		void SetScore() const;
 	};
 }
 

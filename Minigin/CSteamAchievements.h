@@ -15,21 +15,35 @@ namespace dae
 		int m_iIconImage;
 	};
 
+	// Defining our achievements
+	enum EAchievements
+	{
+		ACH_WIN_ONE_GAME = 0,
+		ACH_WIN_100_GAMES = 1,
+		ACH_TRAVEL_FAR_ACCUM = 2,
+		ACH_TRAVEL_FAR_SINGLE = 3,
+	};
+
+	// Achievement array which will hold data about the achievements and their state
+	inline Achievement_t m_Achievements[4] =
+	{
+		ACH_ID(ACH_WIN_ONE_GAME, "Winner"),
+		ACH_ID(ACH_WIN_100_GAMES, "Champion"),
+		ACH_ID(ACH_TRAVEL_FAR_ACCUM, "Interstellar"),
+		ACH_ID(ACH_TRAVEL_FAR_SINGLE, "Orbiter"),
+	};
+
 	class CSteamAchievements
 	{
-	private:
-		int64 m_iAppID; // Our current AppID
-		Achievement_t* m_pAchievements; // Achievements data
-		int m_iNumAchievements; // The number of Achievements
-		bool m_bInitialized; // Have we called Request stats and received the callback?
-
 	public:
-		CSteamAchievements(Achievement_t* Achievements, int NumAchievements);
+		static CSteamAchievements* GetInstance();
+
 		~CSteamAchievements() = default;
 		CSteamAchievements(const CSteamAchievements& other) = delete;
 		CSteamAchievements(CSteamAchievements&& other) noexcept = delete;
 		CSteamAchievements& operator=(const CSteamAchievements& other) = delete;
 		CSteamAchievements& operator=(CSteamAchievements&& other) noexcept = delete;
+
 		bool RequestStats();
 		bool SetAchievement(const char* ID);
 
@@ -39,6 +53,16 @@ namespace dae
 			m_CallbackUserStatsStored);
 		STEAM_CALLBACK(CSteamAchievements, OnAchievementStored,
 			UserAchievementStored_t, m_CallbackAchievementStored);
+
+	private:
+		static CSteamAchievements* m_Instance;
+
+		int64 m_iAppID; // Our current AppID
+		Achievement_t* m_pAchievements; // Achievements data
+		int m_iNumAchievements; // The number of Achievements
+		bool m_bInitialized; // Have we called Request stats and received the callback?
+
+		CSteamAchievements(Achievement_t* Achievements, int NumAchievements);
 	};
 }
 

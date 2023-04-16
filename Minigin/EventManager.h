@@ -2,6 +2,7 @@
 #include "MiniginPCH.h"
 #include "Singleton.h"
 #include <functional>
+#include <map>
 
 namespace dae
 {
@@ -16,6 +17,8 @@ namespace dae
 		EventManager& operator=(EventManager&& other) noexcept = delete;
 
 		void Init();
+
+		void Update();
 
 		void AttachEvent(const std::string& eventName, std::function<void()> eventHandle); 
 		void SendEvent(const std::string& eventName);
@@ -33,6 +36,8 @@ namespace dae
 		int m_Tail;
 
 		std::string m_Events[MAX_ARGS];
+
+		std::map<std::string, std::function<void()>> m_EventQueue{};
 
 	};
 }
