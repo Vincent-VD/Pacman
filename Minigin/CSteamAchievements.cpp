@@ -31,6 +31,11 @@ CSteamAchievements* CSteamAchievements::GetInstance()
 	}
 }
 
+CSteamAchievements::~CSteamAchievements()
+{
+	delete m_Instance;
+}
+
 
 bool CSteamAchievements::RequestStats()
 {

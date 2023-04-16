@@ -38,7 +38,7 @@ namespace dae
 	public:
 		static CSteamAchievements* GetInstance();
 
-		~CSteamAchievements() = default;
+		~CSteamAchievements();
 		CSteamAchievements(const CSteamAchievements& other) = delete;
 		CSteamAchievements(CSteamAchievements&& other) noexcept = delete;
 		CSteamAchievements& operator=(const CSteamAchievements& other) = delete;
