@@ -1,4 +1,5 @@
 #pragma once
+#include "Observer.h"
 #include "RootComponent.h"
 namespace dae
 {
@@ -7,7 +8,7 @@ namespace dae
 	class LifeComponent : public RootComponent
 	{
 	public:
-		LifeComponent(GameObject* pOwner, /*TextRenderComponent* pTextRenderComponent, */const int nrOfLives = 3);
+		LifeComponent(GameObject* pOwner, TextRenderComponent* pTextRenderComponent, const int nrOfLives = 3);
 		virtual ~LifeComponent() override = default;
 		LifeComponent(const LifeComponent& other) = delete;
 		LifeComponent(LifeComponent&& other) noexcept = delete;
@@ -25,6 +26,7 @@ namespace dae
 	private:
 		int m_CurrLives;
 		const int m_MaxLives;
+		Subject<int> m_HUDSubject;
 		//TextRenderComponent* m_pTextRenderComponent;
 	};
 }

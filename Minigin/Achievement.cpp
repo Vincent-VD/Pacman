@@ -1,28 +1,23 @@
 #include "Achievement.h"
 
-#include "CSteamAchievements.h"
-#include "GameObject.h"
-#include "ScoreComponent.h"
-
-dae::Achievement::Achievement(GameObject* pOwner)
-	: RootComponent(pOwner)
-	, Observer()
+dae::Achievement::Achievement()
+	: Observer<std::string>()
 {
 }
 
-void dae::Achievement::OnNotify(const std::string& msg, const GameObject* gameObject)
+
+void dae::Achievement::OnNotify(std::string args)
 {
-	if(msg == "player died")
+	if (args == "player died")
 	{
-		std::cout << "Player died\n";
-		CSteamAchievements::GetInstance()->SetAchievement("ACH_WIN_100_GAMES");
-	}
-	if(msg == "score")
-	{
-		const int score{ gameObject->GetComponent<ScoreComponent>()->GetScore() };
-		if(score > 500)
+		if (CSteamAchievements::GetInstance())
 		{
-			CSteamAchievements::GetInstance()->SetAchievement("ACH_TRAVEL_FAR_SINGLE");
+			CSteamAchievements::GetInstance()->SetAchievement("ACH_WIN_100_GAMES");
+
 		}
 	}
+}
+
+void dae::Achievement::OnSubjectDestroyed()
+{
 }

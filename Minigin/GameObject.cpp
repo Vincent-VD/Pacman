@@ -86,29 +86,3 @@ dae::GameObject* dae::GameObject::GetParent() const
 {
 	return m_pParent;
 }
-
-void dae::GameObject::AddObserver(Observer* pObserver)
-{
-	m_pObservers.push_back(pObserver);
-}
-
-void dae::GameObject::RemoveObserver(const Observer* pObserver)
-{
-	
-	for (auto it = m_pObservers.begin(); it != m_pObservers.end(); ++it)
-	{
-		if (*it == pObserver)
-		{
-			m_pObservers.erase(it);
-			break;
-		}
-	}
-}
-
-void dae::GameObject::NotifyObservers(const std::string& event) const
-{
-	for (auto& observer : m_pObservers)
-	{
-		observer->OnNotify(event, this);
-	}
-}

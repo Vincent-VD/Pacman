@@ -1,6 +1,7 @@
 #pragma once
 #include "MiniginPCH.h"
 #include "RootComponent.h"
+#include "Observer.h"
 
 namespace dae
 {
@@ -9,7 +10,7 @@ namespace dae
 	class ScoreComponent : public RootComponent
 	{
 	public:
-		ScoreComponent(GameObject* pOwner);
+		ScoreComponent(GameObject* pOwner, TextRenderComponent* textRenderComponent);
 		virtual ~ScoreComponent() override = default;
 		ScoreComponent(const ScoreComponent& other) = delete;
 		ScoreComponent(ScoreComponent&& other) noexcept = delete;
@@ -27,6 +28,8 @@ namespace dae
 
 	private:
 		int m_Score;
+		Subject<std::string> m_AchievementSubject;
+		Subject<int> m_HUDSubject;
 	};
 }
 

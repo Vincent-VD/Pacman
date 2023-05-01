@@ -20,7 +20,8 @@ CSteamAchievements::CSteamAchievements(Achievement_t* Achievements, int NumAchie
 
 CSteamAchievements* CSteamAchievements::GetInstance()
 {
-	if(m_Instance)
+	return nullptr;
+	/*if(m_Instance)
 	{
 		return m_Instance;
 	}
@@ -28,7 +29,7 @@ CSteamAchievements* CSteamAchievements::GetInstance()
 	{
 		m_Instance = new CSteamAchievements(m_Achievements, 4);
 		return m_Instance;
-	}
+	}*/
 }
 
 CSteamAchievements::~CSteamAchievements()

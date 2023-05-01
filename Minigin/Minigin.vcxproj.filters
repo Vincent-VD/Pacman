@@ -168,6 +168,9 @@
     <ClInclude Include="EventManager.h">
       <Filter>Observer/EventQueue</Filter>
     </ClInclude>
+    <ClInclude Include="TextRenderObserver.h">
+      <Filter>Observer/EventQueue</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -288,6 +291,9 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
+      <Filter>Observer/EventQueue</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRenderObserver.cpp">
       <Filter>Observer/EventQueue</Filter>
     </ClCompile>
   </ItemGroup>

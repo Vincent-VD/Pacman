@@ -11,7 +11,6 @@
 
 dae::TextRenderComponent::TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font)
 	: RootComponent(pOwner)
-	, Observer()
 	, m_needsUpdate(true)
 	, m_text(text)
 	, m_font(font)
@@ -56,19 +55,19 @@ void dae::TextRenderComponent::SetText(const std::string& text)
 	m_needsUpdate = true;
 }
 
-void dae::TextRenderComponent::OnNotify(const std::string& msg, const GameObject* gameObject)
-{
-	if(msg == "player hit" && GetOwner()->GetTag() == "lives")
-	{
-		const int livesLeft{ gameObject->GetComponent<LifeComponent>()->GetLivesLeft() };
-		SetText("Lives: " + std::to_string(livesLeft));
-	}
-	if(msg == "score" && GetOwner()->GetTag() == "score")
-	{
-		const int score{ gameObject->GetComponent<ScoreComponent>()->GetScore() };
-		SetText("Score: " + std::to_string(score));
-	}
-}
+//void dae::TextRenderComponent::OnNotify(int arg, const GameObject* gameObject)
+//{
+//	if(msg == "player hit" && GetOwner()->GetTag() == "lives")
+//	{
+//		const int livesLeft{ gameObject->GetComponent<LifeComponent>()->GetLivesLeft() };
+//		SetText("Lives: " + std::to_string(livesLeft));
+//	}
+//	if(msg == "score" && GetOwner()->GetTag() == "score")
+//	{
+//		const int score{ gameObject->GetComponent<ScoreComponent>()->GetScore() };
+//		SetText("Score: " + std::to_string(score));
+//	}
+//}
 
 //void dae::TextRenderComponent::SetPosition(const float x, const float y)
 //{
