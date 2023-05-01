@@ -2,7 +2,7 @@
 #include "FPSComponent.h"
 #include "GameObject.h"
 #include "TextRenderComponent.h"
-#include "Time.h"
+#include "GameTime.h"
 
 using namespace dae;
 
@@ -28,8 +28,8 @@ void FPSComponent::Update()
 		return;
 	}
 
-	m_ElapsedSec = Time::GetInstance().GetDeltaTime();
-	m_FPS = Time::GetInstance().GetFPS();
+	m_ElapsedSec = GameTime::GetInstance().GetDeltaTime();
+	m_FPS = GameTime::GetInstance().GetFPS();
 	m_UpdateTimer += m_ElapsedSec;
 	if (m_UpdateTimer >= m_UpdateInterval)
 	{

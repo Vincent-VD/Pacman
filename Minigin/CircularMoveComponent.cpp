@@ -1,7 +1,7 @@
 #include "CircularMoveComponent.h"
 
 #include "GameObject.h"
-#include "Time.h"
+#include "GameTime.h"
 
 using namespace dae;
 
@@ -16,7 +16,7 @@ CircularMoveComponent::CircularMoveComponent(GameObject* pOwner, float radius, f
 
 void CircularMoveComponent::Update()
 {
-	const float elapsedTime{ Time::GetInstance().GetDeltaTime() };
+	const float elapsedTime{ GameTime::GetInstance().GetDeltaTime() };
 
 	m_CurrAngle += m_MoveSpeed * elapsedTime;
 	m_CurrAngle = fmod(m_CurrAngle, 360.f);

@@ -1,7 +1,6 @@
 #pragma once
 #include <list>
 
-#include "MiniginPCH.h"
 #include <memory>
 #include <vector>
 #include "TransformComponent.h"

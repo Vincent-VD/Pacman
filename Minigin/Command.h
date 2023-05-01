@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "MiniginPCH.h"
-#include "Time.h"
+#include "GameTime.h"
 
 namespace dae
 {

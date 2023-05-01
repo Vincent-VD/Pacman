@@ -4,18 +4,18 @@
 #include "TextRenderComponent.h"
 #include "TextRenderObserver.h"
 
-dae::LifeComponent::LifeComponent(GameObject* pOwner, TextRenderComponent* pTextRenderComponent, const int nrOfLives)
+pac::LifeComponent::LifeComponent(dae::GameObject* pOwner, TextRenderComponent* pTextRenderComponent, const int nrOfLives)
 	: RootComponent(pOwner)
 	, m_CurrLives(nrOfLives)
 	, m_MaxLives(nrOfLives)
-	, m_HUDSubject(Subject<int>())
+	, m_HUDSubject(dae::Subject<int>())
 	//, m_pTextRenderComponent(pTextRenderComponent)
 {
-	auto HUDObserver{ new TextRenderObserver(pTextRenderComponent)};
+	auto HUDObserver{ new dae::TextRenderObserver(pTextRenderComponent)};
 	m_HUDSubject.AddObserver(HUDObserver);
 }
 
-void dae::LifeComponent::Hit()
+void pac::LifeComponent::Hit()
 {
 	--m_CurrLives;
 	//m_pTextRenderComponent->SetText("Lives: " + std::to_string(m_CurrLives));

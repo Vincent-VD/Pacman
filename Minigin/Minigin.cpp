@@ -6,14 +6,14 @@
 #include <SDL_ttf.h>
 #include "Minigin.h"
 #include <chrono>
-#include <steam_api.h>
+//#include <steam_api.h>
 
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
 #include "SoundManager.h"
-#include "Time.h"
+#include "GameTime.h"
 #include "UIManager.h"
 
 SDL_Window* g_window{};
@@ -76,7 +76,6 @@ dae::Minigin::Minigin(const std::string &dataPath)
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
-	SteamAPI_Shutdown();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
@@ -89,7 +88,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& renderer = Renderer::GetInstance();
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
-	auto& timer = Time::GetInstance();
+	auto& timer = GameTime::GetInstance();
 	auto& UIManager = UIManager::GetInstance();
 	auto soundManager = std::make_unique<SoundManager>();
 	timer.Init(MsPerFrame);

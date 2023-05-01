@@ -10,11 +10,11 @@ void dae::Achievement::OnNotify(std::string args)
 {
 	if (args == "player died")
 	{
-		if (CSteamAchievements::GetInstance())
+		/*if (CSteamAchievements::GetInstance())
 		{
 			CSteamAchievements::GetInstance()->SetAchievement("ACH_WIN_100_GAMES");
 
-		}
+		}*/
 	}
 }
 

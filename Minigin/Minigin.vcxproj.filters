@@ -57,7 +57,7 @@
     <ClInclude Include="TextRenderComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="Time.h">
+    <ClInclude Include="GameTime.h">
       <Filter>Singleton</Filter>
     </ClInclude>
     <ClInclude Include="TextureComponent2D.h">
@@ -156,15 +156,6 @@
     <ClInclude Include="Achievement.h">
       <Filter>Observer/EventQueue</Filter>
     </ClInclude>
-    <ClInclude Include="LifeComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="CSteamAchievements.h">
-      <Filter>Steam</Filter>
-    </ClInclude>
-    <ClInclude Include="ScoreComponent.h">
-      <Filter>Component</Filter>
-    </ClInclude>
     <ClInclude Include="EventManager.h">
       <Filter>Observer/EventQueue</Filter>
     </ClInclude>
@@ -174,9 +165,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
-      <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Main.cpp">
       <Filter>Core</Filter>
     </ClCompile>
     <ClCompile Include="Minigin.cpp">
@@ -191,7 +179,7 @@
     <ClCompile Include="TextRenderComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="Time.cpp">
+    <ClCompile Include="GameTime.cpp">
       <Filter>Singleton</Filter>
     </ClCompile>
     <ClCompile Include="TextureComponent2D.cpp">
@@ -280,15 +268,6 @@
     </ClCompile>
     <ClCompile Include="Achievement.cpp">
       <Filter>Observer/EventQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="LifeComponent.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="CSteamAchievements.cpp">
-      <Filter>Steam</Filter>
-    </ClCompile>
-    <ClCompile Include="ScoreComponent.cpp">
-      <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
       <Filter>Observer/EventQueue</Filter>

@@ -5,7 +5,7 @@
 
 void dae::MoveCommand::Execute(const InputAction& inputAction)
 {
-	auto elapsedSec{ Time::GetInstance().GetDeltaTime() };
+	auto elapsedSec{ GameTime::GetInstance().GetDeltaTime() };
 	auto currentPos{ GetActor()->GetTransform()->GetWorldPosition() };
 	if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
 	{
