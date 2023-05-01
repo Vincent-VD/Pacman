@@ -6,8 +6,6 @@
 #include "Font.h"
 #include "Texture2D.h"
 #include "GameObject.h"
-#include "LifeComponent.h"
-#include "ScoreComponent.h"
 
 dae::TextRenderComponent::TextRenderComponent(GameObject* pOwner, const std::string& text, const std::shared_ptr<Font>& font)
 	: RootComponent(pOwner)

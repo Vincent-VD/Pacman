@@ -147,16 +147,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="GameCommands.cpp" />
     <ClCompile Include="HealthDisplayComponent.cpp" />
     <ClCompile Include="HeroComponent.cpp" />
-    <ClCompile Include="LifeComponent.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HealthDisplayComponent.h" />
     <ClInclude Include="HeroComponent.h" />
-    <ClInclude Include="LifeComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

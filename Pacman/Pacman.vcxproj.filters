@@ -27,18 +27,15 @@
     <ClCompile Include="ScoreComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
-    <ClCompile Include="LifeComponent.cpp">
-      <Filter>Components</Filter>
+    <ClCompile Include="GameCommands.cpp">
+      <Filter>Commands</Filter>
     </ClCompile>
     <ClCompile Include="HealthDisplayComponent.cpp">
-      <Filter>Game Files</Filter>
+      <Filter>Components</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
-      <Filter>Components</Filter>
-    </ClInclude>
-    <ClInclude Include="LifeComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="ScoreComponent.h">
@@ -46,6 +43,9 @@
     </ClInclude>
     <ClInclude Include="HealthDisplayComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GameCommands.h">
+      <Filter>Commands</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

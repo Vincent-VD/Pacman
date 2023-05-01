@@ -56,35 +56,6 @@ namespace dae
 		virtual void Execute([[maybe_unused]] const InputAction& inputAction = InputAction{}) override { std::cout << "Firing\n"; }
 	};
 
-	class MoveCommand : public GameObjectCommand
-	{
-	public:
-		MoveCommand(GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : GameObjectCommand(pActor), m_Speed(speed), m_Direction(direction) {}
-		virtual ~MoveCommand() override = default;
-
-		virtual void Execute(const InputAction& inputAction) override;
-
-	private:
-		const float m_Speed{};
-		const glm::vec2 m_Direction{};
-	};
-
-	class HitCommand : public GameObjectCommand
-	{
-	public:
-		HitCommand(GameObject* pActor) : GameObjectCommand(pActor) {}
-		virtual ~HitCommand() override = default;
-
-		virtual void Execute([[maybe_unused]] const InputAction& inputAction) override;
-	};
-
-	class ScoreCommand : public GameObjectCommand
-	{
-	public:
-		ScoreCommand(GameObject* pActor) : GameObjectCommand(pActor) {}
-		virtual ~ScoreCommand() override = default;
-
-		virtual void Execute([[maybe_unused]] const InputAction& inputAction) override;
-	};
+	
 
 }

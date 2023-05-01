@@ -22,7 +22,7 @@ void pac::HeroComponent::Render() const
 void pac::HeroComponent::Damage()
 {
 	--m_Health;
-	m_Health = std::min(0, m_Health);
+	m_Health = std::max(0, m_Health);
 
 	m_HealthChanged.Notify();
 }
