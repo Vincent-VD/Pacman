@@ -4,16 +4,21 @@
 
 namespace dae
 {
+	struct SoundDesc
+	{
+		int id;
+		float volume;
+	};
 
 	class SoundManager : public Singleton<SoundManager>
 	{
 		class SoundImpl;
-		std::unique_ptr<SoundImpl> m_pImpl;
+		SoundImpl* m_pImpl;
 
 	public:
 		void Init();
 
-		virtual ~SoundManager() override = default;
+		virtual ~SoundManager() override;
 		SoundManager(const SoundManager& other) = delete;
 		SoundManager(SoundManager&& other) noexcept = delete;
 		SoundManager& operator=(const SoundManager& other) = delete;
@@ -21,7 +26,7 @@ namespace dae
 
 		void AddSound(const std::string& soundPath);
 
-		void PlaySound(int soundType, float volume);
+		void PlaySound(SoundDesc soundDesc);
 		void Update();
 
 	private:
@@ -30,7 +35,7 @@ namespace dae
 		static const int MAX_PENDING{ 16 };
 		int m_Head{};
 		int m_Tail{};
-		std::vector<int> m_PendingSounds;
+		std::vector<SoundDesc> m_PendingSounds;
 		std::vector<std::string> m_SoundPaths;
 
 

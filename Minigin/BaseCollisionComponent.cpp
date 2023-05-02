@@ -20,10 +20,6 @@ bool dae::CollisionManager::CheckForCollision(int layer1, int layer2) const
 	return (m_Layers[layer1] & m_Layers[layer2]).any();
 }
 
-//std::vector<dae::BaseCollisionComponent*> dae::CollisionManager::GetCollisions()
-//{
-//}
-
 dae::BaseCollisionComponent::BaseCollisionComponent(GameObject* pOwner, bool isDynamic)
 	: RootComponent(pOwner)
 	, m_IsDynamic(isDynamic)

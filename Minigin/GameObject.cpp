@@ -5,8 +5,9 @@
 #include "RootComponent.h"
 
 
-dae::GameObject::GameObject(const std::string& tag)
-	: m_Tag{tag}
+dae::GameObject::GameObject(const std::string& tag, int layer)
+	: m_Layer(layer)
+	, m_Tag{tag}
 	, m_pTransform{ std::make_unique<TransformComponent>(this) }
 {
 }

@@ -58,7 +58,7 @@ void load()
 void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
 {
 	using namespace dae;
-	auto lives = std::make_unique<GameObject>("lives", (int)Layers::player);
+	auto lives = std::make_unique<GameObject>("lives", (int)Layers::UI);
 	lives->GetTransform()->SetPosition(position.x, 0.f, 0.f);
 	auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
 	lives->AddComponent(livesText);
@@ -68,7 +68,7 @@ void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<da
 	auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
 	score->AddComponent(scoreText);
 
-	auto player = std::make_unique<GameObject>("player", (int)Layers::UI);
+	auto player = std::make_unique<GameObject>("player", (int)Layers::player);
 	player->GetTransform()->SetPosition(position);
 	auto input = std::make_shared<InputComponent>(player.get());
 	auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
