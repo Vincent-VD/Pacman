@@ -90,11 +90,11 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = GameTime::GetInstance();
 	auto& UIManager = UIManager::GetInstance();
-	auto soundManager = std::make_unique<SoundManager>();
+	auto& soundManager = SoundManager::GetInstance();
 	timer.Init(MsPerFrame);
 	input.Init();
 	UIManager.Init();
-	soundManager->Init();
+	soundManager.Init();
 
 	// todo: this update loop could use some work.
 	bool doContinue = true;
@@ -114,7 +114,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			lag -= Minigin::MsPerFrame;
 		}
 		sceneManager.Update();
-		soundManager->ProcessAudio();
+		soundManager.Update();
 		renderer.Render();
 
 		const auto sleepTime = timer.GetSleepTime();

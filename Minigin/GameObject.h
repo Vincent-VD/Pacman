@@ -14,7 +14,7 @@ namespace dae
 	class GameObject final
 	{
 	public:
-		GameObject(const std::string& tag);
+		GameObject(const std::string& tag, int layer);
 		~GameObject()
 		{
 			std::cout << m_Tag << std::endl;
@@ -28,7 +28,8 @@ namespace dae
 		void Destroy() { m_MarkedForDeletion = true; }
 		const bool IsMarkedForDeletion() const { return m_MarkedForDeletion; }
 
-		std::string GetTag() { return m_Tag; }
+		std::string GetTag() const { return m_Tag; }
+		int GetLayer() const { return m_Layer; }
 
 		void Update();
 		void FixedUpdate();
@@ -54,6 +55,7 @@ namespace dae
 
 	private:
 		bool m_MarkedForDeletion{ false };
+		int m_Layer;
 		std::string m_Tag;
 
 		std::unique_ptr<TransformComponent> m_pTransform{};

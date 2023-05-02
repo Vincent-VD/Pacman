@@ -162,6 +162,10 @@
     <ClInclude Include="TextRenderObserver.h">
       <Filter>Observer/EventQueue</Filter>
     </ClInclude>
+    <ClInclude Include="BaseCollisionComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="RectCollisionComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -275,5 +279,9 @@
     <ClCompile Include="TextRenderObserver.cpp">
       <Filter>Observer/EventQueue</Filter>
     </ClCompile>
+    <ClCompile Include="BaseCollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="RectCollisionComponent.cpp" />
   </ItemGroup>
 </Project>
