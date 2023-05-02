@@ -154,6 +154,7 @@
     <ClCompile Include="ScoreComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CollisionTemplates.h" />
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="HealthDisplayComponent.h" />
     <ClInclude Include="HeroComponent.h" />

@@ -24,6 +24,7 @@
 #include "TextureComponent2D.h"
 #include "TextRenderComponent.h"
 #include "HeroComponent.h"
+#include "CollisionTemplates.h"
 
 using namespace dae;
 
@@ -33,13 +34,13 @@ void load()
 {
 	auto& scene = SceneManager::GetInstance().CreateScene("Demo");
 
-	auto background = std::make_unique<GameObject>("test");
+	auto background = std::make_unique<GameObject>("test", (int)Layers::UI);
 	auto textureComp = std::make_shared<TextureComponent2D>(background.get(), "background.tga", 0.f, 0.f, 640.f, 480.f, false);
 	//textureComp->SetTexture("background.tga");
 	background->AddComponent(textureComp);
 	scene.Add(std::move(background));
 
-	auto parent = std::make_unique<GameObject>("parent");
+	auto parent = std::make_unique<GameObject>("parent", (int)Layers::UI);
 	auto fps = std::make_shared<FPSComponent>(parent.get());
 	//go->GetTransform()->SetPosition(100.f, 100.f, 0.f);
 	auto font = ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
@@ -57,17 +58,17 @@ void load()
 void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
 {
 	using namespace dae;
-	auto lives = std::make_unique<GameObject>("lives");
+	auto lives = std::make_unique<GameObject>("lives", (int)Layers::player);
 	lives->GetTransform()->SetPosition(position.x, 0.f, 0.f);
 	auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
 	lives->AddComponent(livesText);
 
-	auto score = std::make_unique<GameObject>("score");
+	auto score = std::make_unique<GameObject>("score", (int)Layers::UI);
 	score->GetTransform()->SetPosition(position.x, 10.f, 0.f);
 	auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
 	score->AddComponent(scoreText);
 
-	auto player = std::make_unique<GameObject>("player");
+	auto player = std::make_unique<GameObject>("player", (int)Layers::UI);
 	player->GetTransform()->SetPosition(position);
 	auto input = std::make_shared<InputComponent>(player.get());
 	auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);

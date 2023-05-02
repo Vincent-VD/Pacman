@@ -47,5 +47,8 @@
     <ClInclude Include="GameCommands.h">
       <Filter>Commands</Filter>
     </ClInclude>
+    <ClInclude Include="CollisionTemplates.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
