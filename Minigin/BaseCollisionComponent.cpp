@@ -3,11 +3,23 @@
 void dae::CollisionManager::Init()
 {
 	m_pCollisionComponents = std::vector<BaseCollisionComponent*>{};
+	m_Layers = std::vector<std::bitset<8>>{};
 }
 
 void dae::CollisionManager::AddCollision(BaseCollisionComponent* collision)
 {
-	m_pCollisionComponents.push_back(collision);
+	m_pCollisionComponents.emplace_back(collision);
+}
+
+void dae::CollisionManager::AddLayer()
+{
+	m_Layers.emplace_back(std::bitset<8>{});
+}
+
+void dae::CollisionManager::RemoveLayer(int layer)
+{
+	const auto layerToRemove{ m_Layers[layer] };
+	m_Layers.erase(std::remove(m_Layers.begin(), m_Layers.end(), layerToRemove));
 }
 
 void dae::CollisionManager::SetLayerCollision(int layer1, int layer2)

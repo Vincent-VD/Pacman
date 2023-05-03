@@ -33,6 +33,12 @@
     <ClCompile Include="HealthDisplayComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerCollisionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
+    <ClCompile Include="PacmanGame.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -49,6 +55,12 @@
     </ClInclude>
     <ClInclude Include="CollisionTemplates.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerCollisionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PacmanGame.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

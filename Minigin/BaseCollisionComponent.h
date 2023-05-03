@@ -24,6 +24,9 @@ namespace dae
 
 		void Init();
 		void AddCollision(BaseCollisionComponent* collision);
+		void AddLayer();
+		void RemoveLayer(int layer);
+
 		std::vector<BaseCollisionComponent*> GetCollisions() const { return m_pCollisionComponents; }
 		//ONLY sets layer1 to collide with layer 2
 		void SetLayerCollision(int layer1, int layer2);
@@ -39,7 +42,7 @@ namespace dae
 		friend class Singleton<CollisionManager>;
 		CollisionManager() = default;
 		std::vector<BaseCollisionComponent*> m_pCollisionComponents;
-		std::vector<std::bitset<4>> m_Layers;
+		std::vector<std::bitset<8>> m_Layers;
 	};
 
 	class BaseCollisionComponent : public RootComponent

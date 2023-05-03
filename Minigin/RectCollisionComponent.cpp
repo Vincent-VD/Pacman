@@ -37,10 +37,12 @@ void dae::RectCollisionComponent::Update()
 
 void dae::RectCollisionComponent::Render() const
 {
+#if _DEBUG
 	const SDL_Rect rect{ static_cast<int>(m_CollisionBox.left), static_cast<int>(m_CollisionBox.bottom), static_cast<int>(m_CollisionBox.width), static_cast<int>(m_CollisionBox.height) };
 	SDL_SetRenderDrawColor(dae::Renderer::GetInstance().GetSDLRenderer(), 255, 0, 0, 255);
 	SDL_RenderDrawRect(dae::Renderer::GetInstance().GetSDLRenderer(), &rect);
 	SDL_SetRenderDrawColor(dae::Renderer::GetInstance().GetSDLRenderer(), 0, 0, 0, 255);
+#endif
 }
 
 bool dae::RectCollisionComponent::CheckCollision(const BaseCollisionComponent* other) const
