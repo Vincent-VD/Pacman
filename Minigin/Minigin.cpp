@@ -98,8 +98,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = GameTime::GetInstance();
 	auto& UIManager = UIManager::GetInstance();
-	ServiceLocator::RegisterSoundSystem(new SoundLogger(new FmodSoundSystem));
-	auto& soundManager = ServiceLocator::GetSoundSystem();
+	//auto& soundManager = ServiceLocator::GetSoundSystem();
 	//auto& soundManager = FmodSoundSystem::GetInstance();
 	timer.Init(MsPerFrame);
 	input.Init();
@@ -122,7 +121,6 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			lag -= Minigin::MsPerFrame;
 		}
 		sceneManager.Update();
-		soundManager.Update();
 		renderer.Render();
 
 		const auto sleepTime = timer.GetSleepTime();

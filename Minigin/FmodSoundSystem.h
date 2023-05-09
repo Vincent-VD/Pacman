@@ -1,5 +1,8 @@
 #pragma once
 
+#include <mutex>
+#include <thread>
+
 #include "MiniginPCH.h"
 #include "SoundSystem.h"
 
@@ -30,12 +33,27 @@ namespace dae
 		virtual void Update() override;
 
 	private:
+		class AudioThreadFunctor
+		{
+		public:
+			explicit AudioThreadFunctor(FmodSoundSystem* soundSystem) : m_SoundSystem{ soundSystem } {}
+			void operator()() { m_SoundSystem->Update(); }
+
+		private:
+			FmodSoundSystem* m_SoundSystem;
+		};
+
+		bool m_StopThread{ false };
+		std::jthread m_AudioThread;
+		static std::condition_variable m_ConditionVariable;
+		static std::mutex m_Mutex;
+
 		//Condition variable for thread MWAhAHHAHAAHHHAahahAHAHAHHAhahahAAahahHAHAhahaHHAAAAAAAA
-		static const int MAX_PENDING{ 16 };
-		int m_Head{};
-		int m_Tail{};
-		std::vector<SoundDesc> m_PendingSounds;
-		std::vector<std::string> m_SoundPaths;
+		static constexpr int MAX_PENDING{ 16 };
+		static int m_Head;
+		static int m_Tail;
+		static SoundDesc m_PendingSounds[MAX_PENDING];
+		static std::vector<std::string> m_SoundPaths;
 	};
 }
 

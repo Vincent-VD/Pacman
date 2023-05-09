@@ -26,7 +26,7 @@ void dae::SoundLogger::PlaySound(SoundDesc soundDesc)
 {
 	m_pSoundSystem->PlaySound(soundDesc);
 
-	std::cout << "Sound played with id: " << soundDesc.id << "@ " << soundDesc.volume << "volume\n";
+	std::cout << "Sound played with id: " << soundDesc.id << " @ " << soundDesc.volume << "volume\n";
 }
 
 void dae::SoundLogger::PauseSound()

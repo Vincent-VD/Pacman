@@ -29,6 +29,7 @@ public:
 	~SoundImpl()
 	{
 		m_pFmodSystem->release();
+		std::cout << "FMOD released\n";
 	}
 
 	SoundImpl(const SoundImpl& other) = delete;
@@ -66,16 +67,28 @@ private:
 	FMOD::System* m_pFmodSystem{ nullptr };
 };
 
-FmodSoundSystem::FmodSoundSystem()
-	: m_pImpl{new SoundImpl{}}
-	, m_PendingSounds{ std::vector<SoundDesc>(MAX_PENDING) }
+std::mutex FmodSoundSystem::m_Mutex;
+std::condition_variable FmodSoundSystem::m_ConditionVariable;
 
+int FmodSoundSystem::m_Head = 0;
+int FmodSoundSystem::m_Tail = 0;
+std::vector<std::string> FmodSoundSystem::m_SoundPaths{};
+SoundDesc FmodSoundSystem::m_PendingSounds[FmodSoundSystem::MAX_PENDING] = {};
+
+
+FmodSoundSystem::FmodSoundSystem()
+	: m_pImpl(new SoundImpl{})
+	, m_AudioThread(AudioThreadFunctor{ this })
 {
 }
 
 FmodSoundSystem::~FmodSoundSystem()
 {
 	delete m_pImpl;
+	m_StopThread = true;
+	m_ConditionVariable.notify_one();
+	m_AudioThread.join();
+
 }
 
 int FmodSoundSystem::AddSound(const std::string& soundPath)
@@ -87,6 +100,8 @@ int FmodSoundSystem::AddSound(const std::string& soundPath)
 
 void FmodSoundSystem::PlaySound(SoundDesc soundDesc)
 {
+	std::unique_lock<std::mutex> lock{ m_Mutex };
+
 	for (int iter = m_Head; iter != m_Tail; iter = (iter + 1) % MAX_PENDING)
 	{
 		SoundDesc curr{ m_PendingSounds[iter] };
@@ -96,8 +111,11 @@ void FmodSoundSystem::PlaySound(SoundDesc soundDesc)
 			return;
 		}
 	}
+
 	m_PendingSounds[m_Tail] = soundDesc;
 	m_Tail = (m_Tail + 1) % MAX_PENDING;
+
+	m_ConditionVariable.notify_one();
 }
 
 void FmodSoundSystem::PauseSound()
@@ -112,13 +130,22 @@ void FmodSoundSystem::ResumeSound()
 
 void FmodSoundSystem::Update()
 {
-	if (m_Head == m_Tail) return;
+	while(true)
+	{
+		std::unique_lock<std::mutex> lock{ m_Mutex };
 
-	const std::string path{ ResourceManager::GetInstance().GetDataPath() };
+		m_ConditionVariable.wait(lock, [this] { return m_StopThread || m_Head != m_Tail; });
 
-	const SoundDesc soundDesc{ m_PendingSounds[m_Head] };
+		if (m_StopThread) {
+			break;
+		}
 
-	m_pImpl->PlayAudio(path + m_SoundPaths[soundDesc.id], soundDesc.volume);
+		const std::string path{ ResourceManager::GetInstance().GetDataPath() };
 
-	m_Head = (m_Head + 1) % MAX_PENDING;
+		const SoundDesc soundDesc{ m_PendingSounds[m_Head] };
+
+		m_pImpl->PlayAudio(path + m_SoundPaths[soundDesc.id], soundDesc.volume);
+
+		m_Head = (m_Head + 1) % MAX_PENDING;
+	}
 }

@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "CollisionTemplates.h"
 #include "Command.h"
+#include "FmodSoundSystem.h"
 #include "FPSComponent.h"
 #include "GameCommands.h"
 #include "HealthDisplayComponent.h"
@@ -18,6 +19,8 @@
 #include "TextureComponent2D.h"
 #include "HeroComponent.h"
 #include "Minigin.h"
+#include "ServiceLocator.h"
+#include "SoundLogger.h"
 
 void pac::PacmanGame::LoadGame()
 {
@@ -42,6 +45,12 @@ void pac::PacmanGame::LoadGame()
 	CreatePlayer(glm::vec3(200.f, 100.f, 0.f), false, font, scene);
 
 	scene.Add(std::move(parent));
+
+	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
+
+	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
+	soundManager.AddSound("S_Car_Pain_Edition_Overflow.wav");
+	soundManager.PlaySound(dae::SoundDesc{ 0, 1.f });
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene)
