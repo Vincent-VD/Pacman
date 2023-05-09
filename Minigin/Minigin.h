@@ -23,10 +23,9 @@ namespace dae
 		Minigin& operator=(const Minigin& other) = delete;
 		Minigin& operator=(Minigin&& other) = delete;
 
-		static WindowInfo GetWindowInfo() { return m_WindowInfo; }
+		static WindowInfo m_WindowInfo;
 
 	private:
 		static constexpr float MsPerFrame = 16.6f;
-		static WindowInfo m_WindowInfo;
 	};
 }

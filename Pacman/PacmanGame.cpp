@@ -49,11 +49,11 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
 	std::ifstream obj(levelPath.c_str());
-	if (!obj) {
+	/*if (obj == std::ifstream::) {
 		std::cerr << "Cannot open " << levelPath << std::endl;
-	}
+	}*/
 
-	float y{ dae::Minigin::GetWindowInfo().m_Height - 19 * 32.f }; //window height - # rows * texture size
+	float y{ dae::Minigin::m_WindowInfo.m_Height - 19 * 32.f }; //window height - # rows * texture size
 	std::string line;
 	while (std::getline(obj, line))
 	{
@@ -63,7 +63,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene
 			//std::cout << ch << std::endl;
 			if (ch == '#')
 			{
-				scene->Add(CreateTile({x, y}));
+				scene->Add(std::move(CreateTile({x, y})));
 			}
 			x += 32.f;
 		}
@@ -122,7 +122,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 
 std::unique_ptr<dae::GameObject> pac::PacmanGame::CreateTile(glm::vec2 position)
 {
-	std::shared_ptr<dae::GameObject> go = std::make_shared<dae::GameObject>("tile", (int)Layers::level);
+	std::unique_ptr<dae::GameObject> go = std::make_unique<dae::GameObject>("tile", (int)Layers::level);
 	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile.png", position.x, position.y, 32, 32, false) };
 	//TileCollisionComponent* collisionComp{ new TileCollisionComponent{go.get(), x, y, 32, 32, false} };
 
@@ -130,5 +130,5 @@ std::unique_ptr<dae::GameObject> pac::PacmanGame::CreateTile(glm::vec2 position)
 	go->AddComponent(textureComp);
 	//go->AddComponent(collisionComp);
 
-	return go;
+	return std::move(go);
 }

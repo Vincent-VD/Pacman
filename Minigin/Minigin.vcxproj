@@ -100,7 +100,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;$(SolutionDir)3rdParty\FMOD\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -112,11 +112,15 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(PlatformTarget)\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
+</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -126,7 +130,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;_DEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;$(SolutionDir)3rdParty\FMOD\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -138,11 +142,15 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(PlatformTarget)\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
+</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -154,7 +162,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;$(SolutionDir)3rdParty\FMOD\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -168,11 +176,15 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(PlatformTarget)\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
+</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -184,7 +196,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions);_CRT_SECURE_NO_WARNINGS;_CRT_SECURE_NO_WARNINGS</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParty\imgui-1.89.3;$(SolutionDir)3rdParty\FMOD\core\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <TreatWarningAsError>true</TreatWarningAsError>
       <LanguageStandard>stdcpp20</LanguageStandard>
     </ClCompile>
@@ -198,11 +210,15 @@
     </Link>
     <PostBuildEvent />
     <PostBuildEvent>
-      <Command>
-      </Command>
+      <Command>xcopy "$(SolutionDir)3rdParty\SDL2\lib\$(PlatformTarget)\SDL2.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
+xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
+</Command>
     </PostBuildEvent>
     <Lib>
-      <AdditionalDependencies>xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>xinput.lib;fmod_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformShortName);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -229,6 +245,7 @@
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Minigin.h" />
     <ClInclude Include="MiniginPCH.h" />
+    <ClInclude Include="NullSoundSystem.h" />
     <ClInclude Include="Observer.h" />
     <ClInclude Include="RectCollisionComponent.h" />
     <ClInclude Include="Renderer.h" />
@@ -236,8 +253,11 @@
     <ClInclude Include="RootComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="Singleton.h" />
-    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="FmodSoundSystem.h" />
+    <ClInclude Include="SoundLogger.h" />
+    <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="TextRenderComponent.h" />
     <ClInclude Include="TextRenderObserver.h" />
     <ClInclude Include="Texture2D.h" />
@@ -271,6 +291,7 @@
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Minigin.cpp" />
+    <ClCompile Include="NullSoundSystem.cpp" />
     <ClCompile Include="Observer.cpp" />
     <ClCompile Include="RectCollisionComponent.cpp" />
     <ClCompile Include="Renderer.cpp" />
@@ -278,7 +299,10 @@
     <ClCompile Include="RootComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
-    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="ServiceLocator.cpp" />
+    <ClCompile Include="FmodSoundSystem.cpp" />
+    <ClCompile Include="SoundLogger.cpp" />
+    <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="TextRenderComponent.cpp" />
     <ClCompile Include="TextRenderObserver.cpp" />
     <ClCompile Include="Texture2D.cpp" />

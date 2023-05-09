@@ -40,6 +40,9 @@
     <Filter Include="Steam">
       <UniqueIdentifier>{a7acad3e-530b-4048-9d84-cafcd8a4ed53}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ServiceLocator">
+      <UniqueIdentifier>{e4ed58d4-6758-4f66-900f-302d1fdf26d2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -147,7 +150,7 @@
     <ClInclude Include="Command.h">
       <Filter>Input</Filter>
     </ClInclude>
-    <ClInclude Include="SoundManager.h">
+    <ClInclude Include="FmodSoundSystem.h">
       <Filter>Sound</Filter>
     </ClInclude>
     <ClInclude Include="Observer.h">
@@ -165,7 +168,21 @@
     <ClInclude Include="BaseCollisionComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
-    <ClInclude Include="RectCollisionComponent.h" />
+    <ClInclude Include="ServiceLocator.h">
+      <Filter>ServiceLocator</Filter>
+    </ClInclude>
+    <ClInclude Include="RectCollisionComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="NullSoundSystem.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundSystem.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundLogger.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -264,7 +281,7 @@
     <ClCompile Include="Command.cpp">
       <Filter>Input</Filter>
     </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
+    <ClCompile Include="FmodSoundSystem.cpp">
       <Filter>Sound</Filter>
     </ClCompile>
     <ClCompile Include="Observer.cpp">
@@ -282,6 +299,20 @@
     <ClCompile Include="BaseCollisionComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
-    <ClCompile Include="RectCollisionComponent.cpp" />
+    <ClCompile Include="ServiceLocator.cpp">
+      <Filter>ServiceLocator</Filter>
+    </ClCompile>
+    <ClCompile Include="RectCollisionComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="NullSoundSystem.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundSystem.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="SoundLogger.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

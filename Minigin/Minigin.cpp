@@ -12,8 +12,10 @@
 #include "SceneManager.h"
 #include "Renderer.h"
 #include "ResourceManager.h"
-#include "SoundManager.h"
+#include "FmodSoundSystem.h"
 #include "GameTime.h"
+#include "ServiceLocator.h"
+#include "SoundLogger.h"
 #include "UIManager.h"
 
 SDL_Window* g_window{};
@@ -45,6 +47,8 @@ void PrintSDLVersion()
 	printf("We are linking against SDL_ttf version %u.%u.%u.\n",
 		version.major, version.minor, version.patch);
 }
+
+dae::WindowInfo  dae::Minigin::m_WindowInfo{};
 
 dae::Minigin::Minigin(const std::string &dataPath, const WindowInfo& windowInfo)
 {
@@ -79,6 +83,7 @@ dae::Minigin::Minigin(const std::string &dataPath, const WindowInfo& windowInfo)
 dae::Minigin::~Minigin()
 {
 	Renderer::GetInstance().Destroy();
+	ServiceLocator::Shutdown();
 	SDL_DestroyWindow(g_window);
 	g_window = nullptr;
 	SDL_Quit();
@@ -93,13 +98,13 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& input = InputManager::GetInstance();
 	auto& timer = GameTime::GetInstance();
 	auto& UIManager = UIManager::GetInstance();
-	auto& soundManager = SoundManager::GetInstance();
+	ServiceLocator::RegisterSoundSystem(new SoundLogger(new FmodSoundSystem));
+	auto& soundManager = ServiceLocator::GetSoundSystem();
+	//auto& soundManager = FmodSoundSystem::GetInstance();
 	timer.Init(MsPerFrame);
 	input.Init();
 	UIManager.Init();
-	soundManager.Init();
 
-	// todo: this update loop could use some work.
 	bool doContinue = true;
 	//auto lastTime = std::chrono::high_resolution_clock::now();
 	float lag = 0.0f;
