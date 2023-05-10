@@ -1,4 +1,7 @@
 #include "FmodSoundSystem.h"
+
+#include <unordered_map>
+
 #include "fmod.hpp"
 #include "ResourceManager.h"
 
@@ -37,34 +40,38 @@ public:
 	SoundImpl& operator=(const SoundImpl& other) = delete;
 	SoundImpl& operator=(SoundImpl&& other) noexcept = delete;
 
-	void PlayAudio(const std::string filename, const float volume)
+	void PlayAudio(const std::string& filename, SoundDesc soundDesc, bool loop = false)
 	{
 		FMOD::Sound* sound{};
-		if (m_pFmodSystem->createSound(filename.c_str(), FMOD_DEFAULT, nullptr, &sound) != FMOD_OK)
+		FMOD_MODE mode{ static_cast<FMOD_MODE>(loop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT) };
+		if (m_pFmodSystem->createSound(filename.c_str(), mode, nullptr, &sound) != FMOD_OK)
 		{
 			std::cout << "FMOD: Failed to create sound\n";
 		}
 
 		FMOD::Channel* fmodChannel{};
-		fmodChannel->setVolume(volume);
 		if (m_pFmodSystem->playSound(sound, nullptr, false, &fmodChannel) != FMOD_OK)
 		{
 			std::cout << "FMOD: Failed to play sound\n";
 		}
+
+		fmodChannel->setVolume(soundDesc.volume);
+
+		m_SoundMap.insert(std::pair{soundDesc.id, fmodChannel });
     }
 
-	void PauseSound()
+	void PlayPauseSound(int soundId, bool playPause)
 	{
-		
-	}
-
-	void ResumeSound()
-	{
-		
+		if (m_SoundMap.find(soundId) != m_SoundMap.end())
+		{
+			const auto pChannel{ m_SoundMap.at(soundId) };
+			pChannel->setPaused(playPause);
+		}
 	}
 
 private:
 	FMOD::System* m_pFmodSystem{ nullptr };
+	std::unordered_map<int, FMOD::Channel*> m_SoundMap{};
 };
 
 std::mutex FmodSoundSystem::m_Mutex;
@@ -118,14 +125,9 @@ void FmodSoundSystem::PlaySound(SoundDesc soundDesc)
 	m_ConditionVariable.notify_one();
 }
 
-void FmodSoundSystem::PauseSound()
+void FmodSoundSystem::PlayPause(int soundId, bool pause)
 {
-	m_pImpl->PauseSound();
-}
-
-void FmodSoundSystem::ResumeSound()
-{
-	m_pImpl->ResumeSound();
+	m_pImpl->PlayPauseSound(soundId, pause);
 }
 
 void FmodSoundSystem::Update()
@@ -144,7 +146,7 @@ void FmodSoundSystem::Update()
 
 		const SoundDesc soundDesc{ m_PendingSounds[m_Head] };
 
-		m_pImpl->PlayAudio(path + m_SoundPaths[soundDesc.id], soundDesc.volume);
+		m_pImpl->PlayAudio(path + m_SoundPaths[soundDesc.id], soundDesc);
 
 		m_Head = (m_Head + 1) % MAX_PENDING;
 	}

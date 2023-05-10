@@ -25,9 +25,7 @@ namespace dae
 		virtual int AddSound(const std::string& soundPath) = 0;
 		virtual void PlaySound(SoundDesc soundDesc) = 0;
 
-		virtual void PauseSound() = 0;
-
-		virtual void ResumeSound() = 0;
+		virtual void PlayPause(int soundId, bool pause) = 0;
 
 		virtual void Update() = 0;
 	};

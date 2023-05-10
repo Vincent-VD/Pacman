@@ -15,8 +15,7 @@ namespace dae
 
 		virtual int AddSound(const std::string& /*soundPath*/) override { return -1; }
 		virtual void PlaySound(SoundDesc /*soundDesc*/) override {}
-		virtual void PauseSound() override {}
-		virtual void ResumeSound() override {}
+		virtual void PlayPause(int /*soundId*/, bool /*pause*/) override {}
 		virtual void Update() override {}
 	};
 }

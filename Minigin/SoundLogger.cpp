@@ -29,18 +29,13 @@ void dae::SoundLogger::PlaySound(SoundDesc soundDesc)
 	std::cout << "Sound played with id: " << soundDesc.id << " @ " << soundDesc.volume << "volume\n";
 }
 
-void dae::SoundLogger::PauseSound()
+void dae::SoundLogger::PlayPause(int soundId, bool pause)
 {
-	m_pSoundSystem->PauseSound();
+	m_pSoundSystem->PlayPause(soundId, pause);
 
-	std::cout << "Sound paused\n";
-}
+	auto status{ pause ? " paused" : " resumed"};
 
-void dae::SoundLogger::ResumeSound()
-{
-	m_pSoundSystem->ResumeSound();
-
-	std::cout << "Sound resumed";
+	std::cout << "Sound ID: " << soundId << status << std::endl;
 }
 
 void dae::SoundLogger::Update()

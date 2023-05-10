@@ -26,9 +26,7 @@ namespace dae
 
 		virtual void PlaySound(SoundDesc soundDesc) override;
 
-		virtual void PauseSound() override;
-
-		virtual void ResumeSound() override;
+		virtual void PlayPause(int soundId, bool pause) override;
 
 		virtual void Update() override;
 
