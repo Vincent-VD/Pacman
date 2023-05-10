@@ -9,6 +9,7 @@ namespace pac
 		MoveCommand(dae::GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : GameObjectCommand(pActor), m_Speed(speed), m_Direction(direction) {}
 		virtual ~MoveCommand() override = default;
 
+		virtual void Execute() override {}
 		virtual void Execute(const dae::InputAction& inputAction) override;
 
 	private:
@@ -22,7 +23,8 @@ namespace pac
 		HitCommand(dae::GameObject* pActor) : GameObjectCommand(pActor) {}
 		virtual ~HitCommand() override = default;
 
-		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override;
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
 	};
 
 	class ScoreCommand : public dae::GameObjectCommand
@@ -31,6 +33,20 @@ namespace pac
 		ScoreCommand(dae::GameObject* pActor) : GameObjectCommand(pActor) {}
 		virtual ~ScoreCommand() override = default;
 
-		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override;
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+	};
+
+	class PauseCommand : public dae::Command
+	{
+	public:
+		PauseCommand() : Command() {}
+		virtual ~PauseCommand() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+
+	private:
+		bool m_IsPaused{ false };
 	};
 }

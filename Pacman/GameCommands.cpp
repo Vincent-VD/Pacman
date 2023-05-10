@@ -1,6 +1,7 @@
 #include "GameCommands.h"
 
 #include "HeroComponent.h"
+#include "ServiceLocator.h"
 
 
 void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
@@ -13,7 +14,7 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 	}
 }
 
-void pac::HitCommand::Execute([[maybe_unused]] const dae::InputAction& inputAction)
+void pac::HitCommand::Execute()
 {
 	auto hero{ GetActor()->GetComponent<HeroComponent>()};
 	if(!hero)
@@ -23,7 +24,7 @@ void pac::HitCommand::Execute([[maybe_unused]] const dae::InputAction& inputActi
 	hero->Damage();
 }
 
-void pac::ScoreCommand::Execute([[maybe_unused]] const dae::InputAction& inputAction)
+void pac::ScoreCommand::Execute()
 {
 	auto hero{ GetActor()->GetComponent<HeroComponent>() };
 	if (!hero)
@@ -31,4 +32,10 @@ void pac::ScoreCommand::Execute([[maybe_unused]] const dae::InputAction& inputAc
 		std::cout << "Hero component not found (HitCommand)\n";
 	}
 	hero->Pickup(PickupType::apple);
+}
+
+void pac::PauseCommand::Execute()
+{
+	dae::ServiceLocator::GetSoundSystem().PlayPause(0, m_IsPaused);
+	m_IsPaused = !m_IsPaused;
 }

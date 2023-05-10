@@ -51,6 +51,9 @@ void pac::PacmanGame::LoadGame()
 	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
 	soundManager.AddSound("S_Car_Pain_Edition_Overflow.wav");
 	soundManager.PlaySound(dae::SoundDesc{ 0, 1.f });
+
+	auto pauseCommand{ std::make_shared<pac::PauseCommand>() };
+	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene)
@@ -132,7 +135,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 std::unique_ptr<dae::GameObject> pac::PacmanGame::CreateTile(glm::vec2 position)
 {
 	std::unique_ptr<dae::GameObject> go = std::make_unique<dae::GameObject>("tile", (int)Layers::level);
-	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile.png", position.x, position.y, 32, 32, false) };
+	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile.png", position.x, position.y, 32.f, 32.f, false) };
 	//TileCollisionComponent* collisionComp{ new TileCollisionComponent{go.get(), x, y, 32, 32, false} };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
