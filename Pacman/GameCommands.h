@@ -49,4 +49,17 @@ namespace pac
 	private:
 		bool m_IsPaused{ false };
 	};
+
+	class SoundCommand : public dae::Command
+	{
+	public:
+		SoundCommand() : Command() {}
+		virtual ~SoundCommand() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+
+	private:
+		bool m_IsPaused{ false };
+	};
 }

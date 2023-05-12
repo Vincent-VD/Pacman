@@ -21,11 +21,16 @@ public:
 			//exit(-1);
 		}
 
-		result = m_pFmodSystem->init(10, FMOD_INIT_NORMAL, nullptr);	// Initialize FMOD.
+		result = m_pFmodSystem->init(MAX_CHANNELS, FMOD_INIT_NORMAL, nullptr);	// Initialize FMOD.
 		if (result != FMOD_OK)
 		{
 			printf("FMOD error! (%d) \n", result);
 			//exit(-1);
+		}
+
+		for (auto& [soundId, pChannel] : m_pChannels)
+		{
+			soundId = -1;
 		}
 	}
 
@@ -42,36 +47,65 @@ public:
 
 	void PlayAudio(const std::string& filename, SoundDesc soundDesc, bool loop = false)
 	{
-		FMOD::Sound* sound{};
-		FMOD_MODE mode{ static_cast<FMOD_MODE>(loop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT) };
-		if (m_pFmodSystem->createSound(filename.c_str(), mode, nullptr, &sound) != FMOD_OK)
+		for (auto& [soundId, pChannel] : m_pChannels)
 		{
-			std::cout << "FMOD: Failed to create sound\n";
+			bool isChannelPlaying{};
+			pChannel->isPlaying(&isChannelPlaying);
+			if (soundId == soundDesc.id)
+			{
+				pChannel->setVolume(soundDesc.volume);
+				pChannel->setPosition(0, FMOD_TIMEUNIT_MS);
+				break;
+			}
+			if (!isChannelPlaying && soundId != soundDesc.id)
+			{
+				FMOD::Sound* sound{};
+				FMOD_MODE mode{ static_cast<FMOD_MODE>(loop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT) };
+				if (m_pFmodSystem->createSound(filename.c_str(), mode, nullptr, &sound) != FMOD_OK)
+				{
+					std::cout << "FMOD: Failed to create sound\n";
+				}
+
+				if (m_pFmodSystem->playSound(sound, nullptr, false, &pChannel) != FMOD_OK)
+				{
+					std::cout << "FMOD: Failed to play sound\n";
+				}
+
+				pChannel->setVolume(soundDesc.volume);
+
+				soundId = soundDesc.id;
+				break;
+			}
 		}
-
-		FMOD::Channel* fmodChannel{};
-		if (m_pFmodSystem->playSound(sound, nullptr, false, &fmodChannel) != FMOD_OK)
-		{
-			std::cout << "FMOD: Failed to play sound\n";
-		}
-
-		fmodChannel->setVolume(soundDesc.volume);
-
-		m_SoundMap.insert(std::pair{soundDesc.id, fmodChannel });
     }
 
 	void PlayPauseSound(int soundId, bool playPause)
 	{
-		if (m_SoundMap.find(soundId) != m_SoundMap.end())
+		for (auto& [id, pChannel] : m_pChannels)
 		{
-			const auto pChannel{ m_SoundMap.at(soundId) };
-			pChannel->setPaused(playPause);
+			if (id == soundId)
+			{
+				pChannel->setPaused(playPause);
+			}
+		}
+	}
+
+	void ResetSound(int soundId)
+	{
+		for (auto& [id, pChannel] : m_pChannels)
+		{
+			if (id == soundId)
+			{
+				pChannel->setPosition(0, FMOD_TIMEUNIT_MS);
+			}
 		}
 	}
 
 private:
+	static constexpr int MAX_CHANNELS{ 32 };
 	FMOD::System* m_pFmodSystem{ nullptr };
 	std::unordered_map<int, FMOD::Channel*> m_SoundMap{};
+	std::vector<std::pair<int, FMOD::Channel*>> m_pChannels{ MAX_CHANNELS };
 };
 
 std::mutex FmodSoundSystem::m_Mutex;

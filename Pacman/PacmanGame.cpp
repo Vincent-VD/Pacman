@@ -1,5 +1,6 @@
 #include "PacmanGame.h"
 
+#include <iostream>
 #include <fstream>
 
 #include "GameObject.h"
@@ -21,6 +22,8 @@
 #include "Minigin.h"
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
+
+pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
 
 void pac::PacmanGame::LoadGame()
 {
@@ -46,40 +49,46 @@ void pac::PacmanGame::LoadGame()
 
 	scene.Add(std::move(parent));
 
+	ReadLevelFromFile("Level_1.txt", &scene);
+
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
 
 	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
 	soundManager.AddSound("S_Car_Pain_Edition_Overflow.wav");
 	soundManager.PlaySound(dae::SoundDesc{ 0, 1.f });
 
+	soundManager.AddSound("S_BatteringRamHit_04.wav");
+
 	auto pauseCommand{ std::make_shared<pac::PauseCommand>() };
+	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
+	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_o, dae::InputType::pressed, soundCommand);
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
-	std::ifstream obj(levelPath.c_str());
-	/*if (obj == std::ifstream::) {
+	std::ifstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
+	if (!obj.eof()) {
 		std::cerr << "Cannot open " << levelPath << std::endl;
-	}*/
+	}
 
-	float y{ dae::Minigin::m_WindowInfo.m_Height - 19 * 32.f }; //window height - # rows * texture size
+	float y{ dae::Minigin::m_WindowInfo.m_Height / 2.f - (m_GameField.rows / 2.f) * m_GameField.tileSize };
 	std::string line;
-	while (std::getline(obj, line))
+ 	while (std::getline(obj, line))
 	{
-		float x{};
+		float x{ dae::Minigin::m_WindowInfo.m_Width / 2.f - (m_GameField.cols / 2.f) * m_GameField.tileSize };
 		for (const char& ch : line)
 		{
 			//std::cout << ch << std::endl;
 			if (ch == '#')
 			{
-				scene->Add(std::move(CreateTile({x, y})));
+				scene->Add(std::unique_ptr<dae::GameObject>(CreateTile({x, y})));
 			}
-			x += 32.f;
+			x += m_GameField.tileSize;
 		}
-		y += 32.f;
+		y += m_GameField.tileSize;
 
 	}
 }
@@ -132,15 +141,15 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	scene.Add(std::move(player));
 }
 
-std::unique_ptr<dae::GameObject> pac::PacmanGame::CreateTile(glm::vec2 position)
+dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
 {
-	std::unique_ptr<dae::GameObject> go = std::make_unique<dae::GameObject>("tile", (int)Layers::level);
-	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile.png", position.x, position.y, 32.f, 32.f, false) };
+	dae::GameObject* go = new dae::GameObject("tile", (int)Layers::level);
+	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", position.x, position.y, m_GameField.tileSize, m_GameField.tileSize, false) };
 	//TileCollisionComponent* collisionComp{ new TileCollisionComponent{go.get(), x, y, 32, 32, false} };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	//go->AddComponent(collisionComp);
 
-	return std::move(go);
+	return go;
 }

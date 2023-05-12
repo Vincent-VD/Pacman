@@ -32,7 +32,16 @@ namespace pac
 		//Creates player and respective UI elements
 		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene);
 
-		static std::unique_ptr<dae::GameObject> CreateTile(glm::vec2 position);
+		static dae::GameObject* CreateTile(glm::vec2 position);
+
+		struct GameField
+		{
+			float rows;
+			float cols;
+			float tileSize;
+		};
+
+		static GameField m_GameField;
 	};
 
 }

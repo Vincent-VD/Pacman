@@ -15,10 +15,7 @@ namespace dae
 	{
 	public:
 		GameObject(const std::string& tag, int layer);
-		~GameObject()
-		{
-			std::cout << m_Tag << std::endl;
-		}
+		~GameObject() = default;
 
 		GameObject(const GameObject& other) = delete;
 		GameObject(GameObject&& other) = delete;

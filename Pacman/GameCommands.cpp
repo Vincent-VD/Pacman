@@ -39,3 +39,8 @@ void pac::PauseCommand::Execute()
 	dae::ServiceLocator::GetSoundSystem().PlayPause(0, m_IsPaused);
 	m_IsPaused = !m_IsPaused;
 }
+
+void pac::SoundCommand::Execute()
+{
+	dae::ServiceLocator::GetSoundSystem().PlaySound(dae::SoundDesc{1, 1.f});
+}

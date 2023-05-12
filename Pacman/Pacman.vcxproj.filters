@@ -60,7 +60,7 @@
       <Filter>Components</Filter>
     </ClInclude>
     <ClInclude Include="PacmanGame.h">
-      <Filter>Components</Filter>
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
