@@ -3,6 +3,7 @@
 #include <string>
 
 #include "RootComponent.h"
+#include "Structs.h"
 
 struct SDL_Texture;
 namespace dae
@@ -12,18 +13,6 @@ namespace dae
 	 * Simple RAII wrapper for an SDL_Texture
 	 */
 	class Texture2D;
-
-	struct Rectf
-	{
-	public:
-		Rectf();
-		explicit Rectf(float left, float bottom, float width, float height);
-
-		float left;
-		float bottom;
-		float width;
-		float height;
-	};
 
 	class TextureComponent2D : public RootComponent
 	{

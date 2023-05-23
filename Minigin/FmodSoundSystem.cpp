@@ -102,7 +102,7 @@ public:
 	}
 
 private:
-	static constexpr int MAX_CHANNELS{ 32 };
+	static constexpr int MAX_CHANNELS{ 10 };
 	FMOD::System* m_pFmodSystem{ nullptr };
 	std::unordered_map<int, FMOD::Channel*> m_SoundMap{};
 	std::vector<std::pair<int, FMOD::Channel*>> m_pChannels{ MAX_CHANNELS };

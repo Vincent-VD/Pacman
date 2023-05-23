@@ -39,6 +39,9 @@
     <ClCompile Include="PacmanGame.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="TileCollisionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -61,6 +64,9 @@
     </ClInclude>
     <ClInclude Include="PacmanGame.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TileCollisionComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

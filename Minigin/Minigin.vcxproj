@@ -258,6 +258,7 @@ xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(Outpu
     <ClInclude Include="FmodSoundSystem.h" />
     <ClInclude Include="SoundLogger.h" />
     <ClInclude Include="SoundSystem.h" />
+    <ClInclude Include="Structs.h" />
     <ClInclude Include="TextRenderComponent.h" />
     <ClInclude Include="TextRenderObserver.h" />
     <ClInclude Include="Texture2D.h" />

@@ -5,17 +5,10 @@
 
 #include "RootComponent.h"
 #include "Singleton.h"
+#include "Structs.h"
 
 namespace dae
 {
-	struct Rectf
-	{
-		float left;
-		float bottom;
-		float width;
-		float height;
-	};
-
 	class BaseCollisionComponent;
 
 	class CollisionManager final : public Singleton<CollisionManager>

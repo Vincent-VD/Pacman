@@ -20,8 +20,10 @@
 #include "TextureComponent2D.h"
 #include "HeroComponent.h"
 #include "Minigin.h"
+#include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
+#include "TileCollisionComponent.h"
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
 
@@ -29,13 +31,13 @@ void pac::PacmanGame::LoadGame()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
-	auto background = std::make_unique<dae::GameObject>("test", (int)Layers::UI);
+	auto background = std::make_unique<dae::GameObject>("test", static_cast<int>(Layers::UI));
 	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", 0.f, 0.f, 640.f, 480.f, false);
 	//textureComp->SetTexture("background.tga");
 	background->AddComponent(textureComp);
 	scene.Add(std::move(background));
 
-	auto parent = std::make_unique<dae::GameObject>("parent", (int)Layers::UI);
+	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
 	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
 	//go->GetTransform()->SetPosition(100.f, 100.f, 0.f);
 	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
@@ -51,6 +53,7 @@ void pac::PacmanGame::LoadGame()
 
 	ReadLevelFromFile("Level_1.txt", &scene);
 
+	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
 
 	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
@@ -63,6 +66,22 @@ void pac::PacmanGame::LoadGame()
 	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_o, dae::InputType::pressed, soundCommand);
+
+	std::cout << "Press 'p' to pause background music\n";
+	std::cout << "Press 'o' to play sound effect (sound effect will not play if other sound effect is still playing)\n";
+
+	//Register layers & collision
+	auto& collisionManager{ dae::CollisionManager::GetInstance() };
+
+	for(int iter = 0; iter < 4; ++iter)
+	{
+		collisionManager.AddLayer();
+	}
+
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::enemy), static_cast<int>(Layers::player));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene)
@@ -97,17 +116,17 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	dae::Scene& scene)
 {
 	using namespace dae;
-	auto lives = std::make_unique<GameObject>("lives", (int)Layers::UI);
+	auto lives = std::make_unique<GameObject>("lives", static_cast<int>(Layers::UI));
 	lives->GetTransform()->SetPosition(position.x, 0.f, 0.f);
 	auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
 	lives->AddComponent(livesText);
 
-	auto score = std::make_unique<GameObject>("score", (int)Layers::UI);
+	auto score = std::make_unique<GameObject>("score", static_cast<int>(Layers::UI));
 	score->GetTransform()->SetPosition(position.x, 10.f, 0.f);
 	auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
 	score->AddComponent(scoreText);
 
-	auto player = std::make_unique<GameObject>("player", (int)Layers::player);
+	auto player = std::make_unique<GameObject>("player", static_cast<int>(Layers::player));
 	player->GetTransform()->SetPosition(position);
 	auto input = std::make_shared<InputComponent>(player.get());
 	auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
@@ -143,13 +162,13 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 
 dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
 {
-	dae::GameObject* go = new dae::GameObject("tile", (int)Layers::level);
+	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::level));
 	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", position.x, position.y, m_GameField.tileSize, m_GameField.tileSize, false) };
-	//TileCollisionComponent* collisionComp{ new TileCollisionComponent{go.get(), x, y, 32, 32, false} };
+	auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}, false) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
-	//go->AddComponent(collisionComp);
+	go->AddComponent(collisionComp);
 
 	return go;
 }

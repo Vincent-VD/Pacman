@@ -15,6 +15,7 @@ void dae::RectCollisionComponent::Update()
 {
 	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
 	{
+
 		if(CheckCollision(component))
 		{
 			OnCollision(component);
@@ -47,6 +48,7 @@ void dae::RectCollisionComponent::Render() const
 
 bool dae::RectCollisionComponent::CheckCollision(const BaseCollisionComponent* other) const
 {
+	//todo: check for collisions with self
 	if(const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(other)})
 	{
 		//todo: check for tags

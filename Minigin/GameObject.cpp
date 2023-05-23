@@ -34,7 +34,6 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::LateUpdate()
 {
-
 }
 
 void dae::GameObject::Render() const

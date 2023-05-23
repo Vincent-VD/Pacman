@@ -8,19 +8,6 @@
 
 using namespace dae;
 
-Rectf::Rectf()
-	:Rectf{ 0.0f, 0.0f, 0.0f, 0.0f }
-{
-}
-
-Rectf::Rectf(float left, float bottom, float width, float height)
-	: left{ left }
-	, bottom{ bottom }
-	, width{ width }
-	, height{ height }
-{
-}
-
 TextureComponent2D::TextureComponent2D(GameObject* pOwner, const std::string& filename, float left, float bottom, float width, float height, bool isDynamic)
 	: RootComponent(pOwner)
 	, m_Rect(left, bottom, width, height)
