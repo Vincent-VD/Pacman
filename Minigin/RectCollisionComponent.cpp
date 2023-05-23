@@ -13,26 +13,26 @@ dae::RectCollisionComponent::RectCollisionComponent(GameObject* pOwner, const Re
 
 void dae::RectCollisionComponent::Update()
 {
+	if(m_IsDynamic)
+	{
+		const auto pOwner{ GetOwner()->GetTransform()->GetWorldPosition() };
+		m_CollisionBox.left = pOwner.x;
+		m_CollisionBox.bottom = pOwner.y;
+	}
+
 	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
 	{
 
 		if(CheckCollision(component))
 		{
 			OnCollision(component);
-		}
-		/*if (HandleCollision(m_Rect, component->m_Rect, component->m_Tag) && !m_IsColliding)
+			m_HasCollided = true;
+			break;
+		} else if(m_HasCollided)
 		{
-			detail.m_Tag = component->m_Tag;
-			detail.m_CollisionThisFrame = true;
-			detail.m_OtherRect = component->m_Rect;
-			m_CollisionDetail = detail;
-			OnCollision(component);
-			m_IsColliding = true;
+			m_HasCollided = false;
 		}
-		else
-		{
-			m_IsColliding = false;
-		}*/
+		
 	}
 }
 
@@ -59,15 +59,51 @@ bool dae::RectCollisionComponent::CheckCollision(const BaseCollisionComponent* o
 
 		const Rectf otherRect{ rect->m_CollisionBox };
 
-		if (m_CollisionBox.left < otherRect.left + otherRect.width &&
-			m_CollisionBox.left + m_CollisionBox.width > otherRect.left &&
-			m_CollisionBox.bottom < otherRect.bottom + otherRect.height &&
-			m_CollisionBox.height + m_CollisionBox.bottom > otherRect.bottom)
+		if (HandleBoxCollision(m_CollisionBox, otherRect))
 		{
 			return true;
 		}
 	}
 	return false;
 
+}
+
+bool dae::RectCollisionComponent::CheckCollisionAtPosition(glm::vec3 pos) const
+{
+	const Rectf rectf{ pos.x, pos.y, m_CollisionBox.width, m_CollisionBox.height };
+
+
+	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
+	{
+
+		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })
+		{
+			//todo: check for tags
+			if (!CollisionManager::GetInstance().CheckForCollision(GetOwner()->GetLayer(), rect->GetOwner()->GetLayer()))
+			{
+				continue;
+			}
+
+			const Rectf otherRect{ rect->m_CollisionBox };
+
+			if(HandleBoxCollision(rectf, otherRect))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+bool dae::RectCollisionComponent::HandleBoxCollision(const Rectf& rect1, const Rectf& rect2) const
+{
+	if (rect1.left < rect2.left + rect2.width &&
+		rect1.left + rect1.width > rect2.left &&
+		rect1.bottom < rect2.bottom + rect2.height &&
+		rect1.height + rect1.bottom > rect2.bottom)
+	{
+		return true;
+	}
+	return false;
 }
 

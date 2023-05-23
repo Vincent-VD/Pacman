@@ -1,4 +1,6 @@
 #pragma once
+#include <glm/vec3.hpp>
+
 #include "BaseCollisionComponent.h"
 
 namespace dae
@@ -19,8 +21,12 @@ namespace dae
 
 		virtual bool CheckCollision(const BaseCollisionComponent* other) const override;
 
+		bool CheckCollisionAtPosition(glm::vec3 pos) const;
+
 	private:
-		const Rectf m_CollisionBox;
+		Rectf m_CollisionBox;
+
+		bool HandleBoxCollision(const Rectf& rect1, const Rectf& rect2) const;
 	};
 }
 

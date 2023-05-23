@@ -1,6 +1,7 @@
 #include "GameCommands.h"
 
 #include "HeroComponent.h"
+#include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 
 
@@ -10,7 +11,15 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 	auto currentPos{ GetActor()->GetTransform()->GetWorldPosition() };
 	if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
 	{
-		GetActor()->GetTransform()->SetPosition(currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f) * elapsedSec);
+		auto nextPos{ currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f) * elapsedSec };
+		if(!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckCollisionAtPosition(nextPos))
+		{
+			GetActor()->GetTransform()->SetPosition(nextPos);
+		}
+		else
+		{
+			std::cout << "Cannot move due to collision\n";
+		}
 	}
 }
 

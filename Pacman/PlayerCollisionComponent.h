@@ -6,7 +6,7 @@ namespace pac
 	class PlayerCollisionComponent : public dae::RectCollisionComponent
 	{
 	public:
-		PlayerCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect, bool isDynamic);
+		PlayerCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect);
 		virtual ~PlayerCollisionComponent() override = default;
 		PlayerCollisionComponent(const PlayerCollisionComponent& other) = delete;
 		PlayerCollisionComponent(PlayerCollisionComponent&& other) noexcept = delete;
@@ -14,6 +14,7 @@ namespace pac
 		PlayerCollisionComponent& operator=(PlayerCollisionComponent&& other) noexcept = delete;
 
 		virtual void OnCollision(BaseCollisionComponent* other) override;
+
 	};
 
 

@@ -48,11 +48,14 @@ namespace dae
 		BaseCollisionComponent& operator=(const BaseCollisionComponent& other) = delete;
 		BaseCollisionComponent& operator=(BaseCollisionComponent&& other) noexcept = delete;
 
+		bool HasCollisionOccurred() const { return m_HasCollided; }
+
 		virtual void OnCollision(BaseCollisionComponent* other) = 0;
 
 		virtual bool CheckCollision(const BaseCollisionComponent* other) const = 0;
 
 	protected:
 		bool m_IsDynamic;
+		bool m_HasCollided{ false };
 	};
 }

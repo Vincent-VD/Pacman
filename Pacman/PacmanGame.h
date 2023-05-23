@@ -27,7 +27,7 @@ namespace pac
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene
-		static void ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene);
+		static void ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene);
 
 		//Creates player and respective UI elements
 		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene);

@@ -6,7 +6,7 @@ namespace pac
 	class TileCollisionComponent : public dae::RectCollisionComponent
 	{
 	public:
-		TileCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect, bool isDynamic);
+		TileCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect);
 		virtual ~TileCollisionComponent() override = default;
 		TileCollisionComponent(const TileCollisionComponent& other) = delete;
 		TileCollisionComponent(TileCollisionComponent&& other) noexcept = delete;

@@ -46,12 +46,12 @@ void pac::PacmanGame::LoadGame()
 	parent->AddComponent(text);
 	parent->AddComponent(fps);
 
-	CreatePlayer(glm::vec3(100.f, 100.f, 0.f), true, font, scene);
-	CreatePlayer(glm::vec3(200.f, 100.f, 0.f), false, font, scene);
+	/*CreatePlayer(glm::vec3(100.f, 100.f, 0.f), true, font, scene);
+	CreatePlayer(glm::vec3(200.f, 100.f, 0.f), false, font, scene);*/
 
 	scene.Add(std::move(parent));
 
-	ReadLevelFromFile("Level_1.txt", &scene);
+	ReadLevelFromFile("Level_1.txt", font, scene);
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -84,7 +84,7 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
 }
 
-void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene* scene)
+void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
@@ -100,10 +100,16 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::Scene
 		float x{ dae::Minigin::m_WindowInfo.m_Width / 2.f - (m_GameField.cols / 2.f) * m_GameField.tileSize };
 		for (const char& ch : line)
 		{
-			//std::cout << ch << std::endl;
-			if (ch == '#')
+			switch(ch)
 			{
-				scene->Add(std::unique_ptr<dae::GameObject>(CreateTile({x, y})));
+			case '#':
+				scene.Add(std::unique_ptr<dae::GameObject>(CreateTile({ x, y })));
+				break;
+			case 'P':
+				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene);
+				break;
+			default:
+				break;
 			}
 			x += m_GameField.tileSize;
 		}
@@ -128,16 +134,18 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 
 	auto player = std::make_unique<GameObject>("player", static_cast<int>(Layers::player));
 	player->GetTransform()->SetPosition(position);
-	auto input = std::make_shared<InputComponent>(player.get());
-	auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
-	auto hero = std::make_shared<pac::HeroComponent>(player.get());
-	auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
-	auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
+	const auto input = std::make_shared<InputComponent>(player.get());
+	const auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
+	const auto hero = std::make_shared<pac::HeroComponent>(player.get());
+	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
+	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
+	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
 	player->AddComponent(text);
 	player->AddComponent(input);
 	player->AddComponent(hero);
 	player->AddComponent(lifeComp);
 	player->AddComponent(scoreComp);
+	player->AddComponent(collisionComp);
 
 	auto hitCommand = std::make_shared<pac::HitCommand>(player.get());
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::ButtonX), InputType::pressed, hitCommand);
@@ -163,8 +171,8 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
 {
 	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::level));
-	auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", position.x, position.y, m_GameField.tileSize, m_GameField.tileSize, false) };
-	auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}, false) };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", position.x, position.y, m_GameField.tileSize, m_GameField.tileSize, false) };
+	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
