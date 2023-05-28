@@ -180,7 +180,9 @@
     <ClCompile Include="PacmanGame.cpp" />
     <ClCompile Include="PlayerCollisionComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="UIState.cpp" />
     <ClCompile Include="TileCollisionComponent.cpp" />
+    <ClCompile Include="UIMenuComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CollisionTemplates.h" />
@@ -190,7 +192,9 @@
     <ClInclude Include="PacmanGame.h" />
     <ClInclude Include="PlayerCollisionComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="UIState.h" />
     <ClInclude Include="TileCollisionComponent.h" />
+    <ClInclude Include="UIMenuComponent.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

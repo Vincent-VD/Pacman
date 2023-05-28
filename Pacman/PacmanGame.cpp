@@ -24,15 +24,17 @@
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
 #include "TileCollisionComponent.h"
+#include "UIMenuComponent.h"
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
+std::string pac::PacmanGame::PlayerName{};
 
 void pac::PacmanGame::LoadGame()
 {
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_unique<dae::GameObject>("test", static_cast<int>(Layers::UI));
-	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", 0.f, 0.f, 640.f, 480.f, false);
+	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", 0.f, 0.f, dae::Minigin::m_WindowInfo.m_Height, dae::Minigin::m_WindowInfo.m_Width, false);
 	//textureComp->SetTexture("background.tga");
 	background->AddComponent(textureComp);
 	scene.Add(std::move(background));
@@ -82,6 +84,17 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
+
+	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
+	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
+	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	menu->AddComponent(ui);
+
+	scene.Add(std::move(menu));
+}
+
+void pac::PacmanGame::SaveGame()
+{
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
@@ -95,7 +108,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std:
 
 	float y{ dae::Minigin::m_WindowInfo.m_Height / 2.f - (m_GameField.rows / 2.f) * m_GameField.tileSize };
 	std::string line;
- 	while (std::getline(obj, line))
+	while (std::getline(obj, line))
 	{
 		float x{ dae::Minigin::m_WindowInfo.m_Width / 2.f - (m_GameField.cols / 2.f) * m_GameField.tileSize };
 		for (const char& ch : line)

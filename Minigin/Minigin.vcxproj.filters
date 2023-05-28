@@ -186,6 +186,9 @@
     <ClInclude Include="Structs.h">
       <Filter>Core</Filter>
     </ClInclude>
+    <ClInclude Include="UIBaseComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -316,6 +319,9 @@
     </ClCompile>
     <ClCompile Include="SoundLogger.cpp">
       <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="UIBaseComponent.cpp">
+      <Filter>Component</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

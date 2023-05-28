@@ -21,7 +21,7 @@ namespace dae
 
 		virtual bool CheckCollision(const BaseCollisionComponent* other) const override;
 
-		bool CheckCollisionAtPosition(glm::vec3 pos) const;
+		bool CheckCollisionAtPosition(const glm::vec3& pos) const;
 
 	private:
 		Rectf m_CollisionBox;

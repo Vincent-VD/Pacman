@@ -8,20 +8,20 @@
 
 namespace dae
 {
+	class GameObject;
+
 	class UIManager : public Singleton<UIManager>
 	{
 	public:
-		void Init();
-
 		void Render();
 
-		void AddWindow( std::unique_ptr<UIWindow> window)
+		void AddWindow(GameObject* window)
 		{
-			m_pWindows.emplace_back(std::move(window));
+			m_pWindows.emplace_back(window);
 		}
 
 
 	private:
-		std::vector<std::unique_ptr<UIWindow>> m_pWindows;
+		std::vector<GameObject*> m_pWindows;
 	};
 }

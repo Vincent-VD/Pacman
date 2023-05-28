@@ -97,12 +97,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 	auto& sceneManager = SceneManager::GetInstance();
 	auto& input = InputManager::GetInstance();
 	auto& timer = GameTime::GetInstance();
-	auto& UIManager = UIManager::GetInstance();
 	//auto& soundManager = ServiceLocator::GetSoundSystem();
 	//auto& soundManager = FmodSoundSystem::GetInstance();
 	timer.Init(MsPerFrame);
 	input.Init();
-	UIManager.Init();
 
 	bool doContinue = true;
 	//auto lastTime = std::chrono::high_resolution_clock::now();

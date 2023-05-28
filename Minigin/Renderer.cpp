@@ -6,11 +6,9 @@
 #include "imgui.h"
 #include <backends/imgui_impl_sdl2.h>
 
-#include "Exercise1.h"
 #include "backends/imgui_impl_opengl2.h"
 
 #include "UIManager.h"
-#include "Exercise2.h"
 
 int GetOpenGLDriverIndex()
 {
@@ -48,14 +46,11 @@ void dae::Renderer::Render() const
 
 	SceneManager::GetInstance().Render();
 
-	auto& UIManager = UIManager::GetInstance();
-
 	ImGui_ImplOpenGL2_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_window);
 	ImGui::NewFrame();
 
-	//ImGui::ShowDemoWindow();
-	UIManager.Render();
+	UIManager::GetInstance().Render();
 
 	ImGui::Render();
 	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());

@@ -24,6 +24,9 @@ namespace pac
 		PacmanGame& operator=(PacmanGame&& other) noexcept = delete;
 
 		static void LoadGame();
+		static void SaveGame();
+
+		static std::string PlayerName;
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene

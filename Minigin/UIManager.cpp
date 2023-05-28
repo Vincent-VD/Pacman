@@ -1,14 +1,12 @@
 #include "UIManager.h"
-#include "UIWindow.h"
 
-void dae::UIManager::Init()
-{
-}
+#include "GameObject.h"
+#include "UIBaseComponent.h"
 
 void dae::UIManager::Render()
 {
-	for(auto& window : m_pWindows)
+	for(const auto& window : m_pWindows)
 	{
-		window->Render();
+		window->GetComponent<UIBaseComponent>()->RenderUI();
 	}
 }

@@ -28,7 +28,8 @@ void dae::RectCollisionComponent::Update()
 			OnCollision(component);
 			m_HasCollided = true;
 			break;
-		} else if(m_HasCollided)
+		}
+		if(m_HasCollided)
 		{
 			m_HasCollided = false;
 		}
@@ -68,12 +69,11 @@ bool dae::RectCollisionComponent::CheckCollision(const BaseCollisionComponent* o
 
 }
 
-bool dae::RectCollisionComponent::CheckCollisionAtPosition(glm::vec3 pos) const
+bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos) const
 {
 	const Rectf rectf{ pos.x, pos.y, m_CollisionBox.width, m_CollisionBox.height };
 
-
-	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
+	for (const BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
 	{
 
 		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })

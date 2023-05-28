@@ -16,6 +16,9 @@
     <Filter Include="Commands">
       <UniqueIdentifier>{1ce048e3-cfbd-4f37-ad93-8cd6305ae7fc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{020c478f-8f58-445c-9652-0ca91ac2eecf}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pacman.cpp">
@@ -42,6 +45,12 @@
     <ClCompile Include="TileCollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="UIMenuComponent.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="UIState.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -67,6 +76,12 @@
     </ClInclude>
     <ClInclude Include="TileCollisionComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMenuComponent.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="UIState.h">
+      <Filter>UI</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
