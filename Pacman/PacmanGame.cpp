@@ -34,7 +34,7 @@ void pac::PacmanGame::LoadGame()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
 
 	auto background = std::make_unique<dae::GameObject>("test", static_cast<int>(Layers::UI));
-	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", 0.f, 0.f, dae::Minigin::m_WindowInfo.m_Height, dae::Minigin::m_WindowInfo.m_Width, false);
+	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", dae::Rectf{ 0.f, 0.f, dae::Minigin::m_WindowInfo.m_Height, dae::Minigin::m_WindowInfo.m_Width });
 	//textureComp->SetTexture("background.tga");
 	background->AddComponent(textureComp);
 	scene.Add(std::move(background));
@@ -53,7 +53,14 @@ void pac::PacmanGame::LoadGame()
 
 	scene.Add(std::move(parent));
 
-	ReadLevelFromFile("Level_1.txt", font, scene);
+	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
+	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
+	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	menu->AddComponent(ui);
+
+	ReadLevelFromFile("Level_1.txt", font, scene, menu.get());
+
+	scene.Add(std::move(menu));
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -64,7 +71,7 @@ void pac::PacmanGame::LoadGame()
 
 	soundManager.AddSound("S_BatteringRamHit_04.wav");
 
-	auto pauseCommand{ std::make_shared<pac::PauseCommand>() };
+	auto pauseCommand{ std::make_shared<pac::MusicPauseCommand>() };
 	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_o, dae::InputType::pressed, soundCommand);
@@ -84,20 +91,13 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
-
-	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
-	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
-	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-	menu->AddComponent(ui);
-
-	scene.Add(std::move(menu));
 }
 
 void pac::PacmanGame::SaveGame()
 {
 }
 
-void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
+void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
@@ -119,7 +119,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std:
 				scene.Add(std::unique_ptr<dae::GameObject>(CreateTile({ x, y })));
 				break;
 			case 'P':
-				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene);
+				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
 				break;
 			default:
 				break;
@@ -131,8 +131,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std:
 	}
 }
 
-void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font,
-	dae::Scene& scene)
+void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
 {
 	using namespace dae;
 	auto lives = std::make_unique<GameObject>("lives", static_cast<int>(Layers::UI));
@@ -149,16 +148,23 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	player->GetTransform()->SetPosition(position);
 	const auto input = std::make_shared<InputComponent>(player.get());
 	const auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
+	const auto texture = std::make_shared<TextureComponent2D>(player.get(), "PacSpriteSheet.png", Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize }, Rectf{ 0.f, 0.f, 32.f, 32.f }, 2, true, true);
 	const auto hero = std::make_shared<pac::HeroComponent>(player.get());
 	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
 	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
 	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
+	hero->m_Menu.AddObserver(menu->GetComponent<UIMenuComponent>().get());
+	player->AddComponent(texture);
 	player->AddComponent(text);
 	player->AddComponent(input);
 	player->AddComponent(hero);
 	player->AddComponent(lifeComp);
 	player->AddComponent(scoreComp);
 	player->AddComponent(collisionComp);
+
+	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(menu);
+	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::Start), InputType::pressed, pauseCommand);
+	if (useKeyboard) InputManager::GetInstance().AddKeyboardCommand(input->GetPlayerID(), SDLK_ESCAPE, InputType::pressed, pauseCommand);
 
 	auto hitCommand = std::make_shared<pac::HitCommand>(player.get());
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::ButtonX), InputType::pressed, hitCommand);
@@ -184,7 +190,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
 {
 	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::level));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", position.x, position.y, m_GameField.tileSize, m_GameField.tileSize, false) };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);

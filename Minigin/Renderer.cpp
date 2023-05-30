@@ -6,7 +6,8 @@
 #include "imgui.h"
 #include <backends/imgui_impl_sdl2.h>
 
-#include "backends/imgui_impl_opengl2.h"
+#include "Structs.h"
+#include "backends/imgui_impl_opengl3.h"
 
 #include "UIManager.h"
 
@@ -35,7 +36,7 @@ void dae::Renderer::Init(SDL_Window* window)
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 	ImGui_ImplSDL2_InitForOpenGL(window, SDL_GL_GetCurrentContext());
-	ImGui_ImplOpenGL2_Init();
+	ImGui_ImplOpenGL3_Init();
 }
 
 void dae::Renderer::Render() const
@@ -46,21 +47,21 @@ void dae::Renderer::Render() const
 
 	SceneManager::GetInstance().Render();
 
-	ImGui_ImplOpenGL2_NewFrame();
+	ImGui_ImplOpenGL3_NewFrame();
 	ImGui_ImplSDL2_NewFrame(m_window);
 	ImGui::NewFrame();
 
 	UIManager::GetInstance().Render();
 
 	ImGui::Render();
-	ImGui_ImplOpenGL2_RenderDrawData(ImGui::GetDrawData());
+	ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 	
 	SDL_RenderPresent(m_renderer);
 }
 
 void dae::Renderer::Destroy()
 {
-	ImGui_ImplOpenGL2_Shutdown();
+	ImGui_ImplOpenGL3_Shutdown();
 	ImGui_ImplSDL2_Shutdown();
 	ImGui::DestroyContext();
 
@@ -87,7 +88,27 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.y = static_cast<int>(y);
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
+	SDL_Rect src{};
+	src.x = 0;
+	src.y = 0;
+	src.w = 32;
+	src.h = 32;
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
+}
+
+void dae::Renderer::RenderTextureAnimation(const Texture2D& texture, const Rectf& src, const Rectf& dst) const
+{
+	SDL_Rect dest{};
+	dest.x = static_cast<int>(dst.left);
+	dest.y = static_cast<int>(dst.bottom);
+	dest.w = static_cast<int>(dst.width);
+	dest.h = static_cast<int>(dst.height);
+	SDL_Rect source{};
+	source.x = static_cast<int>(src.left);
+	source.y = static_cast<int>(src.bottom);
+	source.w = static_cast<int>(src.width);
+	source.h = static_cast<int>(src.height);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &source, &dest);
 }
 
 inline SDL_Renderer* dae::Renderer::GetSDLRenderer() const { return m_renderer; }

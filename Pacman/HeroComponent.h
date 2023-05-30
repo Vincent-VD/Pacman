@@ -32,6 +32,7 @@ namespace pac
 
 		dae::Subject<> m_HealthChanged{};
 		dae::Subject<PickupType> m_Pickup{};
+		dae::Subject<std::string> m_Menu{};
 
 	private:
 		int m_Health;

@@ -24,8 +24,12 @@ namespace dae
 		Minigin& operator=(Minigin&& other) = delete;
 
 		static WindowInfo m_WindowInfo;
+		static void SetPaused(bool paused) { m_IsPaused = paused; }
+		static bool GetPaused() { return m_IsPaused; }
+
 
 	private:
 		static constexpr float MsPerFrame = 16.6f;
+		static bool m_IsPaused;
 	};
 }

@@ -1,7 +1,5 @@
 #include "UIMenuComponent.h"
 
-#include <iostream>
-
 #include "UIState.h"
 
 pac::UIMenuComponent::UIMenuComponent(dae::GameObject* pOwner, const std::string& windowTitle, ImGuiWindowFlags windowFlags)
@@ -15,6 +13,16 @@ pac::UIMenuComponent::~UIMenuComponent()
 	delete m_State;
 }
 
+void pac::UIMenuComponent::OnNotify(std::string action)
+{
+	const auto newState{ m_State->HandleInput(action) };
+	if (newState != nullptr)
+	{
+		delete m_State;
+		m_State = newState;
+	}
+}
+
 void pac::UIMenuComponent::RenderUI()
 {
 	const auto newState{ m_State->Update() };
@@ -23,5 +31,4 @@ void pac::UIMenuComponent::RenderUI()
 		delete m_State;
 		m_State = newState;
 	}
-
 }

@@ -8,6 +8,8 @@ namespace pac
 	class InputState;
 	class EndState;
 	class IdleState;
+	class WaitState;
+	class StartState;
 
 	class UIState
 	{
@@ -20,7 +22,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() { return nullptr; }
+		virtual UIState* HandleInput(const std::string& /*action*/) { return nullptr; }
 		virtual UIState* Update() { return nullptr; }
 
 	private:
@@ -39,7 +41,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() override;
+		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
 	private:
@@ -58,7 +60,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() override;
+		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
 	private:
@@ -77,7 +79,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() override;
+		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
 	private:
@@ -96,7 +98,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() override;
+		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
 	private:
@@ -115,7 +117,7 @@ namespace pac
 		{
 			OnExit();
 		}
-		virtual UIState* HandleInput() override;
+		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
 	private:
@@ -123,7 +125,24 @@ namespace pac
 		virtual void OnExit() override {}
 	};
 
+	class WaitState : public UIState
+	{
+	public:
+		WaitState()
+		{
+			OnEnter();
+		}
+		virtual ~WaitState() override
+		{
+			OnExit();
+		}
+		virtual UIState* HandleInput(const std::string& action) override;
+		virtual UIState* Update() override;
 
+	private:
+		virtual void OnEnter() override {}
+		virtual void OnExit() override {}
+	};
 }
 
 

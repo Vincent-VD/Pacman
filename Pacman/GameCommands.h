@@ -37,11 +37,11 @@ namespace pac
 		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
 	};
 
-	class PauseCommand : public dae::Command
+	class MusicPauseCommand : public dae::Command
 	{
 	public:
-		PauseCommand() : Command() {}
-		virtual ~PauseCommand() override = default;
+		MusicPauseCommand() : Command() {}
+		virtual ~MusicPauseCommand() override = default;
 
 		virtual void Execute() override;
 		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
@@ -61,5 +61,15 @@ namespace pac
 
 	private:
 		bool m_IsPaused{ false };
+	};
+
+	class GamePauseCommand : public dae::GameObjectCommand
+	{
+	public:
+		GamePauseCommand(dae::GameObject* pActor) : GameObjectCommand(pActor) {}
+		virtual ~GamePauseCommand() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
 	};
 }

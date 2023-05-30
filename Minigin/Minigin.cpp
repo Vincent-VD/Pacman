@@ -49,6 +49,7 @@ void PrintSDLVersion()
 }
 
 dae::WindowInfo  dae::Minigin::m_WindowInfo{};
+bool dae::Minigin::m_IsPaused{ true };
 
 dae::Minigin::Minigin(const std::string &dataPath, const WindowInfo& windowInfo)
 {
@@ -118,7 +119,10 @@ void dae::Minigin::Run(const std::function<void()>& load)
 			sceneManager.FixedUpdate(); //Don't use the deltaTime in this function, use MsPerFrame instead
 			lag -= Minigin::MsPerFrame;
 		}
-		sceneManager.Update();
+		if(!m_IsPaused)
+		{
+			sceneManager.Update();
+		}
 		renderer.Render();
 
 		const auto sleepTime = timer.GetSleepTime();

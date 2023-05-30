@@ -23,6 +23,10 @@ void pac::HeroComponent::Damage()
 {
 	--m_Health;
 	m_Health = std::max(0, m_Health);
+	if(m_Health == 0)
+	{
+		m_Menu.Notify("game over");
+	}
 
 	m_HealthChanged.Notify();
 }

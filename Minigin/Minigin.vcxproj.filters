@@ -189,6 +189,9 @@
     <ClInclude Include="UIBaseComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
+    <ClInclude Include="..\3rdParty\imgui-1.89.3\backends\imgui_impl_opengl3.h">
+      <Filter>ImGui\Headers</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="GameObject.cpp">
@@ -322,6 +325,9 @@
     </ClCompile>
     <ClCompile Include="UIBaseComponent.cpp">
       <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rdParty\imgui-1.89.3\backends\imgui_impl_opengl3.cpp">
+      <Filter>ImGui\Source</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -4,6 +4,7 @@
 
 namespace dae
 {
+	struct Rectf;
 	class Texture2D;
 	/**
 	 * Simple RAII wrapper for the SDL renderer
@@ -20,6 +21,7 @@ namespace dae
 
 		void RenderTexture(const Texture2D& texture, float x, float y) const;
 		void RenderTexture(const Texture2D& texture, float x, float y, float width, float height) const;
+		void RenderTextureAnimation(const Texture2D& texture, const Rectf& src, const Rectf& dst) const;
 
 		SDL_Renderer* GetSDLRenderer() const;
 

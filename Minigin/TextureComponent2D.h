@@ -17,7 +17,7 @@ namespace dae
 	class TextureComponent2D : public RootComponent
 	{
 	public:
-		TextureComponent2D(GameObject* pOwner, const std::string& filename, float left, float bottom, float width, float height, bool isDynamic);
+		TextureComponent2D(GameObject* pOwner, const std::string& filename, const Rectf& dest, const Rectf& source = Rectf{}, int nrOfFrames = 0, bool isDynamic = false, bool isAnimated = false);
 		virtual ~TextureComponent2D() override = default;
 
 		TextureComponent2D(const TextureComponent2D& other) = delete;
@@ -33,8 +33,14 @@ namespace dae
 
 	private:
 		std::shared_ptr<Texture2D> m_pTexture;
-		Rectf m_Rect;
+		Rectf m_DestRect;
+		Rectf m_SourceRect;
 		const bool m_IsDynamic;
+		const bool m_IsAnimated;
+		const int m_NrOfFrames;
+		int m_CurrFrame{};
+		const float m_MaxAnimTime{ 0.5f };
+		float m_CurrAnimTime{};
 
 	};
 }
