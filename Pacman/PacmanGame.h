@@ -1,6 +1,7 @@
 #pragma once
 #include <memory>
 #include <string>
+#include <vector>
 #include <glm/vec2.hpp>
 #include <glm/vec3.hpp>
 
@@ -24,9 +25,7 @@ namespace pac
 		PacmanGame& operator=(PacmanGame&& other) noexcept = delete;
 
 		static void LoadGame();
-		static void SaveGame();
-
-		static std::string PlayerName;
+		static void SaveGame(const std::string& name);
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene
@@ -45,6 +44,8 @@ namespace pac
 		};
 
 		static GameField m_GameField;
+
+		static std::vector<dae::GameObject*> m_pPlayers;
 	};
 
 }

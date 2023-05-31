@@ -27,7 +27,7 @@
 #include "UIMenuComponent.h"
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
-std::string pac::PacmanGame::PlayerName{};
+std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{};
 
 void pac::PacmanGame::LoadGame()
 {
@@ -93,16 +93,31 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
 }
 
-void pac::PacmanGame::SaveGame()
+void pac::PacmanGame::SaveGame(const std::string& name)
 {
+	std::vector<int> scores{};
+
+	for (const auto player : m_pPlayers)
+	{
+		scores.emplace_back(player->GetComponent<ScoreComponent>()->GetScore());
+	}
+
+	const auto maxScore{ *std::ranges::max_element(scores) };
+
+	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::ios_base::app);
+	if (obj.eof()) {
+		std::cerr << "Cannot open score file" << std::endl;
+	}
+
+	obj << name.c_str() << " -- " << std::to_string(maxScore) << "\n";
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
-	std::ifstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
-	if (!obj.eof()) {
+	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
+	if (obj.eof()) {
 		std::cerr << "Cannot open " << levelPath << std::endl;
 	}
 
@@ -181,6 +196,8 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	if (useKeyboard) InputManager::GetInstance().AddKeyboardCommand(input->GetPlayerID(), SDL_KeyCode::SDLK_q, InputType::pressed, command);
 	InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), InputType::leftStick, moveStick, useKeyboard);
 	InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), InputType::dpadAxis, moveStick, useKeyboard);
+
+	m_pPlayers.emplace_back(player.get());
 
 	scene.Add(std::move(lives));
 	scene.Add(std::move(score));

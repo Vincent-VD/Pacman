@@ -73,10 +73,12 @@ pac::UIState* pac::InputState::Update()
 {
 	ImGui::Begin("Game over", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 
-	ImGui::InputText("Enter name: ", &pac::PacmanGame::PlayerName[0], 3);
+	ImGui::InputText("Enter name: ", &m_Name[0], 4); //3 char
 	if (ImGui::Button("Enter"))
 	{
 		std::cout << "Saving...\n";
+		ImGui::End();
+		return new EndState{};
 	}
 
 	ImGui::End();
@@ -85,7 +87,7 @@ pac::UIState* pac::InputState::Update()
 
 void pac::InputState::OnExit()
 {
-	pac::PacmanGame::SaveGame();
+	pac::PacmanGame::SaveGame(m_Name);
 }
 
 pac::UIState* pac::EndState::HandleInput(const std::string& /*action*/)

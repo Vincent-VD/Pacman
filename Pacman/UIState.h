@@ -85,6 +85,8 @@ namespace pac
 	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override;
+
+		std::string m_Name;
 	};
 
 	class EndState : public UIState
