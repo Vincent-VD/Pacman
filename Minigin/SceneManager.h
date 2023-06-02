@@ -14,9 +14,13 @@ namespace dae
 
 		Scene* GetCurrScene() const { return m_CurrScene; }
 
+		void SetScene(int nr);
+
 		void Update();
 		void FixedUpdate();
 		void Render();
+		void RenderUI();
+
 	private:
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;

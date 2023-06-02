@@ -1,28 +1,30 @@
 #include "SceneManager.h"
 #include "Scene.h"
 
+
+void dae::SceneManager::SetScene(int nr)
+{
+	m_CurrScene = m_scenes[nr].get();
+}
+
 void dae::SceneManager::Update()
 {
-	for(auto& scene : m_scenes)
-	{
-		scene->Update();
-	}
+	m_CurrScene->Update();
 }
 
 void dae::SceneManager::FixedUpdate()
 {
-	for (auto& scene : m_scenes)
-	{
-		scene->FixedUpdate();
-	}
+	m_CurrScene->FixedUpdate();
 }
 
 void dae::SceneManager::Render()
 {
-	for (const auto& scene : m_scenes)
-	{
-		scene->Render();
-	}
+	m_CurrScene->Render();
+}
+
+void dae::SceneManager::RenderUI()
+{
+	m_CurrScene->RenderUI();
 }
 
 dae::Scene& dae::SceneManager::CreateScene(const std::string& name)

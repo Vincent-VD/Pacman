@@ -28,39 +28,12 @@
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
 std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{};
+int pac::PacmanGame::m_Levels{ 1 };
 
 void pac::PacmanGame::LoadGame()
 {
-	auto& scene = dae::SceneManager::GetInstance().CreateScene("Demo");
-
-	auto background = std::make_unique<dae::GameObject>("test", static_cast<int>(Layers::UI));
-	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", dae::Rectf{ 0.f, 0.f, dae::Minigin::m_WindowInfo.m_Height, dae::Minigin::m_WindowInfo.m_Width });
-	//textureComp->SetTexture("background.tga");
-	background->AddComponent(textureComp);
-	scene.Add(std::move(background));
-
-	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
-	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
-	//go->GetTransform()->SetPosition(100.f, 100.f, 0.f);
-	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
-	auto text = std::make_shared<dae::TextRenderComponent>(parent.get(), "FPS: 00", font);
-	//auto move = std::make_shared<CircularMoveComponent>(parent.get(), 50.f, 2.f);
-	parent->AddComponent(text);
-	parent->AddComponent(fps);
-
-	/*CreatePlayer(glm::vec3(100.f, 100.f, 0.f), true, font, scene);
-	CreatePlayer(glm::vec3(200.f, 100.f, 0.f), false, font, scene);*/
-
-	scene.Add(std::move(parent));
-
-	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
-	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
-	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-	menu->AddComponent(ui);
-
-	ReadLevelFromFile("Level_1.txt", font, scene, menu.get());
-
-	scene.Add(std::move(menu));
+	ReadLevelFromFile("Level_1.txt"/*, font, scene, menu.get()*/);
+	ReadLevelFromFile("Level_2.txt"/*, font, scene, menu.get()*/);
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -73,8 +46,10 @@ void pac::PacmanGame::LoadGame()
 
 	auto pauseCommand{ std::make_shared<pac::MusicPauseCommand>() };
 	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
+	auto nextLevel{ std::make_shared<pac::Next>() };
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_o, dae::InputType::pressed, soundCommand);
+	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_n, dae::InputType::pressed, nextLevel);
 
 	std::cout << "Press 'p' to pause background music\n";
 	std::cout << "Press 'o' to play sound effect (sound effect will not play if other sound effect is still playing)\n";
@@ -91,11 +66,14 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
+
+	dae::SceneManager::GetInstance().SetScene(0);
 }
 
 void pac::PacmanGame::SaveGame(const std::string& name)
 {
 	std::vector<int> scores{};
+	std::vector<std::tuple<int, std::string>> scoresInFile;
 
 	for (const auto player : m_pPlayers)
 	{
@@ -104,17 +82,71 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 
 	const auto maxScore{ *std::ranges::max_element(scores) };
 
-	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::ios_base::app);
-	if (obj.eof()) {
-		std::cerr << "Cannot open score file" << std::endl;
-	}
+	scoresInFile.emplace_back(std::make_tuple(maxScore, name));
 
-	obj << name.c_str() << " -- " << std::to_string(maxScore) << "\n";
+	{
+		std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::fstream::in);
+		if (obj.eof()) {
+			std::cerr << "Cannot open score file" << std::endl;
+		}
+
+		std::string line;
+		while (std::getline(obj, line))
+		{
+			std::stringstream stream{};
+			std::string nameInFile{};
+			int score{};
+			stream << line;
+			stream >> nameInFile;
+			for (int iter{}; iter < 4; ++iter)
+			{
+				stream.ignore();
+			}
+			stream >> score;
+			std::cout << nameInFile << " -- " << score << std::endl;
+
+			scoresInFile.emplace_back(std::make_tuple(score, nameInFile));
+		}
+		obj.close();
+
+		std::sort(scoresInFile.begin(), scoresInFile.end());
+
+		obj.open(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::fstream::out);
+		int iter{};
+		for (auto& [score, nameInFile] : scoresInFile)
+		{
+			if (iter == 10) break; //Save max of 10 scores
+			obj << nameInFile.c_str() << " -- " << score << "\n";
+			++iter;
+		}
+		obj.close();
+	}
 }
 
-void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
+void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu*/)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
+
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("level_" + std::to_string(m_Levels));
+
+	auto background = std::make_unique<dae::GameObject>("test", static_cast<int>(Layers::UI));
+	auto textureComp = std::make_shared<dae::TextureComponent2D>(background.get(), "background.tga", dae::Rectf{ 0.f, 0.f, dae::Minigin::m_WindowInfo.m_Height, dae::Minigin::m_WindowInfo.m_Width });
+	background->AddComponent(textureComp);
+	scene.Add(std::move(background));
+
+	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
+	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
+	auto font = dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12);
+	auto text = std::make_shared<dae::TextRenderComponent>(parent.get(), "FPS: 00", font);
+	parent->AddComponent(text);
+	parent->AddComponent(fps);
+
+	scene.Add(std::move(parent));
+
+	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
+	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
+	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	menu->AddComponent(ui);
 
 	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
 	if (obj.eof()) {
@@ -134,7 +166,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std:
 				scene.Add(std::unique_ptr<dae::GameObject>(CreateTile({ x, y })));
 				break;
 			case 'P':
-				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
+				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu.get());
 				break;
 			default:
 				break;
@@ -144,6 +176,8 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, const std:
 		y += m_GameField.tileSize;
 
 	}
+	scene.Add(std::move(menu));
+	++m_Levels;
 }
 
 void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
@@ -207,7 +241,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
 {
 	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::level));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile_" + std::to_string(m_Levels) + ".png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);

@@ -5,6 +5,7 @@
 #include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "UIMenuComponent.h"
+#include "SceneManager.h"
 
 
 void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
@@ -75,4 +76,9 @@ void pac::GamePauseCommand::Execute()
 		dae::Minigin::SetPaused(true);
 	}
 	menu->OnNotify("paused");
+}
+
+void pac::Next::Execute()
+{
+	dae::SceneManager::GetInstance().SetScene(1);
 }

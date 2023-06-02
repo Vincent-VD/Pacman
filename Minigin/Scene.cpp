@@ -1,5 +1,6 @@
 #include "Scene.h"
 #include "GameObject.h"
+#include "UIBaseComponent.h"
 
 using namespace dae;
 
@@ -61,6 +62,18 @@ void Scene::Render() const
 	for (const auto& object : m_objects)
 	{
 		object->Render();
+	}
+}
+
+void Scene::RenderUI() const
+{
+	for (const auto& object : m_objects)
+	{
+		const auto UIComp{ object->GetComponent<UIBaseComponent>() };
+		if(UIComp)
+		{
+			UIComp->RenderUI();
+		}
 	}
 }
 

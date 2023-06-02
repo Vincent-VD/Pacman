@@ -1,5 +1,6 @@
 #pragma once
 #include <string>
+#include <vector>
 
 namespace pac
 {
@@ -9,23 +10,16 @@ namespace pac
 	class EndState;
 	class IdleState;
 	class WaitState;
-	class StartState;
-
+	
 	class UIState
 	{
 	public:
-		UIState()
-		{
-			OnEnter();
-		}
-		virtual ~UIState()
-		{
-			OnExit();
-		}
+		UIState() = default;
+		virtual ~UIState() = default;
+
 		virtual UIState* HandleInput(const std::string& /*action*/) { return nullptr; }
 		virtual UIState* Update() { return nullptr; }
 
-	private:
 		virtual void OnEnter() {}
 		virtual void OnExit() {}
 	};
@@ -33,18 +27,12 @@ namespace pac
 	class MainMenuState : public UIState
 	{
 	public:
-		MainMenuState()
-		{
-			OnEnter();
-		}
-		virtual ~MainMenuState() override
-		{
-			OnExit();
-		}
+		MainMenuState() = default;
+		virtual ~MainMenuState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override {}
 	};
@@ -52,18 +40,12 @@ namespace pac
 	class PausedState : public UIState
 	{
 	public:
-		PausedState()
-		{
-			OnEnter();
-		}
-		virtual ~PausedState() override
-		{
-			OnExit();
-		}
+		PausedState() = default;
+		virtual ~PausedState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override {}
 	};
@@ -71,58 +53,43 @@ namespace pac
 	class InputState : public UIState
 	{
 	public:
-		InputState()
-		{
-			OnEnter();
-		}
-		virtual ~InputState() override
-		{
-			OnExit();
-		}
+		InputState() = default;
+		virtual ~InputState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override;
 
+	private:
 		std::string m_Name;
 	};
 
 	class EndState : public UIState
 	{
 	public:
-		EndState()
-		{
-			OnEnter();
-		}
-		virtual ~EndState() override
-		{
-			OnExit();
-		}
+		EndState() = default;
+		virtual ~EndState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
-		virtual void OnEnter() override {}
+		virtual void OnEnter() override;
 		virtual void OnExit() override {}
+
+		std::vector<std::tuple<int, std::string>> m_Scores;
 	};
 
 	class IdleState : public UIState
 	{
 	public:
-		IdleState()
-		{
-			OnEnter();
-		}
-		virtual ~IdleState() override
-		{
-			OnExit();
-		}
+		IdleState() = default;
+		virtual ~IdleState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override {}
 	};
@@ -130,18 +97,12 @@ namespace pac
 	class WaitState : public UIState
 	{
 	public:
-		WaitState()
-		{
-			OnEnter();
-		}
-		virtual ~WaitState() override
-		{
-			OnExit();
-		}
+		WaitState() = default;
+		virtual ~WaitState() override = default;
+
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-	private:
 		virtual void OnEnter() override {}
 		virtual void OnExit() override {}
 	};

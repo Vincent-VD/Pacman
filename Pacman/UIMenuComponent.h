@@ -5,7 +5,6 @@
 
 namespace pac
 {
-
 	class UIMenuComponent : public dae::UIBaseComponent, public dae::Observer<std::string>
 	{
 	public:
@@ -27,5 +26,3 @@ namespace pac
 
 	};
 }
-
-

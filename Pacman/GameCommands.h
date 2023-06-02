@@ -72,4 +72,14 @@ namespace pac
 		virtual void Execute() override;
 		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
 	};
+
+	class Next : public dae::Command
+	{
+	public:
+		Next() : Command() {}
+		virtual ~Next() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {};
+	};;
 }

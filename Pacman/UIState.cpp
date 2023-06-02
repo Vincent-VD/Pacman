@@ -1,11 +1,13 @@
 #include "UIState.h"
 
 #include <iostream>
+#include <fstream>
 
 #include "imgui.h"
 #include "InputManager.h"
 #include "Minigin.h"
 #include "PacmanGame.h"
+#include "ResourceManager.h"
 
 
 pac::UIState* pac::MainMenuState::HandleInput(const std::string& /*action*/)
@@ -71,7 +73,7 @@ pac::UIState* pac::InputState::HandleInput(const std::string& /*action*/)
 
 pac::UIState* pac::InputState::Update()
 {
-	ImGui::Begin("Game over", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	ImGui::Begin("Game over", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
 
 	ImGui::InputText("Enter name: ", &m_Name[0], 4); //3 char
 	if (ImGui::Button("Enter"))
@@ -98,7 +100,42 @@ pac::UIState* pac::EndState::HandleInput(const std::string& /*action*/)
 pac::UIState* pac::EndState::Update()
 {
 	//Read file and display rankings in ImGui window
+	ImGui::Begin("Game over", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+
+	for (auto& [score, name] : m_Scores)
+	{
+		std::string line{ name + " -- " + std::to_string(score) };
+		ImGui::Text(&line[0]);
+	}
+
+	ImGui::End();
 	return nullptr;
+}
+
+void pac::EndState::OnEnter()
+{
+	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt");
+	if (obj.eof()) {
+		std::cerr << "Cannot open score file" << std::endl;
+	}
+
+	std::string line;
+	while (std::getline(obj, line))
+	{
+		std::stringstream stream{};
+		std::string nameInFile{};
+		int score{};
+		stream << line;
+		stream >> nameInFile;
+		for (int iter{}; iter < 4; ++iter)
+		{
+			stream.ignore();
+		}
+		stream >> score;
+		std::cout << nameInFile << " -- " << score << std::endl;
+
+		m_Scores.emplace_back(std::make_tuple(score, nameInFile));
+	}
 }
 
 pac::UIState* pac::IdleState::HandleInput(const std::string& action)
