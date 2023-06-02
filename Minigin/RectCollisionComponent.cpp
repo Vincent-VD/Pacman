@@ -4,6 +4,7 @@
 
 #include "GameObject.h"
 #include "Renderer.h"
+#include "SceneManager.h"
 
 dae::RectCollisionComponent::RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic)
 	: BaseCollisionComponent(pOwner, isDynamic)
@@ -20,9 +21,8 @@ void dae::RectCollisionComponent::Update()
 		m_CollisionBox.bottom = pOwner.y;
 	}
 
-	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
+	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber()))
 	{
-
 		if(CheckCollision(component))
 		{
 			OnCollision(component);
@@ -73,7 +73,7 @@ bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos)
 {
 	const Rectf rectf{ pos.x, pos.y, m_CollisionBox.width, m_CollisionBox.height };
 
-	for (const BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions())
+	for (const BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber()))
 	{
 
 		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })

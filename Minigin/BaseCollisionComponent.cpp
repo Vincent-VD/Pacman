@@ -1,14 +1,22 @@
 #include "BaseCollisionComponent.h"
 
+#include <iostream>
+
+#include "SceneManager.h"
+
 void dae::CollisionManager::Init()
 {
-	m_pCollisionComponents = std::vector<BaseCollisionComponent*>{};
+	m_pCollisionComponents = std::vector<std::vector<BaseCollisionComponent*>>{3};
+	/*for(int iter{}; iter < 3; ++iter)
+	{
+		m_pCollisionComponents.emplace_back(std::vector<BaseCollisionComponent*>{});
+	}*/
 	m_Layers = std::vector<std::bitset<8>>{};
 }
 
-void dae::CollisionManager::AddCollision(BaseCollisionComponent* collision)
+void dae::CollisionManager::AddCollision(BaseCollisionComponent* collision, int level)
 {
-	m_pCollisionComponents.emplace_back(collision);
+	m_pCollisionComponents[level].emplace_back(collision);
 }
 
 void dae::CollisionManager::AddLayer()
@@ -36,5 +44,5 @@ dae::BaseCollisionComponent::BaseCollisionComponent(GameObject* pOwner, bool isD
 	: RootComponent(pOwner)
 	, m_IsDynamic(isDynamic)
 {
-	CollisionManager::GetInstance().AddCollision(this);
+	CollisionManager::GetInstance().AddCollision(this, SceneManager::GetInstance().GetCurrSceneNumber());
 }

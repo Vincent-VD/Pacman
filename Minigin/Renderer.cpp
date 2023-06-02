@@ -88,12 +88,7 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	dst.y = static_cast<int>(y);
 	dst.w = static_cast<int>(width);
 	dst.h = static_cast<int>(height);
-	SDL_Rect src{};
-	src.x = 0;
-	src.y = 0;
-	src.w = 32;
-	src.h = 32;
-	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), &src, &dst);
+	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
 void dae::Renderer::RenderTextureAnimation(const Texture2D& texture, const Rectf& src, const Rectf& dst) const

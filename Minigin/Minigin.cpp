@@ -15,7 +15,6 @@
 #include "FmodSoundSystem.h"
 #include "GameTime.h"
 #include "ServiceLocator.h"
-#include "SoundLogger.h"
 #include "UIManager.h"
 
 SDL_Window* g_window{};

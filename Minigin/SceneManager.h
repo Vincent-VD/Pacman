@@ -13,6 +13,7 @@ namespace dae
 		Scene& CreateScene(const std::string& name);
 
 		Scene* GetCurrScene() const { return m_CurrScene; }
+		int GetCurrSceneNumber() const { return m_CurrSceneNr; }
 
 		void SetScene(int nr);
 
@@ -26,5 +27,6 @@ namespace dae
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_scenes;
 		Scene* m_CurrScene;
+		int m_CurrSceneNr{-1};
 	};
 }
