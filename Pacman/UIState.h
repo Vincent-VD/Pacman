@@ -34,7 +34,7 @@ namespace pac
 		virtual UIState* Update() override;
 
 		virtual void OnEnter() override {}
-		virtual void OnExit() override {}
+		virtual void OnExit() override;
 	};
 
 	class PausedState : public UIState

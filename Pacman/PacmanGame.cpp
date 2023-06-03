@@ -30,6 +30,8 @@ pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
 std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{2, nullptr};
 int pac::PacmanGame::m_Levels{ 1 };
 bool pac::PacmanGame::m_CanAddPlayers{true};
+pac::PacmanGame::GameMode pac::PacmanGame::m_GameMode{pac::PacmanGame::GameMode::Solo};
+int pac::PacmanGame::m_CurrLevel{0};
 
 void pac::PacmanGame::LoadGame()
 {
@@ -47,8 +49,29 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
 
-	ReadLevelFromFile("Level_1.txt"/*, font, scene, menu.get()*/);
-	ReadLevelFromFile("Level_2.txt"/*, font, scene, menu.get()*/);
+	auto& scene = dae::SceneManager::GetInstance().CreateScene("main");
+
+	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
+	std::unique_ptr<dae::GameObject> menu{};
+	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
+	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
+
+	auto text = std::make_shared<dae::TextRenderComponent>(parent.get(), "FPS: 00", font);
+	parent->AddComponent(text);
+	parent->AddComponent(fps);
+
+	scene.AddPersistent(std::move(parent));
+
+	menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
+	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
+	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	menu->AddComponent(ui);
+
+	ReadLevelFromFile("Level_1.txt", menu.get());
+	ReadLevelFromFile("Level_2.txt", menu.get());
+	ReadLevelFromFile("Level_3.txt", menu.get());
+
+	scene.AddPersistent(std::move(menu));
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -125,15 +148,25 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 	}
 }
 
-void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu*/)
+void pac::PacmanGame::GoToNextLevel()
+{
+	++m_CurrLevel;
+	if(m_CurrLevel > m_Levels)
+	{
+		m_CurrLevel = 1;
+	}
+	dae::SceneManager::GetInstance().SetScene(m_CurrLevel);
+}
+
+void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath, dae::GameObject* menu)
 {
 	std::vector<std::shared_ptr<dae::GameObject>> res{};
 
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("level_" + std::to_string(m_Levels));
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
-	std::unique_ptr<dae::GameObject> menu{};
-	if(m_CanAddPlayers)
+	//std::unique_ptr<dae::GameObject> menu{};
+	/*if(m_CanAddPlayers)
 	{	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
 		auto fps = std::make_shared<dae::FPSComponent>(parent.get());
 		
@@ -147,7 +180,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, const st
 		menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
 		auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 		menu->AddComponent(ui);
-	}
+	}*/
 	
 
 	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
@@ -168,14 +201,16 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, const st
 				scene.Add(std::unique_ptr<dae::GameObject>(CreateTile({ x, y })));
 				break;
 			case 'P':
-				if (!m_CanAddPlayers) continue;
+				if (m_Levels > 1) continue;
+				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
+				/*if (!m_CanAddPlayers) continue;
 				for (auto player : m_pPlayers)
 				{
 					if(!player)
 					{
-						CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu.get());
+						CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
 					}
-				}
+				}*/
 				break;
 			default:
 				break;
@@ -185,7 +220,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, const st
 		y += m_GameField.tileSize;
 
 	}
-	scene.AddPersistent(std::move(menu));
+	//scene.AddPersistent(std::move(menu));
 	++m_Levels;
 	m_CanAddPlayers = false;
 }

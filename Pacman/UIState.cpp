@@ -8,6 +8,7 @@
 #include "Minigin.h"
 #include "PacmanGame.h"
 #include "ResourceManager.h"
+#include "SceneManager.h"
 
 
 pac::UIState* pac::MainMenuState::HandleInput(const std::string& /*action*/)
@@ -23,6 +24,7 @@ pac::UIState* pac::MainMenuState::Update()
 	if (ImGui::Button("Play Single"))
 	{
 		std::cout << "Starting Single\n";
+		pac::PacmanGame::SetGameMode(PacmanGame::GameMode::Solo);
 		ImGui::End();
 		return new PausedState{};
 
@@ -30,6 +32,7 @@ pac::UIState* pac::MainMenuState::Update()
 	if (ImGui::Button("Play 1 v 1"))
 	{
 		std::cout << "Starting 1 v 1\n";
+		pac::PacmanGame::SetGameMode(PacmanGame::GameMode::Versus);
 		ImGui::End();
 		return new WaitState{};
 
@@ -37,6 +40,7 @@ pac::UIState* pac::MainMenuState::Update()
 	if (ImGui::Button("Play Co-op"))
 	{
 		std::cout << "Starting Co-op\n";
+		pac::PacmanGame::SetGameMode(PacmanGame::GameMode::Coop);
 		ImGui::End();
 		return new WaitState{};
 
@@ -44,6 +48,11 @@ pac::UIState* pac::MainMenuState::Update()
 	ImGui::End();
 	return nullptr;
 
+}
+
+void pac::MainMenuState::OnExit()
+{
+	pac::PacmanGame::GoToNextLevel();
 }
 
 pac::UIState* pac::PausedState::HandleInput(const std::string& action)

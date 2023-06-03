@@ -21,7 +21,7 @@ void dae::RectCollisionComponent::Update()
 		m_CollisionBox.bottom = pOwner.y;
 	}
 
-	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber()))
+	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber() - 1))
 	{
 		if(CheckCollision(component))
 		{
@@ -73,7 +73,7 @@ bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos)
 {
 	const Rectf rectf{ pos.x, pos.y, m_CollisionBox.width, m_CollisionBox.height };
 
-	for (const BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber()))
+	for (const BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber() - 1))
 	{
 
 		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })

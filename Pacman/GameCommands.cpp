@@ -2,6 +2,7 @@
 
 #include "HeroComponent.h"
 #include "Minigin.h"
+#include "PacmanGame.h"
 #include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "UIMenuComponent.h"
@@ -80,5 +81,5 @@ void pac::GamePauseCommand::Execute()
 
 void pac::Next::Execute()
 {
-	dae::SceneManager::GetInstance().SetScene(1);
+	pac::PacmanGame::GoToNextLevel();
 }

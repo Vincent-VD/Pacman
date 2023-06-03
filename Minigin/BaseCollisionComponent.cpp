@@ -44,5 +44,5 @@ dae::BaseCollisionComponent::BaseCollisionComponent(GameObject* pOwner, bool isD
 	: RootComponent(pOwner)
 	, m_IsDynamic(isDynamic)
 {
-	CollisionManager::GetInstance().AddCollision(this, SceneManager::GetInstance().GetCurrSceneNumber());
+	CollisionManager::GetInstance().AddCollision(this, SceneManager::GetInstance().GetCurrSceneNumber() - 1);
 }
