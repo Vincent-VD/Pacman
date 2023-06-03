@@ -8,7 +8,7 @@ void dae::SceneManager::SetScene(int nr)
 	std::vector<std::shared_ptr<GameObject>> objects;
 	if(m_CurrScene)
 	{
-		objects = m_CurrScene->GetPersisentObjects();
+		objects = m_CurrScene->GetAndRemovePersisentObjects();
 	}
 	m_CurrScene = m_scenes[nr].get();
 	m_CurrScene->AddPersistentObjects(objects);

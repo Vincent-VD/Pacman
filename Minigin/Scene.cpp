@@ -32,7 +32,8 @@ void Scene::AddPersistentObjects(std::vector<std::shared_ptr<GameObject>> object
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
 {
-	m_pObjects.erase(std::remove(m_pObjects.begin(), m_pObjects.end(), object), m_pObjects.end());
+	//auto it = std::find_if(m_pObjects.begin(), m_pObjects.end(), [&object](std::shared_ptr<GameObject> obj) {return obj.get() == object.get(); });
+	m_pObjects.erase(std::remove_if(m_pObjects.begin(), m_pObjects.end(), [object](std::shared_ptr<GameObject> obj) {return obj.get() == object.get(); }), m_pObjects.end());
 }
 
 void Scene::RemoveAll()
@@ -40,9 +41,17 @@ void Scene::RemoveAll()
 	m_pObjects.clear();
 }
 
-std::vector<std::shared_ptr<GameObject>> Scene::GetPersisentObjects() const
+std::vector<std::shared_ptr<GameObject>> Scene::GetAndRemovePersisentObjects()
 {
-	return m_pPersistentObjects;
+	std::vector<std::shared_ptr<GameObject>> res = m_pPersistentObjects;
+
+	for (auto& gameObject : res)
+	{
+		Remove(gameObject);
+		m_pPersistentObjects.erase(std::remove_if(m_pPersistentObjects.begin(), m_pPersistentObjects.end(), [gameObject](std::shared_ptr<GameObject> obj) {return obj.get() == gameObject.get(); }), m_pPersistentObjects.end());
+	}
+
+	return res;
 }
 
 void Scene::Update()

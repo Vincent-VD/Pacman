@@ -17,6 +17,6 @@
 int main(int, char* [])
 {
 	dae::Minigin engine("../Data/");
-	engine.Run([]() { pac::PacmanGame::LoadGame(); });
+	engine.Run([]() { pac::PacmanGame::LoadMain(); });
 	return 0;
 }

@@ -15,7 +15,8 @@ namespace dae
 		void Remove(std::shared_ptr<GameObject> object);
 		void RemoveAll();
 
-		std::vector<std::shared_ptr<GameObject>> GetPersisentObjects() const;
+		std::vector<std::shared_ptr<GameObject>> GetAndRemovePersisentObjects();
+		std::vector<std::shared_ptr<GameObject>> GetPersisentObjects() const { return m_pPersistentObjects; }
 
 		void Update();
 		void FixedUpdate();

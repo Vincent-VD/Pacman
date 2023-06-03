@@ -52,7 +52,7 @@ pac::UIState* pac::MainMenuState::Update()
 
 void pac::MainMenuState::OnExit()
 {
-	pac::PacmanGame::GoToNextLevel();
+	pac::PacmanGame::LoadGame();
 }
 
 pac::UIState* pac::PausedState::HandleInput(const std::string& action)

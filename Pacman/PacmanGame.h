@@ -31,6 +31,7 @@ namespace pac
 			Coop
 		};
 
+		static void LoadMain();
 		static void LoadGame();
 		static void SaveGame(const std::string& name);
 
@@ -40,7 +41,7 @@ namespace pac
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene
-		static void ReadLevelFromFile(const std::string& levelPath, dae::GameObject* menu);
+		static void ReadLevelFromFile(const std::string& levelPath/*, dae::GameObject* menu*/);
 
 		//Creates player and respective UI elements
 		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
