@@ -1,5 +1,6 @@
 #include "HeroComponent.h"
 
+#include "GameTime.h"
 #include "Minigin.h"
 
 pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
@@ -8,8 +9,20 @@ pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
 {
 }
 
+void pac::HeroComponent::ActivatePowerMode()
+{
+	m_IsPowerModeActive = true;
+}
+
 void pac::HeroComponent::Update()
 {
+	if (!m_IsPowerModeActive) return;
+	m_CurrTimer += dae::GameTime::GetInstance().GetDeltaTime();
+	if(m_CurrTimer >= m_PowerModeLimit)
+	{
+		m_IsPowerModeActive = false;
+		m_CurrTimer = 0.f;
+	}
 }
 
 void pac::HeroComponent::FixedUpdate()

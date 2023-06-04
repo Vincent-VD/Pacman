@@ -54,6 +54,9 @@
     <ClCompile Include="PelletCollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="PowerPelletCollisionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -87,6 +90,9 @@
       <Filter>UI</Filter>
     </ClInclude>
     <ClInclude Include="PelletCollisionComponent.h">
+      <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="PowerPelletCollisionComponent.h">
       <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>

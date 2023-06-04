@@ -175,22 +175,6 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
 	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() };
 	dae::GameObject* menu{};
-	//std::unique_ptr<dae::GameObject> menu{};
-	/*if(m_CanAddPlayers)
-	{	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
-		auto fps = std::make_shared<dae::FPSComponent>(parent.get());
-		
-		auto text = std::make_shared<dae::TextRenderComponent>(parent.get(), "FPS: 00", font);
-		parent->AddComponent(text);
-		parent->AddComponent(fps);
-
-		scene.AddPersistent(std::move(parent));
-
-		menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
-		menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
-		auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-		menu->AddComponent(ui);
-	}*/
 	
 
 	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
@@ -221,17 +205,12 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 					}
 				}
 				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
-				/*if (!m_CanAddPlayers) continue;
-				for (auto player : m_pPlayers)
-				{
-					if(!player)
-					{
-						CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
-					}
-				}*/
 				break;
 			case ' ':
 				scene.Add(std::unique_ptr<dae::GameObject>(CreatePellet({ x, y })));
+				break;
+			case 'O':
+				scene.Add(std::unique_ptr<dae::GameObject>(CreatePowerPellet({ x, y })));
 				break;
 			default:
 				break;
@@ -241,7 +220,6 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 		y += m_GameField.tileSize;
 
 	}
-	//scene.AddPersistent(std::move(menu));
 	++m_Levels;
 	m_CanAddPlayers = false;
 }

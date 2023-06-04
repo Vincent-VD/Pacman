@@ -22,6 +22,7 @@ namespace pac
 		HeroComponent& operator=(HeroComponent&& other) noexcept = delete;
 
 		int GetHealth() const { return m_Health; }
+		void ActivatePowerMode();
 
 		virtual void Update() override;
 		virtual void FixedUpdate() override;
@@ -36,6 +37,9 @@ namespace pac
 
 	private:
 		int m_Health;
+		bool m_IsPowerModeActive{ false };
+		float m_CurrTimer{};
+		float m_PowerModeLimit{ 13.f };
 	};
 
 }
