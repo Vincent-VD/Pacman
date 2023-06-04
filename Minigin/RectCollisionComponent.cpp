@@ -6,8 +6,8 @@
 #include "Renderer.h"
 #include "SceneManager.h"
 
-dae::RectCollisionComponent::RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic)
-	: BaseCollisionComponent(pOwner, isDynamic)
+dae::RectCollisionComponent::RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic, bool isTrigger)
+	: BaseCollisionComponent(pOwner, isDynamic, isTrigger)
 	, m_CollisionBox(rect)
 {
 }
@@ -23,6 +23,10 @@ void dae::RectCollisionComponent::Update()
 
 	for (BaseCollisionComponent* component : CollisionManager::GetInstance().GetCollisions(SceneManager::GetInstance().GetCurrSceneNumber() - 1))
 	{
+		if(component == nullptr)
+		{
+			continue;
+		}
 		if(CheckCollision(component))
 		{
 			OnCollision(component);
@@ -79,7 +83,7 @@ bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos)
 		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })
 		{
 			//todo: check for tags
-			if (!CollisionManager::GetInstance().CheckForCollision(GetOwner()->GetLayer(), rect->GetOwner()->GetLayer()))
+			if (!CollisionManager::GetInstance().CheckForCollision(GetOwner()->GetLayer(), rect->GetOwner()->GetLayer()) || component->IsTrigger())
 			{
 				continue;
 			}

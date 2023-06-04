@@ -46,6 +46,10 @@ namespace pac
 		//Creates player and respective UI elements
 		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
 
+		static dae::GameObject* CreatePellet(glm::vec2 position);
+
+		static dae::GameObject* CreatePowerPellet(glm::vec2 position);
+
 		static dae::GameObject* CreateTile(glm::vec2 position);
 
 		struct GameField
@@ -67,6 +71,5 @@ namespace pac
 
 		static int m_CurrLevel;
 	};
-
 }
 

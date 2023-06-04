@@ -1,7 +1,5 @@
 #include "BaseCollisionComponent.h"
 
-#include <iostream>
-
 #include "SceneManager.h"
 
 void dae::CollisionManager::Init()
@@ -17,6 +15,12 @@ void dae::CollisionManager::Init()
 void dae::CollisionManager::AddCollision(BaseCollisionComponent* collision, int level)
 {
 	m_pCollisionComponents[level].emplace_back(collision);
+}
+
+void dae::CollisionManager::RemoveCollision(BaseCollisionComponent* collision, int level)
+{
+	if (m_pCollisionComponents.empty()) return;
+	m_pCollisionComponents[level].erase(std::remove(m_pCollisionComponents[level].begin(), m_pCollisionComponents[level].end(), collision));
 }
 
 void dae::CollisionManager::AddLayer()
@@ -40,9 +44,15 @@ bool dae::CollisionManager::CheckForCollision(int layer1, int layer2) const
 	return m_Layers[layer1][layer2];
 }
 
-dae::BaseCollisionComponent::BaseCollisionComponent(GameObject* pOwner, bool isDynamic)
+dae::BaseCollisionComponent::BaseCollisionComponent(GameObject* pOwner, bool isDynamic, bool isTrigger)
 	: RootComponent(pOwner)
 	, m_IsDynamic(isDynamic)
+	, m_IsTrigger(isTrigger)
 {
 	CollisionManager::GetInstance().AddCollision(this, SceneManager::GetInstance().GetCurrSceneNumber() - 1);
+}
+
+dae::BaseCollisionComponent::~BaseCollisionComponent()
+{
+	CollisionManager::GetInstance().RemoveCollision(this, SceneManager::GetInstance().GetCurrSceneNumber() - 1);
 }

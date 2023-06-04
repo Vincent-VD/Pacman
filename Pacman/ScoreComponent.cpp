@@ -19,10 +19,10 @@ void pac::ScoreComponent::OnNotify(PickupType type)
 {
 	switch (type)
 	{
-	case PickupType::apple:
+	case PickupType::pellet:
 		m_Score += 10;
 		break;
-	case PickupType::largeApple:
+	case PickupType::powerPellet:
 		m_Score += 100;
 		break;
 	}

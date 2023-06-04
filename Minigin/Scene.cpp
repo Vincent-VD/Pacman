@@ -78,7 +78,8 @@ void Scene::Update()
 	}*/
 	for (auto iter : m_ItersToRemove)
 	{
-		m_pObjects[iter] = nullptr;
+		//m_pObjects[iter] = nullptr;
+		Remove(m_pObjects[iter]);
 		//delete m_objects[iter].get();
 	}
 	m_ItersToRemove.clear();

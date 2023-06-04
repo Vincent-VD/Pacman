@@ -7,8 +7,8 @@ namespace pac
 {
 	enum class PickupType
 	{
-		apple,
-		largeApple
+		pellet,
+		powerPellet
 	};
 
 	class HeroComponent : public dae::RootComponent

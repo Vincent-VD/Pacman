@@ -51,6 +51,9 @@
     <ClCompile Include="UIState.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="PelletCollisionComponent.cpp">
+      <Filter>Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="UIState.h">
       <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="PelletCollisionComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

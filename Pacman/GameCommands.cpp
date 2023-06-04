@@ -46,7 +46,7 @@ void pac::ScoreCommand::Execute()
 		std::cout << "Hero component not found (HitCommand)\n";
 		return;
 	}
-	hero->Pickup(PickupType::apple);
+	hero->Pickup(PickupType::pellet);
 }
 
 void pac::MusicPauseCommand::Execute()

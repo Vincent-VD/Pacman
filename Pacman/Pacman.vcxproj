@@ -178,6 +178,7 @@
     <ClCompile Include="HeroComponent.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="PacmanGame.cpp" />
+    <ClCompile Include="PelletCollisionComponent.cpp" />
     <ClCompile Include="PlayerCollisionComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
     <ClCompile Include="UIState.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="HealthDisplayComponent.h" />
     <ClInclude Include="HeroComponent.h" />
     <ClInclude Include="PacmanGame.h" />
+    <ClInclude Include="PelletCollisionComponent.h" />
     <ClInclude Include="PlayerCollisionComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
     <ClInclude Include="UIState.h" />

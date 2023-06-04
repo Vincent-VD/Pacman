@@ -11,7 +11,6 @@ dae::GameObject::GameObject(const std::string& tag, int layer)
 	, m_pTransform{ std::make_unique<TransformComponent>(this) }
 {
 }
-
 void dae::GameObject::Update()
 {
 	for (auto& pComponent : m_pComponents)

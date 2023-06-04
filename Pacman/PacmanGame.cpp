@@ -20,6 +20,7 @@
 #include "TextureComponent2D.h"
 #include "HeroComponent.h"
 #include "Minigin.h"
+#include "PelletCollisionComponent.h"
 #include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
@@ -55,49 +56,6 @@ void pac::PacmanGame::LoadMain()
 
 	scene.AddPersistent(std::move(menu));
 
-	dae::SceneManager::GetInstance().SetScene(0);
-}
-
-void pac::PacmanGame::LoadGame()
-{
-	//Register layers & collision
-	auto& collisionManager{ dae::CollisionManager::GetInstance() };
-	collisionManager.Init();
-
-	for (int iter = 0; iter < 4; ++iter)
-	{
-		collisionManager.AddLayer();
-	}
-
-	collisionManager.SetLayerCollision(static_cast<int>(Layers::enemy), static_cast<int>(Layers::player));
-	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
-	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
-	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
-
-	/*auto& scene = dae::SceneManager::GetInstance().CreateScene("main");
-
-	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
-	std::unique_ptr<dae::GameObject> menu{};
-	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
-	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
-
-	auto text = std::make_shared<dae::TextRenderComponent>(parent.get(), "FPS: 00", font);
-	parent->AddComponent(text);
-	parent->AddComponent(fps);
-
-	scene.AddPersistent(std::move(parent));
-
-	menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
-	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
-	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
-	menu->AddComponent(ui);*/
-
-	ReadLevelFromFile("Level_1.txt"/* menu.get()*/);
-	ReadLevelFromFile("Level_2.txt"/*, menu.get()*/);
-	ReadLevelFromFile("Level_3.txt"/*, menu.get()*/);
-
-	//scene.AddPersistent(std::move(menu));
-
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
 
@@ -116,6 +74,31 @@ void pac::PacmanGame::LoadGame()
 
 	std::cout << "Press 'p' to pause background music\n";
 	std::cout << "Press 'o' to play sound effect (sound effect will not play if other sound effect is still playing)\n";
+
+	dae::SceneManager::GetInstance().SetScene(0);
+}
+
+void pac::PacmanGame::LoadGame()
+{
+	//Register layers & collision
+	auto& collisionManager{ dae::CollisionManager::GetInstance() };
+	collisionManager.Init();
+
+	for (int iter = 0; iter < 5; ++iter)
+	{
+		collisionManager.AddLayer();
+	}
+
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::enemy), static_cast<int>(Layers::player));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::pickup));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::pickup), static_cast<int>(Layers::player));
+
+	ReadLevelFromFile("Level_1.txt"/* menu.get()*/);
+	ReadLevelFromFile("Level_2.txt"/*, menu.get()*/);
+	ReadLevelFromFile("Level_3.txt"/*, menu.get()*/);
 
 	GoToNextLevel();
 }
@@ -247,6 +230,9 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 					}
 				}*/
 				break;
+			case ' ':
+				scene.Add(std::unique_ptr<dae::GameObject>(CreatePellet({ x, y })));
+				break;
 			default:
 				break;
 			}
@@ -316,6 +302,32 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	scene.AddPersistent(std::move(lives));
 	scene.AddPersistent(std::move(score));
 	scene.AddPersistent(std::move(player));
+}
+
+dae::GameObject* pac::PacmanGame::CreatePellet(glm::vec2 position)
+{
+	dae::GameObject* go = new dae::GameObject("pellet", static_cast<int>(Layers::pickup));
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Pellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+
+	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
+	go->AddComponent(textureComp);
+	go->AddComponent(collisionComp);
+
+	return go;
+}
+
+dae::GameObject* pac::PacmanGame::CreatePowerPellet(glm::vec2 position)
+{
+	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::pickup));
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "PowerPellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+
+	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
+	go->AddComponent(textureComp);
+	go->AddComponent(collisionComp);
+
+	return go;
 }
 
 dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)

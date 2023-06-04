@@ -8,7 +8,7 @@ namespace dae
 	class RectCollisionComponent : public BaseCollisionComponent
 	{
 	public:
-		RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic);
+		RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic, bool isTrigger = false);
 		virtual ~RectCollisionComponent() override = default;
 		RectCollisionComponent(const RectCollisionComponent& other) = delete;
 		RectCollisionComponent(RectCollisionComponent&& other) noexcept = delete;

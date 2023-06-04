@@ -17,6 +17,7 @@ namespace dae
 
 		void Init();
 		void AddCollision(BaseCollisionComponent* collision, int level);
+		void RemoveCollision(BaseCollisionComponent* collision, int level);
 		void AddLayer();
 		void RemoveLayer(int layer);
 
@@ -41,14 +42,15 @@ namespace dae
 	class BaseCollisionComponent : public RootComponent
 	{
 	public:
-		BaseCollisionComponent(GameObject* pOwner, bool isDynamic);
-		virtual ~BaseCollisionComponent() override = default;
+		BaseCollisionComponent(GameObject* pOwner, bool isDynamic, bool isTrigger);
+		virtual ~BaseCollisionComponent() override;
 		BaseCollisionComponent(const BaseCollisionComponent& other) = delete;
 		BaseCollisionComponent(BaseCollisionComponent&& other) noexcept = delete;
 		BaseCollisionComponent& operator=(const BaseCollisionComponent& other) = delete;
 		BaseCollisionComponent& operator=(BaseCollisionComponent&& other) noexcept = delete;
 
 		bool HasCollisionOccurred() const { return m_HasCollided; }
+		bool IsTrigger() const { return m_IsTrigger; }
 
 		virtual void OnCollision(BaseCollisionComponent* other) = 0;
 
@@ -57,5 +59,6 @@ namespace dae
 	protected:
 		bool m_IsDynamic;
 		bool m_HasCollided{ false };
+		bool m_IsTrigger;
 	};
 }
