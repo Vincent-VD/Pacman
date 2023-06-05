@@ -22,6 +22,7 @@ namespace pac
 		HeroComponent& operator=(HeroComponent&& other) noexcept = delete;
 
 		int GetHealth() const { return m_Health; }
+		bool IsPowerModeActive() const { return m_IsPowerModeActive; }
 		void ActivatePowerMode();
 
 		virtual void Update() override;
@@ -33,13 +34,17 @@ namespace pac
 
 		dae::Subject<> m_HealthChanged{};
 		dae::Subject<PickupType> m_Pickup{};
-		dae::Subject<std::string> m_Menu{};
+		dae::Subject<const std::string&> m_Menu{};
 
 	private:
 		int m_Health;
 		bool m_IsPowerModeActive{ false };
 		float m_CurrTimer{};
-		float m_PowerModeLimit{ 13.f };
+		const float m_PowerModeLimit{ 13.f };
+
+		bool m_HasBeenDamaged{ false };
+		float m_CurrHitCooldown{};
+		const float m_MaxHitCooldown{ 5.f };
 	};
 
 }

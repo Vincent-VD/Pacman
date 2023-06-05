@@ -46,6 +46,8 @@ namespace pac
 		//Creates player and respective UI elements
 		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
 
+		static void CreateGhost(glm::vec3 position, const std::string& type, dae::Scene& scene);
+
 		static dae::GameObject* CreatePellet(glm::vec2 position);
 
 		static dae::GameObject* CreatePowerPellet(glm::vec2 position);

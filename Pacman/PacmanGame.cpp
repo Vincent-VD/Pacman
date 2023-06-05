@@ -10,6 +10,9 @@
 #include "FmodSoundSystem.h"
 #include "FPSComponent.h"
 #include "GameCommands.h"
+#include "GhostCollisionComponent.h"
+#include "GhostComponent.h"
+#include "GhostMoveComponent.h"
 #include "HealthDisplayComponent.h"
 #include "InputComponent.h"
 #include "InputManager.h"
@@ -90,6 +93,7 @@ void pac::PacmanGame::LoadGame()
 	}
 
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::enemy), static_cast<int>(Layers::player));
+	collisionManager.SetLayerCollision(static_cast<int>(Layers::enemy), static_cast<int>(Layers::level));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::enemy));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::level), static_cast<int>(Layers::player));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::level));
@@ -197,14 +201,26 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 				break;
 			case 'P':
 				if (m_Levels > 1) continue;
-				for (auto currSceneObj : currSceneObjs)
+				for (const auto& currSceneObj : currSceneObjs)
 				{
-					if(const auto menuComp{currSceneObj->GetComponent<UIMenuComponent>()})
+					if(const auto& menuComp{currSceneObj->GetComponent<UIMenuComponent>()})
 					{
 						menu = currSceneObj.get();
 					}
 				}
 				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
+				break;
+			case 'B':
+				CreateGhost({ x, y, 0.f }, "Bonnie", scene);
+				break;
+			case 'C':
+				CreateGhost({ x, y, 0.f }, "Clyde", scene);
+				break;
+			case 'R':
+				CreateGhost({ x, y, 0.f }, "Ret", scene);
+				break;
+			case 'D':
+				CreateGhost({ x, y, 0.f }, "Dee", scene);
 				break;
 			case ' ':
 				scene.Add(std::unique_ptr<dae::GameObject>(CreatePellet({ x, y })));
@@ -280,6 +296,23 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	scene.AddPersistent(std::move(lives));
 	scene.AddPersistent(std::move(score));
 	scene.AddPersistent(std::move(player));
+}
+
+void pac::PacmanGame::CreateGhost(glm::vec3 position, const std::string& type, dae::Scene& scene)
+{
+	auto ghost = std::make_unique<dae::GameObject>("enemy", static_cast<int>(Layers::enemy));
+	ghost->GetTransform()->SetPosition(position);
+
+	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize });
+	const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
+	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type);
+	const auto texture = std::make_shared<dae::TextureComponent2D>(ghost.get(), "PacSpriteSheet.png", dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize }, dae::Rectf{32.f, 32.f, 32.f, 32.f}, 1, true, true);
+	ghost->AddComponent(collision);
+	ghost->AddComponent(move);
+	ghost->AddComponent(ghostComp);
+	ghost->AddComponent(texture);
+
+	scene.Add(std::move(ghost));
 }
 
 dae::GameObject* pac::PacmanGame::CreatePellet(glm::vec2 position)

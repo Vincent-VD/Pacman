@@ -31,7 +31,8 @@ void dae::RectCollisionComponent::Update()
 		{
 			OnCollision(component);
 			m_HasCollided = true;
-			break;
+			//
+			//break;
 		}
 		if(m_HasCollided)
 		{

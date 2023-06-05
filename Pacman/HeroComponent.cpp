@@ -16,12 +16,24 @@ void pac::HeroComponent::ActivatePowerMode()
 
 void pac::HeroComponent::Update()
 {
+	const float elapsedTime{ dae::GameTime::GetInstance().GetDeltaTime() };
 	if (!m_IsPowerModeActive) return;
-	m_CurrTimer += dae::GameTime::GetInstance().GetDeltaTime();
+	m_CurrTimer += elapsedTime;
 	if(m_CurrTimer >= m_PowerModeLimit)
 	{
 		m_IsPowerModeActive = false;
 		m_CurrTimer = 0.f;
+		m_Menu.Notify("power up");
+	}
+
+	if(m_HasBeenDamaged)
+	{
+		m_CurrTimer += elapsedTime;
+		if(m_CurrHitCooldown >= m_MaxHitCooldown)
+		{
+			m_CurrHitCooldown = 0.f;
+			m_HasBeenDamaged = false;
+		}
 	}
 }
 
@@ -38,6 +50,7 @@ void pac::HeroComponent::Damage()
 {
 	--m_Health;
 	m_Health = std::max(0, m_Health);
+	m_HasBeenDamaged = true;
 	if(m_Health == 0)
 	{
 		dae::Minigin::SetPaused(true);

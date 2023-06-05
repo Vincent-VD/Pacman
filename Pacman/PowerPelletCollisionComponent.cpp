@@ -11,11 +11,8 @@ pac::PowerPelletCollisionComponent::PowerPelletCollisionComponent(dae::GameObjec
 
 void pac::PowerPelletCollisionComponent::OnCollision(dae::BaseCollisionComponent* other)
 {
-	if (const auto& player{ other->GetOwner()->GetComponent<dae::InputComponent>() })
+	if (other->GetOwner()->GetTag() == "player")
 	{
-		const auto& hero{ other->GetOwner()->GetComponent<HeroComponent>() };
-		hero->Pickup(PickupType::powerPellet);
-		hero->ActivatePowerMode();
 		GetOwner()->Destroy();
 	}
 }

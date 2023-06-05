@@ -19,6 +19,9 @@
     <Filter Include="UI">
       <UniqueIdentifier>{020c478f-8f58-445c-9652-0ca91ac2eecf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Components\Ghost">
+      <UniqueIdentifier>{0a8aa2c7-5987-4dae-95af-b6dd2d15e821}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Pacman.cpp">
@@ -57,6 +60,18 @@
     <ClCompile Include="PowerPelletCollisionComponent.cpp">
       <Filter>Components</Filter>
     </ClCompile>
+    <ClCompile Include="GhostComponent.cpp">
+      <Filter>Components\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostState.cpp">
+      <Filter>Components\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostMoveComponent.cpp">
+      <Filter>Components\Ghost</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostCollisionComponent.cpp">
+      <Filter>Components\Ghost</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -94,6 +109,18 @@
     </ClInclude>
     <ClInclude Include="PowerPelletCollisionComponent.h">
       <Filter>Components</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostComponent.h">
+      <Filter>Components\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostState.h">
+      <Filter>Components\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostMoveComponent.h">
+      <Filter>Components\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostCollisionComponent.h">
+      <Filter>Components\Ghost</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

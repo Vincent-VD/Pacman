@@ -66,8 +66,8 @@ dae::Minigin::Minigin(const std::string &dataPath, const WindowInfo& windowInfo)
 		"Programming 4 assignment",
 		SDL_WINDOWPOS_CENTERED,
 		SDL_WINDOWPOS_CENTERED,
-		(int)windowInfo.m_Width,
-		(int)windowInfo.m_Height,
+		static_cast<int>(windowInfo.m_Width),
+		static_cast<int>(windowInfo.m_Height),
 		SDL_WINDOW_OPENGL
 	);
 	if (g_window == nullptr) 
@@ -78,6 +78,8 @@ dae::Minigin::Minigin(const std::string &dataPath, const WindowInfo& windowInfo)
 	Renderer::GetInstance().Init(g_window);
 
 	ResourceManager::GetInstance().Init(dataPath);
+
+	std::srand(static_cast<unsigned>(std::time(nullptr)));
 }
 
 dae::Minigin::~Minigin()

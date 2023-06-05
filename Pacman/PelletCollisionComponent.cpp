@@ -11,9 +11,8 @@ pac::PelletCollisionComponent::PelletCollisionComponent(dae::GameObject* pOwner,
 
 void pac::PelletCollisionComponent::OnCollision(BaseCollisionComponent* other)
 {
-	if(const auto player{other->GetOwner()->GetComponent<dae::InputComponent>()})
+	if(other->GetOwner()->GetTag() == "player")
 	{
-		other->GetOwner()->GetComponent<HeroComponent>()->Pickup(PickupType::pellet);
 		GetOwner()->Destroy();
 	}
 }

@@ -80,6 +80,16 @@ namespace pac
 		virtual ~Next() override = default;
 
 		virtual void Execute() override;
-		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {};
-	};;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+	};
+
+	class GhostMove : public dae::GameObjectCommand
+	{
+	public:
+		GhostMove(dae::GameObject* pActor) : GameObjectCommand(pActor) {}
+		virtual ~GhostMove() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+	};
 }

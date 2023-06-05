@@ -5,7 +5,7 @@
 
 namespace pac
 {
-	class UIMenuComponent : public dae::UIBaseComponent, public dae::Observer<std::string>
+	class UIMenuComponent : public dae::UIBaseComponent, public dae::Observer<const std::string&>
 	{
 	public:
 		//Created menu component and adds provided GO pointer to UIManager for rendering
@@ -16,13 +16,13 @@ namespace pac
 		UIMenuComponent& operator=(const UIMenuComponent& other) = delete;
 		UIMenuComponent& operator=(UIMenuComponent&& other) noexcept = delete;
 
-		virtual void OnNotify(std::string action) override;
+		virtual void OnNotify(const std::string& action) override;
 		virtual void OnSubjectDestroyed() override {}
 
 		virtual void RenderUI() override;
 
 	private:
-		UIState* m_State;
+		UIState* m_pState;
 
 	};
 }
