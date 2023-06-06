@@ -1,7 +1,7 @@
 #include "GhostComponent.h"
 #include "GhostState.h"
 
-pac::GhostComponent::GhostComponent(dae::GameObject* pOwner, const std::string& type)
+pac::GhostComponent::GhostComponent(dae::GameObject* pOwner, GhostTypes type)
 	: RootComponent(pOwner)
 	, Observer<const std::string&>()
 	, m_Type(type)

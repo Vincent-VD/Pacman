@@ -10,15 +10,25 @@ namespace pac
 {
 	class GhostState;
 
+	enum class GhostTypes
+	{
+		Blinky = 1,
+		Inky = 2,
+		Clyde = 3,
+		Pinky = 4
+	};
+
 	class GhostComponent : public dae::RootComponent, dae::Observer<const std::string&>
 	{
 	public:
-		GhostComponent(dae::GameObject* pOwner, const std::string& type);
+		GhostComponent(dae::GameObject* pOwner, GhostTypes type);
 		virtual ~GhostComponent() override;
 		GhostComponent(const GhostComponent& other) = delete;
 		GhostComponent(GhostComponent&& other) noexcept = delete;
 		GhostComponent& operator=(const GhostComponent& other) = delete;
 		GhostComponent& operator=(GhostComponent&& other) noexcept = delete;
+
+		GhostTypes GetType() const { return m_Type; }
 
 		virtual void OnNotify(const std::string& msg) override;
 		virtual void OnSubjectDestroyed() override {}
@@ -29,7 +39,7 @@ namespace pac
 		virtual void Render() const override {}
 
 	private:
-		const std::string m_Type;
+		const GhostTypes m_Type;
 		GhostState* m_pState;
 	};
 }
