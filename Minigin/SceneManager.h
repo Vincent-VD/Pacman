@@ -12,10 +12,10 @@ namespace dae
 	public:
 		Scene& CreateScene(const std::string& name);
 
-		Scene* GetCurrScene() const { return m_CurrScene; }
+		Scene* GetCurrScene() const { return m_CurrScene.get(); }
 		int GetCurrSceneNumber() const { return m_CurrSceneNr; }
 
-		void SetScene(int nr);
+		void NextScene();
 
 		void Update();
 		void FixedUpdate();
@@ -26,7 +26,7 @@ namespace dae
 		friend class Singleton<SceneManager>;
 		SceneManager() = default;
 		std::vector<std::shared_ptr<Scene>> m_scenes;
-		Scene* m_CurrScene;
+		std::shared_ptr<Scene> m_CurrScene;
 		int m_CurrSceneNr{-1};
 	};
 }

@@ -2,16 +2,17 @@
 #include "Scene.h"
 
 
-void dae::SceneManager::SetScene(int nr)
+void dae::SceneManager::NextScene()
 {
-	m_CurrSceneNr = nr;
+	m_CurrSceneNr = 0;
 	std::vector<std::shared_ptr<GameObject>> objects;
 	if(m_CurrScene)
 	{
 		objects = m_CurrScene->GetAndRemovePersisentObjects();
 	}
-	m_CurrScene = m_scenes[nr].get();
+	m_CurrScene = m_scenes[0];
 	m_CurrScene->AddPersistentObjects(objects);
+	m_scenes.clear();
 }
 
 void dae::SceneManager::Update()
@@ -38,7 +39,7 @@ dae::Scene& dae::SceneManager::CreateScene(const std::string& name)
 {
 	const auto& scene = std::shared_ptr<Scene>(new Scene(name));
 	m_scenes.push_back(scene);
-	++m_CurrSceneNr;
+	//++m_CurrSceneNr;
 	//m_CurrScene = scene.get();
 	return *scene;
 }
