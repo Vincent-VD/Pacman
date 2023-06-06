@@ -48,12 +48,16 @@ void pac::HeroComponent::Render() const
 
 void pac::HeroComponent::Damage()
 {
-	--m_Health;
-	m_Health = std::max(0, m_Health);
-	m_HasBeenDamaged = true;
+	if(!m_HasBeenDamaged)
+	{
+		--m_Health;
+		m_Health = std::max(0, m_Health);
+		m_HasBeenDamaged = true;
+	}
+	
 	if(m_Health == 0)
 	{
-		dae::Minigin::SetPaused(true);
+		
 		m_Menu.Notify("game over");
 	}
 
