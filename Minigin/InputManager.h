@@ -21,6 +21,7 @@ namespace dae
 		XInputController* GetController() const { return m_pController.get(); }
 		int GetNewPlayerId() { return m_NrOfPlayers++; }
 		int GetNrOfPlayers() const { return m_NrOfPlayers; }
+		int GetConnectedControllers() const { return m_pController->GetConnectedControllers(); }
 
 		//void AddCommand(int playerID, SDL_KeyCode key, unsigned int buttons, InputType inputType,const std::shared_ptr<Command>& command);
 		void AddControllerCommand(int playerID, unsigned int buttons, InputType inputType,const std::shared_ptr<Command>& command);

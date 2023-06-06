@@ -21,15 +21,12 @@ public:
 		for(DWORD  iter = 0; iter < XUSER_MAX_COUNT; ++iter)
 		{
 			dwResult = XInputGetState(iter, &m_CurrentState[iter]);
+			m_ConnectedControllers[iter] = dwResult;
 
 			if (dwResult != ERROR_SUCCESS)
 			{
 				// Controller is connected
 				std::cout << "Controller not detected\n";
-			}
-			else
-			{
-				++m_ConnectedControllers;
 			}
 		}
 		
@@ -48,7 +45,8 @@ public:
 		ZeroMemory(&m_CurrentState, sizeof(XINPUT_STATE) * XUSER_MAX_COUNT);
 		for (DWORD  iter = 0; iter < XUSER_MAX_COUNT; ++iter)
 		{
-			XInputGetState(iter, &m_CurrentState[iter]);
+			DWORD dwResult = XInputGetState(iter, &m_CurrentState[iter]);
+			m_ConnectedControllers[iter] = dwResult;
 
 			auto buttons = m_CurrentState[iter].Gamepad.wButtons ^ m_PreviousState[iter].Gamepad.wButtons;
 			m_ButtonsPressedThisFrame[iter] = buttons & m_CurrentState[iter].Gamepad.wButtons;
@@ -109,7 +107,15 @@ public:
 
 	int GetConnectedControllers() const
 	{
-		return m_ConnectedControllers;
+		int res{};
+		for (int iter = 0; iter < XUSER_MAX_COUNT; ++iter)
+		{
+			if(m_ConnectedControllers[iter] == ERROR_SUCCESS)
+			{
+				++res;
+			}
+		}
+		return res;
 	}
 
 	int GetMaxPlayerCount() const
@@ -127,7 +133,7 @@ private:
 	float m_TriggerDZ{ .05f }; //Trigger dead zone
 	float m_AnalogueDZ{ .02f }; //Analogue stick dead zone
 
-	int m_ConnectedControllers{};
+	bool m_ConnectedControllers[XUSER_MAX_COUNT]{false};
 };
 
 XInputController::XInputController()
