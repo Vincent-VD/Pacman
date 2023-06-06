@@ -37,7 +37,7 @@ int pac::PacmanGame::m_Levels{ 1 };
 bool pac::PacmanGame::m_CanAddPlayers{true};
 bool pac::PacmanGame::m_CanAddGhosts{true};
 pac::PacmanGame::GameMode pac::PacmanGame::m_GameMode{pac::PacmanGame::GameMode::Solo};
-int pac::PacmanGame::m_CurrLevel{0};
+int pac::PacmanGame::m_MaxLevels{3};
 
 void pac::PacmanGame::LoadMain()
 {
@@ -161,6 +161,10 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 void pac::PacmanGame::GoToNextLevel()
 {
 	LoadLevel();
+	if(m_Levels > m_MaxLevels)
+	{
+		m_Levels = 1;
+	}
 	dae::SceneManager::GetInstance().NextScene();
 
 	//if(LevelManager::GetInstance().IsLevelCleared(m_CurrLevel - 1))
@@ -245,7 +249,6 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 
 	}
 	++m_Levels;
-	++m_CurrLevel;
 }
 
 void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
@@ -258,9 +261,15 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKe
 			m_pPlayers[playerEnc]->GetTransform()->SetPosition(position);
 			break;
 		case GameMode::Versus:
-			if(playerEnc != 1)
+			if(playerEnc == 0)
 			{
 				m_pPlayers[1]->GetTransform()->SetPosition(position);
+			}
+			break;
+		case GameMode::Solo:
+			if (playerEnc == 0)
+			{
+				m_pPlayers[0]->GetTransform()->SetPosition(position);
 			}
 			break;
 		default:

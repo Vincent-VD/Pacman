@@ -47,7 +47,6 @@ namespace pac
 		static void CreatePowerPellet(glm::vec2 position, dae::Scene& scene);
 
 		static void GoToNextLevel();
-		static int GetCurrentLevel() { return m_CurrLevel; }
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene
@@ -76,7 +75,7 @@ namespace pac
 
 		static GameMode m_GameMode;
 
-		static int m_CurrLevel;
+		static int m_MaxLevels;
 	};
 }
 
