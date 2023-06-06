@@ -19,8 +19,10 @@ void pac::UIMenuComponent::OnNotify(const std::string& action)
 	const auto newState{ m_pState->HandleInput(action) };
 	if (newState != nullptr)
 	{
+		m_pState->OnExit();
 		delete m_pState;
 		m_pState = newState;
+		m_pState->OnEnter();
 	}
 }
 
