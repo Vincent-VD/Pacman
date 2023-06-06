@@ -18,13 +18,13 @@ void pac::PlayerCollisionComponent::OnCollision(BaseCollisionComponent* other)
 	}
 	if (other->GetOwner()->GetTag() == "power pellet")
 	{
-		const auto& hero{ other->GetOwner()->GetComponent<HeroComponent>() };
+		const auto& hero{ GetOwner()->GetComponent<HeroComponent>() };
 		hero->Pickup(PickupType::powerPellet);
 		hero->ActivatePowerMode();
 	}
 	if (other->GetOwner()->GetTag() == "enemy")
 	{
-		const auto& hero{ other->GetOwner()->GetComponent<HeroComponent>() };
+		const auto& hero{ GetOwner()->GetComponent<HeroComponent>() };
 		if(!hero->IsPowerModeActive())
 		{
 			hero->Damage();
