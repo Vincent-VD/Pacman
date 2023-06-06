@@ -11,9 +11,9 @@ namespace dae
 	class InputComponent : public RootComponent
 	{
 	public:
-		InputComponent(GameObject* pOwner)
+		InputComponent(GameObject* pOwner, int playerId)
 			: RootComponent(pOwner)
-			, m_PlayerIdx(InputManager::GetInstance().GetNewPlayerId())
+			, m_PlayerIdx(playerId)
 		{
 		}
 
