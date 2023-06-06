@@ -16,12 +16,12 @@ namespace dae
 	public:
 
 		void Init();
-		void AddCollision(BaseCollisionComponent* collision, int level);
-		void RemoveCollision(BaseCollisionComponent* collision, int level);
+		void AddCollision(BaseCollisionComponent* collision);
+		void RemoveCollision(BaseCollisionComponent* collision);
 		void AddLayer();
 		void RemoveLayer(int layer);
 
-		std::vector<BaseCollisionComponent*> GetCollisions(int level) const { return m_pCollisionComponents[level]; }
+		std::vector<BaseCollisionComponent*> GetCollisions() const { return m_pCollisionComponents; }
 		//ONLY sets layer1 to collide with layer 2
 		void SetLayerCollision(int layer1, int layer2);
 		bool CheckForCollision(int layer1, int layer2) const;
@@ -35,7 +35,7 @@ namespace dae
 	private:
 		friend class Singleton<CollisionManager>;
 		CollisionManager() = default;
-		std::vector<std::vector<BaseCollisionComponent*>> m_pCollisionComponents;
+		std::vector<BaseCollisionComponent*> m_pCollisionComponents;
 		std::vector<std::bitset<8>> m_Layers;
 	};
 
