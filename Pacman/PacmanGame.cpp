@@ -25,15 +25,17 @@
 #include "Minigin.h"
 #include "PelletCollisionComponent.h"
 #include "PlayerCollisionComponent.h"
+#include "PowerPelletCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
 #include "TileCollisionComponent.h"
 #include "UIMenuComponent.h"
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
-std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{2, nullptr};
+std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{};
 int pac::PacmanGame::m_Levels{ 1 };
 bool pac::PacmanGame::m_CanAddPlayers{true};
+bool pac::PacmanGame::m_CanAddGhosts{true};
 pac::PacmanGame::GameMode pac::PacmanGame::m_GameMode{pac::PacmanGame::GameMode::Solo};
 int pac::PacmanGame::m_CurrLevel{0};
 
@@ -78,11 +80,6 @@ void pac::PacmanGame::LoadMain()
 	std::cout << "Press 'p' to pause background music\n";
 	std::cout << "Press 'o' to play sound effect (sound effect will not play if other sound effect is still playing)\n";
 
-	dae::SceneManager::GetInstance().SetScene(0);
-}
-
-void pac::PacmanGame::LoadGame()
-{
 	//Register layers & collision
 	auto& collisionManager{ dae::CollisionManager::GetInstance() };
 	collisionManager.Init();
@@ -100,11 +97,12 @@ void pac::PacmanGame::LoadGame()
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::player), static_cast<int>(Layers::pickup));
 	collisionManager.SetLayerCollision(static_cast<int>(Layers::pickup), static_cast<int>(Layers::player));
 
-	ReadLevelFromFile("Level_1.txt"/* menu.get()*/);
-	ReadLevelFromFile("Level_2.txt"/*, menu.get()*/);
-	ReadLevelFromFile("Level_3.txt"/*, menu.get()*/);
+	dae::SceneManager::GetInstance().NextScene();
+}
 
-	GoToNextLevel();
+void pac::PacmanGame::LoadLevel()
+{
+	ReadLevelFromFile("Level_" + std::to_string(m_Levels) + ".txt");
 }
 
 void pac::PacmanGame::SaveGame(const std::string& name)
@@ -162,12 +160,21 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 
 void pac::PacmanGame::GoToNextLevel()
 {
-	++m_CurrLevel;
-	if(m_CurrLevel > m_Levels - 1)
-	{
-		m_CurrLevel = 1;
-	}
-	dae::SceneManager::GetInstance().SetScene(m_CurrLevel);
+	LoadLevel();
+	dae::SceneManager::GetInstance().NextScene();
+
+	//if(LevelManager::GetInstance().IsLevelCleared(m_CurrLevel - 1))
+	//{
+	//	LevelManager::GetInstance().ResetItems(m_CurrLevel - 1, *dae::SceneManager::GetInstance().GetCurrScene());
+	//}
+	//for (const auto player : m_pPlayers)
+	//{
+	//	LevelManager::GetInstance().ResetPlayer(m_CurrLevel - 1, player);
+	//}
+	//for (const auto player : m_pGhosts[m_CurrLevel - 1])
+	//{
+	//	LevelManager::GetInstance().ResetGhosts(m_CurrLevel - 1, player);
+	//}
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::GameObject* menu*/)
@@ -177,7 +184,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("level_" + std::to_string(m_Levels));
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
-	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() };
+	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() }; 
 	dae::GameObject* menu{};
 	
 
@@ -186,6 +193,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 		std::cerr << "Cannot open " << levelPath << std::endl;
 	}
 
+	int playerEnc{}; //time P has been encountered already in the file
 	float y{ dae::Minigin::m_WindowInfo.m_Height / 2.f - (m_GameField.rows / 2.f) * m_GameField.tileSize };
 	std::string line;
 	while (std::getline(obj, line))
@@ -197,10 +205,10 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 			switch(ch)
 			{
 			case '#':
-				scene.Add(std::unique_ptr<dae::GameObject>(CreateTile({ x, y })));
+				CreateTile({ x, y }, scene);
 				break;
 			case 'P':
-				if (m_Levels > 1) continue;
+				//if (m_Levels > 1) continue;
 				for (const auto& currSceneObj : currSceneObjs)
 				{
 					if(const auto& menuComp{currSceneObj->GetComponent<UIMenuComponent>()})
@@ -208,25 +216,25 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 						menu = currSceneObj.get();
 					}
 				}
-				CreatePlayer(glm::vec3(x, y, 0.f), true, font, scene, menu);
+				CreatePlayer(glm::vec3(x, y, 0.f), playerEnc++, true, font, scene, menu);
 				break;
 			case 'B':
-				CreateGhost({ x, y, 0.f }, "Bonnie", scene);
+				CreateGhost({ x, y, 0.f }, GhostTypes::Blinky, scene);
 				break;
 			case 'C':
-				CreateGhost({ x, y, 0.f }, "Clyde", scene);
+				CreateGhost({ x, y, 0.f }, GhostTypes::Inky, scene);
 				break;
 			case 'R':
-				CreateGhost({ x, y, 0.f }, "Ret", scene);
+				CreateGhost({ x, y, 0.f }, GhostTypes::Clyde, scene);
 				break;
 			case 'D':
-				CreateGhost({ x, y, 0.f }, "Dee", scene);
+				CreateGhost({ x, y, 0.f }, GhostTypes::Pinky, scene);
 				break;
 			case ' ':
-				scene.Add(std::unique_ptr<dae::GameObject>(CreatePellet({ x, y })));
+				CreatePellet({ x, y }, scene);
 				break;
 			case 'O':
-				scene.Add(std::unique_ptr<dae::GameObject>(CreatePowerPellet({ x, y })));
+				CreatePowerPellet({ x, y }, scene);
 				break;
 			default:
 				break;
@@ -237,34 +245,62 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 
 	}
 	++m_Levels;
-	m_CanAddPlayers = false;
+	++m_CurrLevel;
 }
 
-void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
+void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
 {
+	if(!m_pPlayers.empty() && !m_CanAddPlayers)
+	{
+		switch(m_GameMode)
+		{
+		case GameMode::Coop:
+			m_pPlayers[playerEnc]->GetTransform()->SetPosition(position);
+			break;
+		case GameMode::Versus:
+			if(playerEnc != 1)
+			{
+				m_pPlayers[1]->GetTransform()->SetPosition(position);
+			}
+			break;
+		default:
+			break;
+		}
+		return;
+	}
+
+	if (!m_CanAddPlayers)
+	{
+		return;
+	}
 	using namespace dae;
+
+	const int playerId{ InputManager::GetInstance().GetNewPlayerId() };
+
 	auto lives = std::make_unique<GameObject>("lives", static_cast<int>(Layers::UI));
-	lives->GetTransform()->SetPosition(position.x, 0.f, 0.f);
-	auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
+	lives->GetTransform()->SetPosition(0.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f), 0.f);
+	const auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
 	lives->AddComponent(livesText);
 
 	auto score = std::make_unique<GameObject>("score", static_cast<int>(Layers::UI));
-	score->GetTransform()->SetPosition(position.x, 10.f, 0.f);
-	auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
+	score->GetTransform()->SetPosition(0.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f) + 10.f, 0.f);
+	const auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
 	score->AddComponent(scoreText);
 
 	auto player = std::make_unique<GameObject>("player", static_cast<int>(Layers::player));
 	player->GetTransform()->SetPosition(position);
-	const auto input = std::make_shared<InputComponent>(player.get());
-	const auto text = std::make_shared<TextRenderComponent>(player.get(), "PLAYER " + std::to_string(input->GetPlayerID() + 1), font);
-	const auto texture = std::make_shared<TextureComponent2D>(player.get(), "PacSpriteSheet.png", Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize }, Rectf{ 0.f, 0.f, 32.f, 32.f }, 2, true, true);
+	const auto input = std::make_shared<InputComponent>(player.get(), playerId);
+	const float spriteOffset{ static_cast<float>(playerId) * 32.f };
+	const auto texture = std::make_shared<TextureComponent2D>(player.get(), "PacSpriteSheet.png",
+															  Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize },
+															  Rectf{ spriteOffset, spriteOffset, 32.f, 32.f }, 
+															  2, true, true);
 	const auto hero = std::make_shared<pac::HeroComponent>(player.get());
 	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
 	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
 	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
 	hero->m_Menu.AddObserver(menu->GetComponent<UIMenuComponent>().get());
 	player->AddComponent(texture);
-	player->AddComponent(text);
 	player->AddComponent(input);
 	player->AddComponent(hero);
 	player->AddComponent(lifeComp);
@@ -283,73 +319,121 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, bool useKeyboard, const s
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::ButtonY), InputType::pressed, scoreCommand);
 	if (useKeyboard) InputManager::GetInstance().AddKeyboardCommand(input->GetPlayerID(), SDLK_g, InputType::pressed, scoreCommand);
 
-	auto command = std::make_shared<FireCommand>(player.get());
 	auto moveStick = std::make_shared<pac::MoveCommand>(player.get(), 100.f);
 
-	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::LeftShoulder), InputType::pressed, command);
-	if (useKeyboard) InputManager::GetInstance().AddKeyboardCommand(input->GetPlayerID(), SDL_KeyCode::SDLK_q, InputType::pressed, command);
 	InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), InputType::leftStick, moveStick, useKeyboard);
 	InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), InputType::dpadAxis, moveStick, useKeyboard);
 
 	m_pPlayers.emplace_back(player.get());
+	//LevelManager::GetInstance().RegisterPlayer(position, m_CurrLevel);
 
 	scene.AddPersistent(std::move(lives));
 	scene.AddPersistent(std::move(score));
 	scene.AddPersistent(std::move(player));
+
+	if (m_GameMode != GameMode::Coop)
+	{
+		m_CanAddPlayers = false;
+	}else
+	{
+		if(playerEnc == 1)
+		{
+			m_CanAddPlayers = false;
+		}
+	}
+	
 }
 
-void pac::PacmanGame::CreateGhost(glm::vec3 position, const std::string& type, dae::Scene& scene)
+void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scene& scene)
 {
+	if(!m_pPlayers.empty())
+	{
+		if(m_GameMode == GameMode::Versus)
+		{
+			m_pPlayers[0]->GetTransform()->SetPosition(position);
+		}
+	}
+
+	if (!m_CanAddGhosts) return;
+
 	auto ghost = std::make_unique<dae::GameObject>("enemy", static_cast<int>(Layers::enemy));
 	ghost->GetTransform()->SetPosition(position);
-
 	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize });
-	const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
+	//const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
 	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type);
-	const auto texture = std::make_shared<dae::TextureComponent2D>(ghost.get(), "PacSpriteSheet.png", dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize }, dae::Rectf{32.f, 32.f, 32.f, 32.f}, 1, true, true);
+	float spriteOffset{ (static_cast<int>(type) + 1) * 32.f };
+	const auto texture = std::make_shared<dae::TextureComponent2D>(ghost.get(), "PacSpriteSheet.png",
+		dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize },
+		dae::Rectf{ spriteOffset, spriteOffset, 32.f, 32.f },
+		1, true, true);
 	ghost->AddComponent(collision);
-	ghost->AddComponent(move);
+	//ghost->AddComponent(move);
 	ghost->AddComponent(ghostComp);
 	ghost->AddComponent(texture);
 
+	if(m_GameMode == GameMode::Versus)
+	{
+		const int playerId{dae::InputManager::GetInstance().GetNewPlayerId() };
+		const auto input = std::make_shared<dae::InputComponent>(ghost.get(), playerId);
+		auto moveStick = std::make_shared<pac::MoveCommand>(ghost.get(), 100.f);
+
+		dae::InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), dae::InputType::leftStick, moveStick, false);
+		dae::InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), dae::InputType::dpadAxis, moveStick, false);
+
+		m_pPlayers.emplace_back(ghost.get());
+		m_CanAddGhosts = false;
+	}
+	else
+	{
+		const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
+		ghost->AddComponent(move);
+	}
+
+	//LevelManager::GetInstance().RegisterGhost(position, m_CurrLevel);
+
 	scene.Add(std::move(ghost));
+	
 }
 
-dae::GameObject* pac::PacmanGame::CreatePellet(glm::vec2 position)
+void pac::PacmanGame::CreatePellet(glm::vec2 position, dae::Scene& scene)
 {
-	dae::GameObject* go = new dae::GameObject("pellet", static_cast<int>(Layers::pickup));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Pellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
-	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	auto go = std::make_unique<dae::GameObject>("pellet", static_cast<int>(Layers::pickup));
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Pellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	go->AddComponent(collisionComp);
 
-	return go;
+	//LevelManager::GetInstance().RegisterPellet(position, m_CurrLevel);
+
+	scene.Add(std::move(go));
 }
 
-dae::GameObject* pac::PacmanGame::CreatePowerPellet(glm::vec2 position)
+void pac::PacmanGame::CreatePowerPellet(glm::vec2 position, dae::Scene& scene)
 {
-	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::pickup));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "PowerPellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
-	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	auto go = std::make_unique<dae::GameObject>("powerPellet", static_cast<int>(Layers::pickup));
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "PowerPellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto collisionComp{ std::make_shared<PowerPelletCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	go->AddComponent(collisionComp);
 
-	return go;
+	//LevelManager::GetInstance().RegisterPowerPellet(position, m_CurrLevel);
+
+	scene.Add(std::move(go));
 }
 
-dae::GameObject* pac::PacmanGame::CreateTile(glm::vec2 position)
+void pac::PacmanGame::CreateTile(glm::vec2 position, dae::Scene& scene)
 {
-	dae::GameObject* go = new dae::GameObject("tile", static_cast<int>(Layers::level));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go, "Tile_" + std::to_string(m_Levels) + ".png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
-	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go, dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	auto go = std::make_unique<dae::GameObject>("tile", static_cast<int>(Layers::level));
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile_" + std::to_string(m_Levels) + ".png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	go->AddComponent(collisionComp);
 
-	return go;
+	scene.Add(std::move(go));
 }

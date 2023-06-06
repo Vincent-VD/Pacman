@@ -14,6 +14,8 @@ namespace dae
 
 namespace pac
 {
+	enum class GhostTypes;
+
 	class PacmanGame
 	{
 	public:
@@ -32,27 +34,29 @@ namespace pac
 		};
 
 		static void LoadMain();
-		static void LoadGame();
+		static void LoadLevel();
 		static void SaveGame(const std::string& name);
 
 		static void SetGameMode(GameMode gameMode) { m_GameMode = gameMode; }
+		static GameMode GetGameMode() { return m_GameMode; }
+
+		static void CreateGhost(glm::vec3 position, GhostTypes type, dae::Scene& scene);
+
+		static void CreatePellet(glm::vec2 position, dae::Scene& scene);
+
+		static void CreatePowerPellet(glm::vec2 position, dae::Scene& scene);
 
 		static void GoToNextLevel();
+		static int GetCurrentLevel() { return m_CurrLevel; }
 
 	private:
 		//Reads level structure from file, and adds GameObjects to scene
 		static void ReadLevelFromFile(const std::string& levelPath/*, dae::GameObject* menu*/);
 
 		//Creates player and respective UI elements
-		static void CreatePlayer(glm::vec3 position, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
-
-		static void CreateGhost(glm::vec3 position, const std::string& type, dae::Scene& scene);
-
-		static dae::GameObject* CreatePellet(glm::vec2 position);
-
-		static dae::GameObject* CreatePowerPellet(glm::vec2 position);
-
-		static dae::GameObject* CreateTile(glm::vec2 position);
+		static void CreatePlayer(glm::vec3 position, int playerEnc, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
+		
+		static void CreateTile(glm::vec2 position, dae::Scene& scene);
 
 		struct GameField
 		{
@@ -68,6 +72,7 @@ namespace pac
 		static int m_Levels;
 
 		static bool m_CanAddPlayers;
+		static bool m_CanAddGhosts;
 
 		static GameMode m_GameMode;
 
