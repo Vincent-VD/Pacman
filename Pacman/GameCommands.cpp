@@ -40,7 +40,7 @@ void pac::HitCommand::Execute()
 
 void pac::ScoreCommand::Execute()
 {
-	auto hero{ GetActor()->GetComponent<HeroComponent>() };
+	const auto hero{ GetActor()->GetComponent<HeroComponent>() };
 	if (!hero)
 	{
 		std::cout << "Hero component not found (HitCommand)\n";
@@ -62,20 +62,13 @@ void pac::SoundCommand::Execute()
 
 void pac::GamePauseCommand::Execute()
 {
-	auto menu{ GetActor()->GetComponent<UIMenuComponent>() };
+	const auto menu{ GetActor()->GetComponent<UIMenuComponent>() };
 	if(!menu)
 	{
 		std::cout << "Menu component not found (GamePauseCommand)\n";
 		return;
 	}
-	if (dae::Minigin::GetPaused())
-	{
-		dae::Minigin::SetPaused(false);
-	}
-	else
-	{
-		dae::Minigin::SetPaused(true);
-	}
+	
 	menu->OnNotify("paused");
 }
 

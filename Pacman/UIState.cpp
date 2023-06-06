@@ -52,7 +52,7 @@ pac::UIState* pac::MainMenuState::Update()
 
 void pac::MainMenuState::OnExit()
 {
-	pac::PacmanGame::LoadGame();
+	pac::PacmanGame::GoToNextLevel();
 }
 
 pac::UIState* pac::PausedState::HandleInput(const std::string& action)
@@ -73,6 +73,16 @@ pac::UIState* pac::PausedState::Update()
 
 	ImGui::End();
 	return nullptr;
+}
+
+void pac::PausedState::OnEnter()
+{
+	dae::Minigin::SetPaused(true);
+}
+
+void pac::PausedState::OnExit()
+{
+	dae::Minigin::SetPaused(false);
 }
 
 pac::UIState* pac::InputState::HandleInput(const std::string& /*action*/)
@@ -123,6 +133,8 @@ pac::UIState* pac::EndState::Update()
 
 void pac::EndState::OnEnter()
 {
+	dae::Minigin::SetPaused(true);
+
 	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt");
 	if (obj.eof()) {
 		std::cerr << "Cannot open score file" << std::endl;
@@ -167,14 +179,21 @@ pac::UIState* pac::IdleState::Update()
 	return nullptr;
 }
 
-pac::UIState* pac::WaitState::HandleInput(const std::string& /*action*/)
+pac::UIState* pac::WaitState::HandleInput(const std::string& action)
 {
+	if (action == "paused" && PacmanGame::GetGameMode() != PacmanGame::GameMode::Solo)
+	{
+		if (dae::InputManager::GetInstance().GetConnectedControllers() == 2)
+		{
+			return new PausedState{};
+		}
+	}
 	return nullptr;
 }
 
 pac::UIState* pac::WaitState::Update()
 {
-	if(dae::InputManager::GetInstance().GetNrOfPlayers() < 2)
+	if (dae::InputManager::GetInstance().GetConnectedControllers() < 2)
 	{
 		ImGui::Begin("Waiting for more players...", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 

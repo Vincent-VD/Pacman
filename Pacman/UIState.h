@@ -46,8 +46,8 @@ namespace pac
 		virtual UIState* HandleInput(const std::string& action) override;
 		virtual UIState* Update() override;
 
-		virtual void OnEnter() override {}
-		virtual void OnExit() override {}
+		virtual void OnEnter() override;
+		virtual void OnExit() override;
 	};
 
 	class InputState : public UIState
