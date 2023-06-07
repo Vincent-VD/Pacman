@@ -13,7 +13,6 @@
 
 pac::UIState* pac::MainMenuState::HandleInput(const std::string& /*action*/)
 {
-	
 	return nullptr;
 }
 
@@ -171,6 +170,10 @@ pac::UIState* pac::IdleState::HandleInput(const std::string& action)
 		std::cout << "Player died\n";
 		return new InputState{};
 	}
+	if (action == "loading start")
+	{
+		return new LoadingState{};
+	}
 	return nullptr;
 }
 
@@ -203,4 +206,33 @@ pac::UIState* pac::WaitState::Update()
 		return nullptr;
 	}
 	return new PausedState{};
+}
+
+pac::UIState* pac::LoadingState::HandleInput(const std::string& action)
+{
+	if(action == "loading end")
+	{
+		return new IdleState{};
+	}
+	return nullptr;
+}
+
+pac::UIState* pac::LoadingState::Update()
+{
+	ImGui::Begin("Loading", nullptr, ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+
+	ImGui::Text("Loading level");
+
+	ImGui::End();
+	return nullptr;
+}
+
+void pac::LoadingState::OnEnter()
+{
+	dae::Minigin::SetPaused(true);
+}
+
+void pac::LoadingState::OnExit()
+{
+	dae::Minigin::SetPaused(false);
 }

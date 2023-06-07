@@ -33,6 +33,7 @@
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
 std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{};
+dae::GameObject* pac::PacmanGame::m_pMenu{nullptr};
 int pac::PacmanGame::m_Levels{ 1 };
 bool pac::PacmanGame::m_CanAddPlayers{true};
 bool pac::PacmanGame::m_CanAddGhosts{true};
@@ -58,6 +59,8 @@ void pac::PacmanGame::LoadMain()
 	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
 	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
 	menu->AddComponent(ui);
+
+	m_pMenu = menu.get();
 
 	scene.AddPersistent(std::move(menu));
 
@@ -160,12 +163,14 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 
 void pac::PacmanGame::GoToNextLevel()
 {
+	m_pMenu->GetComponent<UIMenuComponent>()->OnNotify("loading start");
 	LoadLevel();
 	if(m_Levels > m_MaxLevels)
 	{
 		m_Levels = 1;
 	}
 	dae::SceneManager::GetInstance().NextScene();
+	m_pMenu->GetComponent<UIMenuComponent>()->OnNotify("loading end");
 
 	//if(LevelManager::GetInstance().IsLevelCleared(m_CurrLevel - 1))
 	//{

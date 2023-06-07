@@ -1,4 +1,6 @@
 #pragma once
+#include <mutex>
+
 #include "Observer.h"
 #include "UIBaseComponent.h"
 #include "UIState.h"
@@ -23,6 +25,5 @@ namespace pac
 
 	private:
 		UIState* m_pState;
-
 	};
 }

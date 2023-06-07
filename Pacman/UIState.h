@@ -10,6 +10,7 @@ namespace pac
 	class EndState;
 	class IdleState;
 	class WaitState;
+	class LoadingState;
 	
 	class UIState
 	{
@@ -105,6 +106,19 @@ namespace pac
 
 		virtual void OnEnter() override {}
 		virtual void OnExit() override {}
+	};
+
+	class LoadingState : public UIState
+	{
+	public:
+		LoadingState() = default;
+		virtual ~LoadingState() override = default;
+
+		virtual UIState* HandleInput(const std::string& action) override;
+		virtual UIState* Update() override;
+
+		virtual void OnEnter() override;
+		virtual void OnExit() override;
 	};
 }
 
