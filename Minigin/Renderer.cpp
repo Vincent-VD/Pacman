@@ -91,7 +91,7 @@ void dae::Renderer::RenderTexture(const Texture2D& texture, const float x, const
 	SDL_RenderCopy(GetSDLRenderer(), texture.GetSDLTexture(), nullptr, &dst);
 }
 
-void dae::Renderer::RenderTextureAnimation(const Texture2D& texture, const Rectf& src, const Rectf& dst) const
+void dae::Renderer::RenderTexture(const Texture2D& texture, const Rectf& src, const Rectf& dst) const
 {
 	SDL_Rect dest{};
 	dest.x = static_cast<int>(dst.left);
