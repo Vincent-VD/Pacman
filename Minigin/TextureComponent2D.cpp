@@ -18,6 +18,7 @@ TextureComponent2D::TextureComponent2D(GameObject* pOwner, const std::string& fi
 	, m_NrOfFrames(nrOfFrames)
 {
 	m_pTexture = ResourceManager::GetInstance().LoadTexture(filename);
+
 }
 
 void TextureComponent2D::Update()
@@ -46,12 +47,19 @@ void TextureComponent2D::Update()
 
 void TextureComponent2D::Render() const
 {
-	if(m_IsAnimated)
-	{
-		Renderer::GetInstance().RenderTextureAnimation(*m_pTexture, m_SourceRect, m_DestRect);
-		return;
-	}
-	Renderer::GetInstance().RenderTexture(*m_pTexture, m_DestRect.left, m_DestRect.bottom, m_DestRect.width, m_DestRect.height);
+	Renderer::GetInstance().RenderTexture(*m_pTexture, m_SourceRect, m_DestRect);
+}
+
+void TextureComponent2D::SetFrame(int frame)
+{
+	assert(frame < m_NrOfFrames && "Nr of Frames exceeded");
+	m_CurrFrame = frame;
+	m_SourceRect.left = m_SourceRect.width * static_cast<float>(m_CurrFrame);
+}
+
+void TextureComponent2D::SetSourceRect(const Rectf& srcRect)
+{
+	m_SourceRect = srcRect;
 }
 
 std::pair<float, float> TextureComponent2D::GetTextureDimensions() const
