@@ -24,6 +24,7 @@ namespace dae
 		std::vector<BaseCollisionComponent*> GetCollisions() const { return m_pCollisionComponents; }
 		//ONLY sets layer1 to collide with layer 2
 		void SetLayerCollision(int layer1, int layer2);
+		void RemoveCollisionLayer(int layer1, int layer2);
 		bool CheckForCollision(int layer1, int layer2) const;
 
 		virtual ~CollisionManager() override = default;

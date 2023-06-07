@@ -39,6 +39,11 @@ void dae::CollisionManager::SetLayerCollision(int layer1, int layer2)
 	m_Layers[layer1].set(layer2);
 }
 
+void dae::CollisionManager::RemoveCollisionLayer(int layer1, int layer2)
+{
+	m_Layers[layer1].reset(layer2);
+}
+
 bool dae::CollisionManager::CheckForCollision(int layer1, int layer2) const
 {
 	return m_Layers[layer1][layer2];
