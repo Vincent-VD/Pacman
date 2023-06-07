@@ -68,6 +68,8 @@ namespace pac
 
 		static std::vector<dae::GameObject*> m_pPlayers;
 
+		static dae::GameObject* m_pMenu;
+
 		static int m_Levels;
 
 		static bool m_CanAddPlayers;

@@ -17,7 +17,8 @@ void pac::HeroComponent::ActivatePowerMode()
 void pac::HeroComponent::Update()
 {
 	const float elapsedTime{ dae::GameTime::GetInstance().GetDeltaTime() };
-	if (!m_IsPowerModeActive) return;
+	//if (!m_IsPowerModeActive) return;
+
 	m_CurrTimer += elapsedTime;
 	if(m_CurrTimer >= m_PowerModeLimit)
 	{
@@ -33,6 +34,7 @@ void pac::HeroComponent::Update()
 		{
 			m_CurrHitCooldown = 0.f;
 			m_HasBeenDamaged = false;
+			m_Pickup.Notify(PickupType::reset);
 		}
 	}
 }
@@ -57,7 +59,6 @@ void pac::HeroComponent::Damage()
 	
 	if(m_Health == 0)
 	{
-		
 		m_Menu.Notify("game over");
 	}
 

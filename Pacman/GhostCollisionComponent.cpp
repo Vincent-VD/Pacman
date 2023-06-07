@@ -11,7 +11,6 @@ pac::GhostCollisionComponent::GhostCollisionComponent(dae::GameObject* pOwner, c
 
 void pac::GhostCollisionComponent::OnCollision(BaseCollisionComponent* other)
 {
-	std::cout << other->GetOwner()->GetTag() << std::endl;
 	if(other->GetOwner()->GetTag() == "player")
 	{
 		GetOwner()->GetComponent<GhostComponent>()->OnCollision();

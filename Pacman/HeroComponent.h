@@ -8,7 +8,9 @@ namespace pac
 	enum class PickupType
 	{
 		pellet,
-		powerPellet
+		powerPellet,
+		ghost,
+		reset
 	};
 
 	class HeroComponent : public dae::RootComponent
@@ -44,7 +46,7 @@ namespace pac
 
 		bool m_HasBeenDamaged{ false };
 		float m_CurrHitCooldown{};
-		const float m_MaxHitCooldown{ 5.f };
+		const float m_MaxHitCooldown{ 2.f };
 	};
 
 }

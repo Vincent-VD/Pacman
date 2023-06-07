@@ -29,6 +29,10 @@ void pac::PlayerCollisionComponent::OnCollision(BaseCollisionComponent* other)
 		{
 			hero->Damage();
 		}
+		else
+		{
+			hero->Pickup(PickupType::ghost);
+		}
 		
 	}
 }

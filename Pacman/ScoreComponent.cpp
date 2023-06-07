@@ -9,6 +9,7 @@ pac::ScoreComponent::ScoreComponent(dae::GameObject* pOwner, HeroComponent* pHer
 	: RootComponent(pOwner)
 	, Observer<PickupType>()
 	, m_Score(0)
+	, m_Combo(0)
 	, m_pHero(pHero)
 	, m_pTextRenderComponent(pTextRenderComponent)
 {
@@ -24,6 +25,12 @@ void pac::ScoreComponent::OnNotify(PickupType type)
 		break;
 	case PickupType::powerPellet:
 		m_Score += 100;
+		break;
+	case PickupType::ghost:
+		m_Score += m_Combo * 300;
+		break;
+	case PickupType::reset:
+		ResetCombo();
 		break;
 	}
 	m_pTextRenderComponent->SetText(std::to_string(m_Score));
