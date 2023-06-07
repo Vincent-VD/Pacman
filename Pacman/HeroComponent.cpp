@@ -1,7 +1,6 @@
 #include "HeroComponent.h"
 
 #include "GameTime.h"
-#include "Minigin.h"
 
 pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
 	: RootComponent(pOwner)
@@ -11,7 +10,9 @@ pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
 
 void pac::HeroComponent::ActivatePowerMode()
 {
+	std::cout << "Power mode activated\n";
 	m_IsPowerModeActive = true;
+	m_CurrPowerModeCooldown = 0.f;
 }
 
 void pac::HeroComponent::Update()
@@ -19,22 +20,26 @@ void pac::HeroComponent::Update()
 	const float elapsedTime{ dae::GameTime::GetInstance().GetDeltaTime() };
 	//if (!m_IsPowerModeActive) return;
 
-	m_CurrTimer += elapsedTime;
-	if(m_CurrTimer >= m_PowerModeLimit)
+	if(m_IsPowerModeActive)
 	{
-		m_IsPowerModeActive = false;
-		m_CurrTimer = 0.f;
-		m_Menu.Notify("power up");
+		m_CurrPowerModeCooldown += elapsedTime;
+		if (m_CurrPowerModeCooldown >= m_PowerModeLimit)
+		{
+			m_IsPowerModeActive = false;
+			m_CurrPowerModeCooldown = 0.f;
+			std::cout << "Power mode DEactivated\n";
+			//m_Menu.Notify("power up");
+			m_Pickup.Notify(PickupType::reset);
+		}
 	}
 
 	if(m_HasBeenDamaged)
 	{
-		m_CurrTimer += elapsedTime;
+		m_CurrHitCooldown += elapsedTime;
 		if(m_CurrHitCooldown >= m_MaxHitCooldown)
 		{
 			m_CurrHitCooldown = 0.f;
 			m_HasBeenDamaged = false;
-			m_Pickup.Notify(PickupType::reset);
 		}
 	}
 }

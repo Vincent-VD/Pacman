@@ -27,10 +27,10 @@ void pac::ScoreComponent::OnNotify(PickupType type)
 		m_Score += 100;
 		break;
 	case PickupType::ghost:
-		m_Score += m_Combo * 300;
+		m_Score += m_Combo++ * 300;
 		break;
 	case PickupType::reset:
-		ResetCombo();
+		m_Combo = 0;
 		break;
 	}
 	m_pTextRenderComponent->SetText(std::to_string(m_Score));

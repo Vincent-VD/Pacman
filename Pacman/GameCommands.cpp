@@ -1,5 +1,6 @@
 #include "GameCommands.h"
 
+#include "CollisionTemplates.h"
 #include "HeroComponent.h"
 #include "Minigin.h"
 #include "PacmanGame.h"
@@ -20,7 +21,7 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 	if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
 	{
 		auto nextPos{ currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f) * elapsedSec };
-		if(!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckCollisionAtPosition(nextPos))
+		if(!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
 		{
 			GetActor()->GetTransform()->SetPosition(nextPos);
 		}

@@ -72,6 +72,12 @@
     <ClCompile Include="GhostCollisionComponent.cpp">
       <Filter>Components\Ghost</Filter>
     </ClCompile>
+    <ClCompile Include="LevelManager.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GhostManager.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -121,6 +127,12 @@
     </ClInclude>
     <ClInclude Include="GhostCollisionComponent.h">
       <Filter>Components\Ghost</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelManager.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GhostManager.h">
+      <Filter>Game Files</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

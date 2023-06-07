@@ -5,6 +5,11 @@
 
 #include "RootComponent.h"
 
+namespace dae
+{
+	class TextureComponent2D;
+}
+
 namespace pac
 {
 	class GhostMoveComponent : public dae::RootComponent
@@ -27,6 +32,8 @@ namespace pac
 	private:
 		glm::vec2 m_MoveDirection;
 		float m_Speed;
+		dae::TextureComponent2D* m_pTextureComp{nullptr};
+
 	};
 }
 

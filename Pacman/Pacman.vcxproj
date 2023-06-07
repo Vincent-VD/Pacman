@@ -176,10 +176,12 @@
     <ClCompile Include="GameCommands.cpp" />
     <ClCompile Include="GhostCollisionComponent.cpp" />
     <ClCompile Include="GhostComponent.cpp" />
+    <ClCompile Include="GhostManager.cpp" />
     <ClCompile Include="GhostMoveComponent.cpp" />
     <ClCompile Include="GhostState.cpp" />
     <ClCompile Include="HealthDisplayComponent.cpp" />
     <ClCompile Include="HeroComponent.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="Pacman.cpp" />
     <ClCompile Include="PacmanGame.cpp" />
     <ClCompile Include="PelletCollisionComponent.cpp" />
@@ -195,10 +197,12 @@
     <ClInclude Include="GameCommands.h" />
     <ClInclude Include="GhostCollisionComponent.h" />
     <ClInclude Include="GhostComponent.h" />
+    <ClInclude Include="GhostManager.h" />
     <ClInclude Include="GhostMoveComponent.h" />
     <ClInclude Include="GhostState.h" />
     <ClInclude Include="HealthDisplayComponent.h" />
     <ClInclude Include="HeroComponent.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="PacmanGame.h" />
     <ClInclude Include="PelletCollisionComponent.h" />
     <ClInclude Include="PlayerCollisionComponent.h" />

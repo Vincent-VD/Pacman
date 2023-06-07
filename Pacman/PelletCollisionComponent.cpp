@@ -2,6 +2,7 @@
 
 #include "GameObject.h"
 #include "HeroComponent.h"
+#include "LevelManager.h"
 #include "PacmanGame.h"
 
 pac::PelletCollisionComponent::PelletCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect)
@@ -13,7 +14,7 @@ void pac::PelletCollisionComponent::OnCollision(BaseCollisionComponent* other)
 {
 	if(other->GetOwner()->GetTag() == "player")
 	{
-		//LevelManager::GetInstance().DestroyPellet(PacmanGame::GetCurrentLevel() - 1);
+		LevelManager::GetInstance().DestroyPellet();
 		GetOwner()->Destroy();
 	}
 }

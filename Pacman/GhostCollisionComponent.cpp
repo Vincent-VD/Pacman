@@ -3,6 +3,7 @@
 #include "GameObject.h"
 #include "GhostComponent.h"
 #include "GhostMoveComponent.h"
+#include "HeroComponent.h"
 
 pac::GhostCollisionComponent::GhostCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect)
 	: RectCollisionComponent(pOwner, rect, true, true)

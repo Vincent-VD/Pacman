@@ -18,10 +18,10 @@ namespace pac
 		Pinky = 4
 	};
 
-	class GhostComponent : public dae::RootComponent, dae::Observer<const std::string&>
+	class GhostComponent : public dae::RootComponent
 	{
 	public:
-		GhostComponent(dae::GameObject* pOwner, GhostTypes type);
+		GhostComponent(dae::GameObject* pOwner, GhostTypes type, bool acceptInput);
 		virtual ~GhostComponent() override;
 		GhostComponent(const GhostComponent& other) = delete;
 		GhostComponent(GhostComponent&& other) noexcept = delete;
@@ -30,17 +30,26 @@ namespace pac
 
 		GhostTypes GetType() const { return m_Type; }
 
-		virtual void OnNotify(const std::string& msg) override;
-		virtual void OnSubjectDestroyed() override {}
-		void OnCollision() const;
+		void Weaken();
+		void Recover();
+		void OnCollision();
+
+		bool IsWeak() const;
 
 		virtual void Update() override;
 		virtual void FixedUpdate() override {}
 		virtual void Render() const override {}
 
 	private:
+		bool m_IsHit{false};
+		const bool m_IsPlayerControlled;
+		float m_CurrCooldown{};
+		const float m_MaxCooldown{ 5.f };
+
 		const GhostTypes m_Type;
 		GhostState* m_pState;
+
+		void StateInput(const std::string& msg);
 	};
 }
 

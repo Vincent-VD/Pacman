@@ -12,6 +12,7 @@
 #include "GameCommands.h"
 #include "GhostCollisionComponent.h"
 #include "GhostComponent.h"
+#include "GhostManager.h"
 #include "GhostMoveComponent.h"
 #include "HealthDisplayComponent.h"
 #include "InputComponent.h"
@@ -22,6 +23,7 @@
 #include "TextRenderComponent.h"
 #include "TextureComponent2D.h"
 #include "HeroComponent.h"
+#include "LevelManager.h"
 #include "Minigin.h"
 #include "PelletCollisionComponent.h"
 #include "PlayerCollisionComponent.h"
@@ -277,8 +279,6 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKe
 				m_pPlayers[0]->GetTransform()->SetPosition(position);
 			}
 			break;
-		default:
-			break;
 		}
 		return;
 	}
@@ -307,13 +307,14 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKe
 	const float spriteOffset{ static_cast<float>(playerId) * 32.f };
 	const auto texture = std::make_shared<TextureComponent2D>(player.get(), "PacSpriteSheet.png",
 															  Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize },
-															  Rectf{ spriteOffset, spriteOffset, 32.f, 32.f }, 
+															  Rectf{ spriteOffset, spriteOffset, 32.f, 32.f },
 															  2, true, true);
 	const auto hero = std::make_shared<pac::HeroComponent>(player.get());
 	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
 	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
 	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
 	hero->m_Menu.AddObserver(menu->GetComponent<UIMenuComponent>().get());
+	hero->m_Pickup.AddObserver(&GhostManager::GetInstance());
 	player->AddComponent(texture);
 	player->AddComponent(input);
 	player->AddComponent(hero);
@@ -374,16 +375,17 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 	ghost->GetTransform()->SetPosition(position);
 	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize });
 	//const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
-	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type);
+	const auto acceptInput{ (m_GameMode == GameMode::Versus ? true : false) };
+	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type, acceptInput);
 	float spriteOffset{ (static_cast<int>(type) + 1) * 32.f };
 	const auto texture = std::make_shared<dae::TextureComponent2D>(ghost.get(), "PacSpriteSheet.png",
 		dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize },
 		dae::Rectf{ spriteOffset, spriteOffset, 32.f, 32.f },
-		1, true, true);
+		4, true, false);
 	ghost->AddComponent(collision);
 	//ghost->AddComponent(move);
-	ghost->AddComponent(ghostComp);
 	ghost->AddComponent(texture);
+	ghost->AddComponent(ghostComp);
 
 	if(m_GameMode == GameMode::Versus)
 	{
@@ -397,13 +399,15 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 		m_pPlayers.emplace_back(ghost.get());
 		m_CanAddGhosts = false;
 	}
-	else
+	/*else
 	{
 		const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
 		ghost->AddComponent(move);
-	}
+	}*/
 
 	//LevelManager::GetInstance().RegisterGhost(position, m_CurrLevel);
+
+	GhostManager::GetInstance().RegisterGhost(ghost.get());
 
 	scene.Add(std::move(ghost));
 	
@@ -412,22 +416,26 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 void pac::PacmanGame::CreatePellet(glm::vec2 position, dae::Scene& scene)
 {
 	auto go = std::make_unique<dae::GameObject>("pellet", static_cast<int>(Layers::pickup));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Pellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto destRect{ dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize} };
+	const auto srcRect{ dae::Rectf{0.f, 0.f, 32.f, 32.f} };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Pellet.png", destRect, srcRect) };
 	const auto collisionComp{ std::make_shared<PelletCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	go->AddComponent(collisionComp);
 
-	//LevelManager::GetInstance().RegisterPellet(position, m_CurrLevel);
+	LevelManager::GetInstance().RegisterPellet();
 
 	scene.Add(std::move(go));
 }
 
 void pac::PacmanGame::CreatePowerPellet(glm::vec2 position, dae::Scene& scene)
 {
-	auto go = std::make_unique<dae::GameObject>("powerPellet", static_cast<int>(Layers::pickup));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "PowerPellet.png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	auto go = std::make_unique<dae::GameObject>("power pellet", static_cast<int>(Layers::pickup));
+	const auto destRect{ dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize} };
+	const auto srcRect{ dae::Rectf{0.f, 0.f, 32.f, 32.f} };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "PowerPellet.png", destRect, srcRect) };
 	const auto collisionComp{ std::make_shared<PowerPelletCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
@@ -442,7 +450,9 @@ void pac::PacmanGame::CreatePowerPellet(glm::vec2 position, dae::Scene& scene)
 void pac::PacmanGame::CreateTile(glm::vec2 position, dae::Scene& scene)
 {
 	auto go = std::make_unique<dae::GameObject>("tile", static_cast<int>(Layers::level));
-	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile_" + std::to_string(m_Levels) + ".png", dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
+	const auto destRect{ dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize} };
+	const auto srcRect{ dae::Rectf{0.f, 0.f, 32.f, 32.f} };
+	const auto textureComp{ std::make_shared<dae::TextureComponent2D>(go.get(), "Tile_" + std::to_string(m_Levels) + ".png", destRect, srcRect) };
 	const auto collisionComp{ std::make_shared<TileCollisionComponent>(go.get(), dae::Rectf{position.x, position.y, m_GameField.tileSize, m_GameField.tileSize}) };
 
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);

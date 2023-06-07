@@ -3,7 +3,6 @@
 #include "GameObject.h"
 #include "GhostComponent.h"
 #include "HeroComponent.h"
-#include "InputComponent.h"
 
 pac::PlayerCollisionComponent::PlayerCollisionComponent(dae::GameObject* pOwner, const dae::Rectf& rect)
 	: RectCollisionComponent(pOwner, rect, true)
@@ -31,7 +30,10 @@ void pac::PlayerCollisionComponent::OnCollision(BaseCollisionComponent* other)
 		}
 		else
 		{
-			hero->Pickup(PickupType::ghost);
+			if(other->GetOwner()->GetComponent<GhostComponent>()->IsWeak())
+			{
+				hero->Pickup(PickupType::ghost);
+			}
 		}
 		
 	}

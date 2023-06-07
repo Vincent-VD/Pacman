@@ -1,5 +1,6 @@
 #pragma once
 #include <RootComponent.h>
+#include <string>
 
 #include "Observer.h"
 
@@ -41,7 +42,7 @@ namespace pac
 	private:
 		int m_Health;
 		bool m_IsPowerModeActive{ false };
-		float m_CurrTimer{};
+		float m_CurrPowerModeCooldown{};
 		const float m_PowerModeLimit{ 13.f };
 
 		bool m_HasBeenDamaged{ false };

@@ -36,8 +36,6 @@ namespace pac
 		int m_Combo;
 		HeroComponent* m_pHero;
 		dae::TextRenderComponent* m_pTextRenderComponent;
-
-		void ResetCombo() { m_Combo = 0; }
 	};
 }
 
