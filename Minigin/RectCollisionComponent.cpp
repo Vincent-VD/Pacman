@@ -74,7 +74,7 @@ bool dae::RectCollisionComponent::CheckCollision(const BaseCollisionComponent* o
 
 }
 
-bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos) const
+bool dae::RectCollisionComponent::CheckLayerCollisionAtPosition(const glm::vec3& pos, int layer) const
 {
 	const Rectf rectf{ pos.x, pos.y, m_CollisionBox.width, m_CollisionBox.height };
 
@@ -84,6 +84,10 @@ bool dae::RectCollisionComponent::CheckCollisionAtPosition(const glm::vec3& pos)
 		if (const RectCollisionComponent* rect{ dynamic_cast<const RectCollisionComponent*>(component) })
 		{
 			//todo: check for tags
+			if(rect->GetOwner()->GetLayer() != layer)
+			{
+				continue;
+			}
 			if (!CollisionManager::GetInstance().CheckForCollision(GetOwner()->GetLayer(), rect->GetOwner()->GetLayer()) || component->IsTrigger())
 			{
 				continue;
