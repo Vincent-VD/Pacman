@@ -1,5 +1,5 @@
-#ifndef PCH
-#define PCH
+#ifndef MINIGIN_PCH
+#define MINIGIN_PCH
 
 #include <stdio.h>
 #include <iostream> // std::cout
@@ -7,6 +7,9 @@
 #include <memory> // smart pointers
 #include <vector>
 #include <list>
+
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 #pragma warning (push, 0)
 #pragma warning (disable:4201)
@@ -20,4 +23,4 @@
 #include <SDL.h>
 #pragma warning (pop)
 
-#endif //PCH
+#endif //MINIGIN_PCH

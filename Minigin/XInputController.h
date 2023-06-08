@@ -2,8 +2,7 @@
 #define XINPUT_CONTROLLER
 
 #include <map>
-#include <memory>
-#include <glm/vec2.hpp>
+#include "MiniginPCH.h"
 
 namespace dae
 {

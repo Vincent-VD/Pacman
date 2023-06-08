@@ -1,11 +1,6 @@
 #include "XInputController.h"
 
-#define WIN32_LEAN_AND_MEAN
-#include <iostream>
-#include <Windows.h>
-
 #include <Xinput.h>
-#include <glm/glm.hpp>
 
 using namespace dae;
 

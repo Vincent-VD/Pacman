@@ -4,8 +4,6 @@
 #include <vld.h>
 #endif
 #endif
-#define WIN32_LEAN_AND_MEAN
-#include <Windows.h>
 
 
 //#include <glm/glm.hpp>
