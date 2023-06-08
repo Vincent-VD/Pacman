@@ -1,4 +1,6 @@
-#pragma once
+#ifndef HEALTH_DISPLAY_COMPONENT
+#define HEALTH_DISPLAY_COMPONENT
+
 #include "Observer.h"
 #include "RootComponent.h"
 
@@ -34,4 +36,4 @@ namespace pac
 	};
 }
 
-
+#endif //HEALTH_DISPLAY_COMPONENT

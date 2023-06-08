@@ -2,6 +2,11 @@
 #include "Scene.h"
 
 
+void dae::SceneManager::Reset()
+{
+	m_CurrScene = nullptr;
+}
+
 void dae::SceneManager::NextScene()
 {
 	m_CurrSceneNr = 0;

@@ -1,13 +1,14 @@
 #include "GameCommands.h"
 
 #include "CollisionTemplates.h"
+#include "GameTime.h"
 #include "HeroComponent.h"
 #include "Minigin.h"
 #include "PacmanGame.h"
 #include "PlayerCollisionComponent.h"
 #include "ServiceLocator.h"
 #include "UIMenuComponent.h"
-#include "SceneManager.h"
+#include "GameObject.h"
 
 
 void pac::MoveCommand::Execute(const dae::InputAction& inputAction)

@@ -1,7 +1,7 @@
-#pragma once
-#include <vector>
-#include <string>
-#include <memory>
+#ifndef SCENE_MANAGER
+#define SCENE_MANAGER
+
+#include "MiniginPCH.h"
 #include "Singleton.h"
 
 namespace dae
@@ -14,6 +14,8 @@ namespace dae
 
 		Scene* GetCurrScene() const { return m_CurrScene.get(); }
 		int GetCurrSceneNumber() const { return m_CurrSceneNr; }
+
+		void Reset();
 
 		void NextScene();
 
@@ -30,3 +32,5 @@ namespace dae
 		int m_CurrSceneNr{-1};
 	};
 }
+
+#endif //SCENE_MANAGER

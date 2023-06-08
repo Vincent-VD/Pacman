@@ -1,8 +1,7 @@
-#pragma once
-#include <string>
-#include <memory>
+#ifndef TEXT_RENDER_COMPONENT
+#define TEXT_RENDER_COMPONENT
+
 #include "RootComponent.h"
-#include "Observer.h"
 
 namespace dae
 {
@@ -35,3 +34,5 @@ namespace dae
 		std::shared_ptr<Texture2D> m_textTexture;
 	};
 }
+
+#endif //TEXT_RENDER_COMPONENT

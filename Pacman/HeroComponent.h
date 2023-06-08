@@ -1,4 +1,6 @@
-#pragma once
+#ifndef HERO_COMPONENT
+#define HERO_COMPONENT
+
 #include <RootComponent.h>
 #include <string>
 
@@ -52,3 +54,4 @@ namespace pac
 
 }
 
+#endif //HERO_COMPONENT

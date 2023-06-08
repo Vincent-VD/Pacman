@@ -9,7 +9,7 @@ pac::ScoreComponent::ScoreComponent(dae::GameObject* pOwner, HeroComponent* pHer
 	: RootComponent(pOwner)
 	, Observer<PickupType>()
 	, m_Score(0)
-	, m_Combo(0)
+	, m_Combo(1)
 	, m_pHero(pHero)
 	, m_pTextRenderComponent(pTextRenderComponent)
 {

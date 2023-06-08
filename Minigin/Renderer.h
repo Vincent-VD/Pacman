@@ -1,5 +1,7 @@
-#pragma once
-#include <SDL.h>
+#ifndef RENDERER
+#define RENDERER
+
+#include "MiniginPCH.h"
 #include "Singleton.h"
 
 namespace dae
@@ -30,3 +32,4 @@ namespace dae
 	};
 }
 
+#endif //RENDERER

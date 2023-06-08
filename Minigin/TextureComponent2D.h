@@ -1,6 +1,5 @@
-#pragma once
-#include <memory>
-#include <string>
+#ifndef TEXTURE_COMPONENT_2D
+#define TEXTURE_COMPONENT_2D
 
 #include "RootComponent.h"
 #include "Structs.h"
@@ -50,3 +49,5 @@ namespace dae
 
 	};
 }
+
+#endif //TEXTURE_COMPONENT_2D

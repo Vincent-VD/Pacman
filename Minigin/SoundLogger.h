@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SOUND_LOGGER
+#define SOUND_LOGGER
+
 #include "SoundSystem.h"
 
 namespace dae
@@ -23,3 +25,4 @@ namespace dae
 
 }
 
+#endif //SOUND_LOGGER

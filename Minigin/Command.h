@@ -1,7 +1,7 @@
-#pragma once
-#include "GameObject.h"
+#ifndef COMMAND
+#define COMMAND
+
 #include "MiniginPCH.h"
-#include "GameTime.h"
 
 namespace dae
 {
@@ -58,7 +58,6 @@ namespace dae
 		virtual void Execute() override {}
 		virtual void Execute([[maybe_unused]] const InputAction& inputAction) override { std::cout << "Firing\n"; }
 	};
-
-	
-
 }
+
+#endif //COMMAND

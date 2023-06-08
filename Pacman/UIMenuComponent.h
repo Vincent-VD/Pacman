@@ -1,5 +1,6 @@
-#pragma once
-#include <mutex>
+#ifndef UI_MENU_COMPONENT
+#define UI_MENU_COMPONENT
+
 
 #include "Observer.h"
 #include "UIBaseComponent.h"
@@ -27,3 +28,5 @@ namespace pac
 		UIState* m_pState;
 	};
 }
+
+#endif //UI_MENU_COMPONENT

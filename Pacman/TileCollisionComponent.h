@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TILE_COLLISION_COMPONENT
+#define TILE_COLLISION_COMPONENT
+
 #include <RectCollisionComponent.h>
 
 namespace pac
@@ -17,4 +19,4 @@ namespace pac
 	};
 }
 
-
+#endif //TILE_COLLISION_COMPONENT

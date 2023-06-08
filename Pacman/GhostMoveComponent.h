@@ -1,7 +1,7 @@
 #ifndef GHOSTMOVECOMPONENT
 #define GHOSTMOVECOMPONENT
 
-#include <glm/vec2.hpp>
+#include "MiniginPCH.h"
 
 #include "RootComponent.h"
 

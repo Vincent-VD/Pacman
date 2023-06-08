@@ -4,13 +4,13 @@
 #include <vld.h>
 #endif
 #endif
+#define WIN32_LEAN_AND_MEAN
+#include <Windows.h>
 
 
 //#include <glm/glm.hpp>
 #include <SDL.h>
 
-#include "Command.h"
-#include "FPSComponent.h"
 #include "Minigin.h"
 #include "PacmanGame.h"
 

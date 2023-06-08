@@ -1,4 +1,6 @@
-#pragma once
+#ifndef SCORE_COMPONENT
+#define SCORE_COMPONENT
+
 #include "RootComponent.h"
 #include "Observer.h"
 
@@ -39,4 +41,4 @@ namespace pac
 	};
 }
 
-
+#endif //SCORE_COMPONENT

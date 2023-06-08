@@ -1,4 +1,5 @@
-#pragma once
+#ifndef FMOD_SOUND_SYSTEM
+#define FMOD_SOUND_SYSTEM
 
 #include <mutex>
 #include <thread>
@@ -55,4 +56,4 @@ namespace dae
 	};
 }
 
-
+#endif //FMOD_SOUND_SYSTEM

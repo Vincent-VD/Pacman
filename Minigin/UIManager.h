@@ -1,10 +1,8 @@
-#pragma once
-#include <functional>
+#ifndef UI_MANAGER
+#define UI_MANAGER
 
 #include "MiniginPCH.h"
 #include "Singleton.h"
-#include "imgui.h"
-#include "UIWindow.h"
 
 namespace dae
 {
@@ -25,3 +23,5 @@ namespace dae
 		std::vector<GameObject*> m_pWindows;
 	};
 }
+
+#endif //UI_MANAGER

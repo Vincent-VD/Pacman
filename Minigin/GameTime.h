@@ -1,8 +1,9 @@
-#pragma once
+#ifndef GAME_TIME
+#define GAME_TIME
 
 #include <chrono>
-#include <glm/fwd.hpp>
 
+#include "MiniginPCH.h"
 #include "Singleton.h"
 
 namespace dae
@@ -37,3 +38,5 @@ namespace dae
 	};
 
 }
+
+#endif //GAME_TIME

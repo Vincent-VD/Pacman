@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PLAYER_COLLISION_COMPONENT
+#define PLAYER_COLLISION_COMPONENT
+
 #include "RectCollisionComponent.h"
 
 namespace pac
@@ -16,6 +18,6 @@ namespace pac
 		virtual void OnCollision(BaseCollisionComponent* other) override;
 
 	};
-
-
 }
+
+#endif //PLAYER_COLLISION_COMPONENT

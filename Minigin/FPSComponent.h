@@ -1,6 +1,7 @@
-#pragma once
-#include <glm/fwd.hpp>
-#include <memory>
+#ifndef FPS_COMPONENT
+#define FPS_COMPONENT
+
+#include "MiniginPCH.h"
 
 #include "RootComponent.h"
 
@@ -31,3 +32,5 @@ namespace dae
 		std::shared_ptr<TextRenderComponent> m_pText = nullptr;
 	};
 }
+
+#endif //FPS_COMPONENT

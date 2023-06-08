@@ -1,9 +1,9 @@
-#pragma once
-#include <map>
+#ifndef XINPUT_CONTROLLER
+#define XINPUT_CONTROLLER
 
-#include "MiniginPCH.h"
+#include <map>
 #include <memory>
-#include <utility>
+#include <glm/vec2.hpp>
 
 namespace dae
 {
@@ -61,6 +61,6 @@ namespace dae
 		   { static_cast<unsigned>(ControllerButton::DPadRight), { 1, 0 } }
 		};
 	};
-
-
 }
+
+#endif //XINPUT_CONTROLLER

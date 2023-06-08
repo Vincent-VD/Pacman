@@ -1,8 +1,11 @@
-#pragma once
-#include "MiniginPCH.h"
-#include "Singleton.h"
+#ifndef EVENT_MANAGER
+#define EVENT_MANAGER
+
 #include <functional>
 #include <map>
+
+#include "MiniginPCH.h"
+#include "Singleton.h"
 
 namespace dae
 {
@@ -41,3 +44,5 @@ namespace dae
 
 	};
 }
+
+#endif //EVENT_MANAGER

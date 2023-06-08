@@ -1,10 +1,11 @@
-#pragma once
-#include <string>
+#ifndef MINIGIN
+#define MINIGIN
+
+#include "MiniginPCH.h"
 #include <functional>
 
 namespace dae
 {
-
 	struct WindowInfo
 	{
 		float m_Width{};
@@ -33,3 +34,5 @@ namespace dae
 		static bool m_IsPaused;
 	};
 }
+
+#endif //MINIGIN

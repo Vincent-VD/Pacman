@@ -4,7 +4,6 @@
 
 #include "GameObject.h"
 #include "Renderer.h"
-#include "SceneManager.h"
 
 dae::RectCollisionComponent::RectCollisionComponent(GameObject* pOwner, const Rectf& rect, bool isDynamic, bool isTrigger)
 	: BaseCollisionComponent(pOwner, isDynamic, isTrigger)

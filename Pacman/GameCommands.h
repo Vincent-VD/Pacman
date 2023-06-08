@@ -1,4 +1,6 @@
-#pragma once
+#ifndef GAME_COMMAND
+#define GAME_COMMAND
+
 #include "Command.h"
 
 namespace pac
@@ -93,3 +95,5 @@ namespace pac
 		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
 	};
 }
+
+#endif //GAME_COMMAND

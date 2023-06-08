@@ -1,4 +1,6 @@
-#pragma once
+#ifndef NULL_SOUND_SYSTEM
+#define NULL_SOUND_SYSTEM
+
 #include "SoundSystem.h"
 
 namespace dae
@@ -20,4 +22,4 @@ namespace dae
 	};
 }
 
-
+#endif //NULL_SOUND_SYSTEM

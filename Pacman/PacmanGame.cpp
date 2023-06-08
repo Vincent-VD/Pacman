@@ -1,5 +1,6 @@
 #include "PacmanGame.h"
 
+#include <algorithm>
 #include <iostream>
 #include <fstream>
 
@@ -44,6 +45,8 @@ int pac::PacmanGame::m_MaxLevels{3};
 
 void pac::PacmanGame::LoadMain()
 {
+	m_Levels = 1;
+	std::cout << "starting\n";
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("main");
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
@@ -65,6 +68,11 @@ void pac::PacmanGame::LoadMain()
 	m_pMenu = menu.get();
 
 	scene.AddPersistent(std::move(menu));
+
+	std::cout << "In solo mode both keyboard and mouse can be used\n";
+	std::cout << "In 1 v 1 and co-op, keyboard input is disabled\n";
+	std::cout << "Controls:\n\t Start/Enter: Pause game \n\t Left analogue stick/D-pad/WASD: move character\n";
+	std::cout << "For testing purposes, press 'N' to got to the next level\n";
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -173,19 +181,6 @@ void pac::PacmanGame::GoToNextLevel()
 	}
 	dae::SceneManager::GetInstance().NextScene();
 	m_pMenu->GetComponent<UIMenuComponent>()->OnNotify("loading end");
-
-	//if(LevelManager::GetInstance().IsLevelCleared(m_CurrLevel - 1))
-	//{
-	//	LevelManager::GetInstance().ResetItems(m_CurrLevel - 1, *dae::SceneManager::GetInstance().GetCurrScene());
-	//}
-	//for (const auto player : m_pPlayers)
-	//{
-	//	LevelManager::GetInstance().ResetPlayer(m_CurrLevel - 1, player);
-	//}
-	//for (const auto player : m_pGhosts[m_CurrLevel - 1])
-	//{
-	//	LevelManager::GetInstance().ResetGhosts(m_CurrLevel - 1, player);
-	//}
 }
 
 void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::GameObject* menu*/)
@@ -227,7 +222,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 						menu = currSceneObj.get();
 					}
 				}
-				CreatePlayer(glm::vec3(x, y, 0.f), playerEnc++, true, font, scene, menu);
+				CreatePlayer(glm::vec3(x, y, 0.f), playerEnc++, font, scene, menu);
 				break;
 			case 'B':
 				CreateGhost({ x, y, 0.f }, GhostTypes::Blinky, scene);
@@ -258,7 +253,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	++m_Levels;
 }
 
-void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKeyboard, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
+void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
 {
 	if(!m_pPlayers.empty() && !m_CanAddPlayers)
 	{
@@ -321,6 +316,8 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, bool useKe
 	player->AddComponent(lifeComp);
 	player->AddComponent(scoreComp);
 	player->AddComponent(collisionComp);
+
+	const bool useKeyboard{ (m_GameMode == GameMode::Solo) ? true : false };
 
 	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(menu);
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::Start), InputType::pressed, pauseCommand);

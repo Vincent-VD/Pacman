@@ -1,4 +1,8 @@
-#pragma once
+#ifndef SCENE
+#define SCENE
+
+#include "MiniginPCH.h"
+
 #include "SceneManager.h"
 #include "GameObject.h"
 
@@ -42,3 +46,5 @@ namespace dae
 	};
 
 }
+
+#endif //SCENE

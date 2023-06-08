@@ -3,7 +3,6 @@
 
 #include <string>
 
-#include "Observer.h"
 #include "RootComponent.h"
 
 namespace pac

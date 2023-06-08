@@ -1,5 +1,7 @@
-#pragma once
-#include <memory>
+#ifndef ROOT_COMPONENT
+#define ROOT_COMPONENT
+
+#include "MiniginPCH.h"
 
 namespace dae
 {
@@ -26,3 +28,5 @@ namespace dae
 		GameObject* m_pGameObject;
 	};
 }
+
+#endif //ROOT_COMPONENT

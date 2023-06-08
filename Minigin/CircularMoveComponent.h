@@ -1,6 +1,9 @@
-#pragma once
+#ifndef CIRCULAR_MOVE_COMPONENT
+#define CIRCULAR_MOVE_COMPONENT
+
 #include "MiniginPCH.h"
 #include "RootComponent.h"
+
 namespace dae
 {
 	class CircularMoveComponent : public RootComponent
@@ -26,3 +29,4 @@ namespace dae
 
 }
 
+#endif //CIRCULAR_MOVE_COMPONENT

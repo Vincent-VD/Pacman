@@ -1,12 +1,11 @@
-#pragma once
-#include <string>
+#ifndef UI_BASE_COMPONENT
+#define UI_BASE_COMPONENT
 
 #include "imgui.h"
 #include "RootComponent.h"
 
 namespace dae
 {
-
 	class UIBaseComponent : public RootComponent
 	{
 	public:
@@ -30,6 +29,7 @@ namespace dae
 		const ImGuiWindowFlags m_WindowFlags;
 		const std::string m_WindowTitle;
 	};
-	
 }
 
+
+#endif //UI_BASE_COMPONENT

@@ -1,4 +1,8 @@
-#pragma once
+#ifndef ACHIEVEMENT
+#define ACHIEVEMENT
+
+#include <string>
+
 #include "Observer.h"
 
 namespace dae
@@ -12,3 +16,5 @@ namespace dae
 		virtual void OnSubjectDestroyed() override;
 	};
 }
+
+#endif //ACHIEVEMENT

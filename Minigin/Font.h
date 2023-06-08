@@ -1,5 +1,7 @@
-#pragma once
-#include <string>
+#ifndef FONT
+#define FONT
+
+#include "MiniginPCH.h"
 
 struct _TTF_Font;
 namespace dae
@@ -23,3 +25,5 @@ namespace dae
 		unsigned int m_size;
 	};
 }
+
+#endif //FONT

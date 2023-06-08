@@ -1,6 +1,7 @@
-#pragma once
-#include <glm/vec3.hpp>
+#ifndef RECT_COLLISION_COMPONENT
+#define RECT_COLLISION_COMPONENT
 
+#include "MiniginPCH.h"
 #include "BaseCollisionComponent.h"
 
 namespace dae
@@ -30,4 +31,4 @@ namespace dae
 	};
 }
 
-
+#endif //RECT_COLLISION_COMPONENT

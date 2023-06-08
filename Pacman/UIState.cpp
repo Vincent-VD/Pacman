@@ -126,6 +126,12 @@ pac::UIState* pac::EndState::Update()
 		ImGui::Text(&line[0]);
 	}
 
+	/*if(ImGui::Button("Back To Main Menu"))
+	{
+		ImGui::End();
+		return new MainMenuState{};
+	}*/
+
 	ImGui::End();
 	return nullptr;
 }
@@ -156,6 +162,10 @@ void pac::EndState::OnEnter()
 
 		m_Scores.emplace_back(std::make_tuple(score, nameInFile));
 	}
+}
+
+void pac::EndState::OnExit()
+{
 }
 
 pac::UIState* pac::IdleState::HandleInput(const std::string& action)

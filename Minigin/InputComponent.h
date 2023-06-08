@@ -1,9 +1,7 @@
-#pragma once
-#include <map>
+#ifndef INPUT_COMPONENT
+#define INPUT_COMPONENT
 
-#include "InputManager.h"
 #include "RootComponent.h"
-#include "XInputController.h"
 
 namespace dae
 {
@@ -36,3 +34,4 @@ namespace dae
 
 }
 
+#endif //INPUT_COMPONENT

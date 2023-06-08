@@ -78,20 +78,22 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Game\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Game\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\</OutDir>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Game\</OutDir>
     <IntDir>$(Platform)\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <OutDir>$(SolutionDir)$(Platform)\$(Configuration)\Game\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -116,7 +118,7 @@
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -146,7 +148,7 @@ xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -180,7 +182,7 @@ xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -214,7 +216,7 @@ xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -261,7 +263,6 @@ xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
     <ClInclude Include="SoundSystem.h" />
     <ClInclude Include="Structs.h" />
     <ClInclude Include="TextRenderComponent.h" />
-    <ClInclude Include="TextRenderObserver.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="TextureComponent2D.h" />
     <ClInclude Include="GameTime.h" />
@@ -308,7 +309,6 @@ xcopy "$(SolutionDir)Data" "$(OutputPath)Data\" /R /Y</Command>
     <ClCompile Include="SoundLogger.cpp" />
     <ClCompile Include="SoundSystem.cpp" />
     <ClCompile Include="TextRenderComponent.cpp" />
-    <ClCompile Include="TextRenderObserver.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="TextureComponent2D.cpp" />
     <ClCompile Include="GameTime.cpp" />

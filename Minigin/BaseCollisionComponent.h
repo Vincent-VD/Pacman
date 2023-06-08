@@ -1,7 +1,7 @@
-#pragma once
+#ifndef COLLISION_MANAGER
+#define COLLISION_MANAGER
 
 #include <bitset>
-#include <vector>
 
 #include "RootComponent.h"
 #include "Singleton.h"
@@ -63,3 +63,4 @@ namespace dae
 		bool m_IsTrigger;
 	};
 }
+#endif //COLLISION_MANAGER

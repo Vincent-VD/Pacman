@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TEXTURE2D
+#define TEXTURE2D
+
 struct SDL_Texture;
 namespace dae
 {
@@ -21,3 +23,4 @@ namespace dae
 	};
 }
 
+#endif //TEXTURE2D

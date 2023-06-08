@@ -1,4 +1,6 @@
-#pragma once
+#ifndef VARIABLE
+#define VARIABLE
+
 #include <string>
 #include <vector>
 
@@ -77,7 +79,7 @@ namespace pac
 		virtual UIState* Update() override;
 
 		virtual void OnEnter() override;
-		virtual void OnExit() override {}
+		virtual void OnExit() override;
 
 		std::vector<std::tuple<int, std::string>> m_Scores;
 	};
@@ -122,4 +124,4 @@ namespace pac
 	};
 }
 
-
+#endif //UI_STATE

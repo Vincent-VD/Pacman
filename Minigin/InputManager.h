@@ -1,5 +1,7 @@
-#pragma once
-#include <map>
+#ifndef INPUT_MANAGER
+#define INPUT_MANAGER
+
+#include "MiniginPCH.h"
 
 #include "Singleton.h"
 #include "XInputController.h"
@@ -47,3 +49,5 @@ namespace dae
 	};
 
 }
+
+#endif //INPUT_MANAGER

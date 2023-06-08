@@ -1,5 +1,6 @@
 #ifndef GHOST_MANAGER
 #define GHOST_MANAGER
+
 #include "HeroComponent.h"
 #include "Observer.h"
 #include "Singleton.h"

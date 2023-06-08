@@ -1,4 +1,6 @@
-#pragma once
+#ifndef POWER_PELLET_COMPONENT
+#define POWER_PELLET_COMPONENT
+
 #include "RectCollisionComponent.h"
 
 namespace pac
@@ -16,3 +18,5 @@ namespace pac
 		virtual void OnCollision(dae::BaseCollisionComponent* other) override;
 	};
 }
+
+#endif //POWER_PELLET_COMPONENT

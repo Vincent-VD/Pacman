@@ -1,4 +1,8 @@
-#pragma once
+#ifndef SERVICE_LOCATOR
+#define SERVICE_LOCATOR
+
+#include "MiniginPCH.h"
+
 #include "NullSoundSystem.h"
 #include "SoundSystem.h"
 
@@ -27,3 +31,5 @@ namespace dae
 		static NullSoundSystem m_pNullSoundSystem;
 	};
 }
+
+#endif //SERVICE_LOCATOR

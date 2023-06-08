@@ -1,8 +1,7 @@
 #ifndef GHOSTSTATE
 #define GHOSTSTATE
 
-#include <string>
-#include <glm/vec2.hpp>
+#include "MiniginPCH.h"
 
 #include "Structs.h"
 

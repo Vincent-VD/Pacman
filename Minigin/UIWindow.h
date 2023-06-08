@@ -1,6 +1,8 @@
-#pragma once
-#include "imgui.h"
+#ifndef UI_WINDOW
+#define UI_WINDOW
+
 #include "MiniginPCH.h"
+#include "imgui.h"
 
 namespace dae
 {
@@ -24,6 +26,6 @@ namespace dae
 		const ImGuiWindowFlags m_WindowFlags;
 		const std::string m_WindowTitle;
 	};
-
-
 }
+
+#endif //UI_WINDOW

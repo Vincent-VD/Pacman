@@ -1,8 +1,10 @@
-#pragma once
-#include "MiniginPCH.h"
+#ifndef OBSERVER
+#define OBSERVER
+
+#include <vector>
+
 namespace dae
 {
-
 	template <typename... Args>
 	class Observer
 	{
@@ -39,6 +41,6 @@ namespace dae
 	private:
 		std::vector<Observer<Args...>*> m_pObservers{};
 	};
-
-	
 }
+
+#endif //OBSERVER

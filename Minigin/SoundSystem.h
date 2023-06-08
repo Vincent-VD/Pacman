@@ -1,5 +1,7 @@
-#pragma once
-#include <string>
+#ifndef SOUND_SYSTEM
+#define SOUND_SYSTEM
+
+#include "MiniginPCH.h"
 
 namespace dae
 {
@@ -31,4 +33,4 @@ namespace dae
 	};
 }
 
-
+#endif //SOUND_SYSTEM

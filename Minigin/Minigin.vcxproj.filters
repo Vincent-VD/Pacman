@@ -162,9 +162,6 @@
     <ClInclude Include="EventManager.h">
       <Filter>Observer/EventQueue</Filter>
     </ClInclude>
-    <ClInclude Include="TextRenderObserver.h">
-      <Filter>Observer/EventQueue</Filter>
-    </ClInclude>
     <ClInclude Include="BaseCollisionComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
@@ -300,9 +297,6 @@
       <Filter>Observer/EventQueue</Filter>
     </ClCompile>
     <ClCompile Include="EventManager.cpp">
-      <Filter>Observer/EventQueue</Filter>
-    </ClCompile>
-    <ClCompile Include="TextRenderObserver.cpp">
       <Filter>Observer/EventQueue</Filter>
     </ClCompile>
     <ClCompile Include="BaseCollisionComponent.cpp">

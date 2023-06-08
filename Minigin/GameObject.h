@@ -1,8 +1,6 @@
-#pragma once
-#include <list>
+#ifndef GAME_OBJECT
+#define GAME_OBJECT
 
-#include <memory>
-#include <vector>
 #include "TransformComponent.h"
 
 namespace dae
@@ -102,3 +100,5 @@ namespace dae
 	}
 
 }
+
+#endif //GAME_OBJECT

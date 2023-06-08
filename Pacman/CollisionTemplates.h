@@ -1,4 +1,6 @@
-#pragma once
+#ifndef LAYERS
+#define LAYERS
+
 
 enum class Layers
 {
@@ -8,3 +10,5 @@ enum class Layers
 	UI = 3,
 	pickup = 4
 };
+
+#endif //LAYERS

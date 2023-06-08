@@ -1,5 +1,6 @@
-#pragma once
-#include "MiniginPCH.h"
+#ifndef TRANSFORM_COMPONENT
+#define TRANSFORM_COMPONENT
+
 #include "RootComponent.h"
 
 namespace dae
@@ -44,3 +45,5 @@ namespace dae
 		void UpdateTransforms();
 	};
 }
+
+#endif //TRANSFORM_COMPONENT

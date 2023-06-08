@@ -1,5 +1,5 @@
-#pragma once
-
+#ifndef STRUCTS
+#define STRUCTS
 
 namespace dae
 {
@@ -11,3 +11,5 @@ namespace dae
 		float height;
 	};
 }
+
+#endif //STRUCTS

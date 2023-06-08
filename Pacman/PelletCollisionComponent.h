@@ -1,4 +1,6 @@
-#pragma once
+#ifndef PELLET_COLLISION_COMPONENT
+#define PELLET_COLLISION_COMPONENT
+
 #include "RectCollisionComponent.h"
 
 namespace pac
@@ -15,6 +17,6 @@ namespace pac
 
 		virtual void OnCollision(BaseCollisionComponent* other) override;
 	};
-
-
 }
+
+#endif //PELLET_COLLISION_COMPONENT
