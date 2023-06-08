@@ -9,6 +9,7 @@
 #include "ServiceLocator.h"
 #include "UIMenuComponent.h"
 #include "GameObject.h"
+#include "GhostCollisionComponent.h"
 
 
 void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
@@ -21,11 +22,37 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 	auto currentPos{ GetActor()->GetTransform()->GetWorldPosition() };
 	if (glm::length2(inputAction.leftStick) > FLT_EPSILON * FLT_EPSILON)
 	{
-		auto nextPos{ currentPos + m_Speed * glm::vec3(inputAction.leftStick.x, -inputAction.leftStick.y, 0.f) * elapsedSec };
-		if(!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
+		glm::vec3 dir{};
+		const float angle{ std::atan2(inputAction.leftStick.y, inputAction.leftStick.x) };
+		const float cos{ std::cos(angle) };
+		const float sin{ std::sin(angle) };
+		if(std::abs(cos) > std::abs(sin))
 		{
-			GetActor()->GetTransform()->SetPosition(nextPos);
+			dir = { cos, 0.f, 0.f };
 		}
+		else
+		{
+			dir = { 0.f, -sin, 0.f };
+		}
+
+		auto nextPos{ currentPos + m_Speed * dir * elapsedSec };
+		const auto tag{GetActor()->GetTag()};
+		if(tag == "player")
+		{
+			if (!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
+			{
+				GetActor()->GetTransform()->SetPosition(nextPos);
+			}
+		}
+		if(tag == "enemy")
+		{
+			if (!GetActor()->GetComponent<GhostCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
+			{
+				GetActor()->GetTransform()->SetPosition(nextPos);
+
+			}
+		}
+		
 	}
 }
 
