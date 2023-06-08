@@ -358,6 +358,8 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 
 void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scene& scene)
 {
+	if (!m_CanAddGhosts) return;
+
 	if(!m_pPlayers.empty())
 	{
 		if(m_GameMode == GameMode::Versus)
@@ -366,11 +368,9 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 		}
 	}
 
-	if (!m_CanAddGhosts) return;
-
 	auto ghost = std::make_unique<dae::GameObject>("enemy", static_cast<int>(Layers::enemy));
 	ghost->GetTransform()->SetPosition(position);
-	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize, m_GameField.tileSize });
+	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
 	//const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
 	const auto acceptInput{ (m_GameMode == GameMode::Versus ? true : false) };
 	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type, acceptInput);
@@ -389,9 +389,19 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 		const int playerId{dae::InputManager::GetInstance().GetNewPlayerId() };
 		const auto input = std::make_shared<dae::InputComponent>(ghost.get(), playerId);
 		auto moveStick = std::make_shared<pac::MoveCommand>(ghost.get(), 100.f);
-
+		const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() };
+		dae::GameObject* menu{};
+		for (const auto& currSceneObj : currSceneObjs)
+		{
+			if (const auto & menuComp{ currSceneObj->GetComponent<UIMenuComponent>() })
+			{
+				menu = currSceneObj.get();
+			}
+		}
+		auto pauseCommand = std::make_shared<pac::GamePauseCommand>(menu);
 		dae::InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), dae::InputType::leftStick, moveStick, false);
 		dae::InputManager::GetInstance().AddAxisCommand(input->GetPlayerID(), dae::InputType::dpadAxis, moveStick, false);
+		dae::InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(dae::XInputController::ControllerButton::Start), dae::InputType::pressed, pauseCommand);
 
 		m_pPlayers.emplace_back(ghost.get());
 		m_CanAddGhosts = false;
