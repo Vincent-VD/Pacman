@@ -12,8 +12,12 @@ namespace pac
 
 		void DestroyPellet();
 
+		bool GetLevelTransition() const { return m_LevelTransition; }
+		void ResetLevelTransition() { m_LevelTransition = false; }
+
 	private:
 		int m_PelletAmount{};
+		bool m_LevelTransition{ false };
 	};
 }
 

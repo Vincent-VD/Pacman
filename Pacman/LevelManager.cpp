@@ -12,6 +12,6 @@ void pac::LevelManager::DestroyPellet()
 	--m_PelletAmount;
 	if(m_PelletAmount == 0)
 	{
-		PacmanGame::GoToNextLevel();
+		m_LevelTransition = true;
 	}
 }

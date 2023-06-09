@@ -12,7 +12,7 @@ pac::PelletCollisionComponent::PelletCollisionComponent(dae::GameObject* pOwner,
 
 void pac::PelletCollisionComponent::OnCollision(BaseCollisionComponent* other)
 {
-	if(other->GetOwner()->GetTag() == "player")
+	if(other->GetOwner()->GetTag() == "player" && !GetOwner()->IsMarkedForDeletion())
 	{
 		LevelManager::GetInstance().DestroyPellet();
 		GetOwner()->Destroy();
