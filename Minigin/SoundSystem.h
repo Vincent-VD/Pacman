@@ -10,6 +10,7 @@ namespace dae
 	{
 		int id;
 		float volume;
+		bool loop;
 	};
 
 

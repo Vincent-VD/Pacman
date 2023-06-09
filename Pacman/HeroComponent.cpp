@@ -1,6 +1,7 @@
 #include "HeroComponent.h"
 
 #include "GameTime.h"
+#include "ServiceLocator.h"
 
 pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
 	: RootComponent(pOwner)
@@ -10,7 +11,6 @@ pac::HeroComponent::HeroComponent(dae::GameObject* pOwner, int health)
 
 void pac::HeroComponent::ActivatePowerMode()
 {
-	std::cout << "Power mode activated\n";
 	m_IsPowerModeActive = true;
 	m_CurrPowerModeCooldown = 0.f;
 }
@@ -27,8 +27,9 @@ void pac::HeroComponent::Update()
 		{
 			m_IsPowerModeActive = false;
 			m_CurrPowerModeCooldown = 0.f;
-			std::cout << "Power mode DEactivated\n";
 			//m_Menu.Notify("power up");
+			auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
+			soundManager.PlaySound({ 4, 1.f, false });
 			m_Pickup.Notify(PickupType::reset);
 		}
 	}
@@ -64,6 +65,8 @@ void pac::HeroComponent::Damage()
 	
 	if(m_Health == 0)
 	{
+		auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
+		soundManager.PlaySound({ 1, 1.f, false });
 		m_Menu.Notify("game over");
 	}
 

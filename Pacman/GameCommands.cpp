@@ -52,7 +52,6 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 
 			}
 		}
-		
 	}
 }
 

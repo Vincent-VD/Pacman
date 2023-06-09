@@ -45,7 +45,7 @@ public:
 	SoundImpl& operator=(const SoundImpl& other) = delete;
 	SoundImpl& operator=(SoundImpl&& other) noexcept = delete;
 
-	void PlayAudio(const std::string& filename, SoundDesc soundDesc, bool loop = false)
+	void PlayAudio(const std::string& filename, SoundDesc soundDesc)
 	{
 		for (auto& [soundId, pChannel] : m_pChannels)
 		{
@@ -54,13 +54,13 @@ public:
 			if (soundId == soundDesc.id)
 			{
 				pChannel->setVolume(soundDesc.volume);
-				pChannel->setPosition(0, FMOD_TIMEUNIT_MS);
+				//pChannel->setPosition(0, FMOD_TIMEUNIT_MS);
 				break;
 			}
 			if (!isChannelPlaying && soundId != soundDesc.id)
 			{
 				FMOD::Sound* sound{};
-				FMOD_MODE mode{ static_cast<FMOD_MODE>(loop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT) };
+				FMOD_MODE mode{ static_cast<FMOD_MODE>(soundDesc.loop ? FMOD_LOOP_NORMAL : FMOD_DEFAULT) };
 				if (m_pFmodSystem->createSound(filename.c_str(), mode, nullptr, &sound) != FMOD_OK)
 				{
 					std::cout << "FMOD: Failed to create sound\n";

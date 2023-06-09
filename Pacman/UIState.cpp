@@ -9,6 +9,7 @@
 #include "PacmanGame.h"
 #include "ResourceManager.h"
 #include "SceneManager.h"
+#include "ServiceLocator.h"
 
 
 pac::UIState* pac::MainMenuState::HandleInput(const std::string& /*action*/)
@@ -51,6 +52,10 @@ pac::UIState* pac::MainMenuState::Update()
 
 void pac::MainMenuState::OnExit()
 {
+	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
+	soundManager.PlayPause(0, true);
+	soundManager.PlaySound({3, 0.2f, true});
+	soundManager.PlayPause(3, true);
 	pac::PacmanGame::GoToNextLevel();
 }
 
@@ -76,11 +81,13 @@ pac::UIState* pac::PausedState::Update()
 
 void pac::PausedState::OnEnter()
 {
+	dae::ServiceLocator::GetSoundSystem().PlayPause(3, true);
 	dae::Minigin::SetPaused(true);
 }
 
 void pac::PausedState::OnExit()
 {
+	dae::ServiceLocator::GetSoundSystem().PlayPause(3, false);
 	dae::Minigin::SetPaused(false);
 }
 

@@ -71,7 +71,6 @@ void pac::PacmanGame::LoadMain()
 
 	scene.AddPersistent(std::move(menu));
 
-
 	std::cout << "In solo mode both keyboard and mouse can be used\n";
 	std::cout << "In 1 v 1 and co-op, keyboard input is disabled\n";
 	std::cout << "Controls:\n\t Start/Enter: Pause game \n\t Left analogue stick/D-pad/WASD: move character\n";
@@ -81,10 +80,14 @@ void pac::PacmanGame::LoadMain()
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
 
 	auto& soundManager{ dae::ServiceLocator::GetSoundSystem() };
-	soundManager.AddSound("S_Car_Pain_Edition_Overflow.wav");
-	soundManager.PlaySound(dae::SoundDesc{ 0, 1.f });
+	soundManager.AddSound("Sounds/game_start.wav");
+	soundManager.AddSound("Sounds/death_1.wav");
+	soundManager.AddSound("Sounds/eat_ghost.wav");
+	soundManager.AddSound("Sounds/wakawaka.wav");
+	soundManager.AddSound("Sounds/power_pellet.wav");
+	soundManager.PlaySound(dae::SoundDesc{ 0, 1.f, true });
 
-	soundManager.AddSound("S_BatteringRamHit_04.wav");
+	//soundManager.AddSound("S_BatteringRamHit_04.wav");
 
 	auto pauseCommand{ std::make_shared<pac::MusicPauseCommand>() };
 	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
