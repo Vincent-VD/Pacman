@@ -30,6 +30,11 @@ void dae::SceneManager::FixedUpdate()
 	m_CurrScene->FixedUpdate();
 }
 
+void dae::SceneManager::LateUpdate()
+{
+	m_CurrScene->LateUpdate();
+}
+
 void dae::SceneManager::Render()
 {
 	m_CurrScene->Render();

@@ -194,6 +194,7 @@
     <ClCompile Include="PlayerCollisionComponent.cpp" />
     <ClCompile Include="PowerPelletCollisionComponent.cpp" />
     <ClCompile Include="ScoreComponent.cpp" />
+    <ClCompile Include="TransitionComponent.cpp" />
     <ClCompile Include="UIState.cpp" />
     <ClCompile Include="TileCollisionComponent.cpp" />
     <ClCompile Include="UIMenuComponent.cpp" />
@@ -214,6 +215,7 @@
     <ClInclude Include="PlayerCollisionComponent.h" />
     <ClInclude Include="PowerPelletCollisionComponent.h" />
     <ClInclude Include="ScoreComponent.h" />
+    <ClInclude Include="TransitionComponent.h" />
     <ClInclude Include="UIState.h" />
     <ClInclude Include="TileCollisionComponent.h" />
     <ClInclude Include="UIMenuComponent.h" />

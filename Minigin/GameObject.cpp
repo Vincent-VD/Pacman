@@ -33,6 +33,10 @@ void dae::GameObject::FixedUpdate()
 
 void dae::GameObject::LateUpdate()
 {
+	for (auto& pComponent : m_pComponents)
+	{
+		pComponent->LateUpdate();
+	}
 }
 
 void dae::GameObject::Render() const

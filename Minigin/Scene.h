@@ -24,6 +24,7 @@ namespace dae
 
 		void Update();
 		void FixedUpdate();
+		void LateUpdate();
 		void Render() const;
 		void RenderUI() const;
 

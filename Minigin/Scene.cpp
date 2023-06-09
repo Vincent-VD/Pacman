@@ -32,7 +32,6 @@ void Scene::AddPersistentObjects(std::vector<std::shared_ptr<GameObject>> object
 
 void Scene::Remove(std::shared_ptr<GameObject> object)
 {
-	//auto it = std::find_if(m_pObjects.begin(), m_pObjects.end(), [&object](std::shared_ptr<GameObject> obj) {return obj.get() == object.get(); });
 	m_pObjects.erase(std::remove_if(m_pObjects.begin(), m_pObjects.end(), [object](std::shared_ptr<GameObject> obj) {return obj.get() == object.get(); }), m_pObjects.end());
 }
 
@@ -59,7 +58,7 @@ void Scene::Update()
 	for(size_t iter = 0; iter < m_pObjects.size(); ++iter)
 	{
 		const auto& object{ m_pObjects[iter] };
-		if (object.get() == nullptr) continue;
+		if (object == nullptr) continue;
 		object->Update();
 		if(object->IsMarkedForDeletion())
 		{
@@ -67,74 +66,50 @@ void Scene::Update()
 		}
 		
 	}
-	/*for (size_t iter = 0; iter < m_pPersistentObjects.size(); ++iter)
-	{
-		const auto& persistantObject{ m_pPersistentObjects[iter] };
-		persistantObject->Update();
-		if (persistantObject->IsMarkedForDeletion())
-		{
-			m_ItersToRemove.emplace_back(iter);
-		}
-	}*/
 	for (auto iter : m_ItersToRemove)
 	{
-		//m_pObjects[iter] = nullptr;
 		Remove(m_pObjects[iter]);
-		//delete m_objects[iter].get();
 	}
 	m_ItersToRemove.clear();
-
-	/*for(auto& object : m_objects)
-	{
-		object->Update();
-	}*/
 }
 
 void Scene::FixedUpdate()
 {
 	for (auto& object : m_pObjects)
 	{
-		if (object.get() == nullptr) continue;
+		if (object.get() != nullptr) continue;
 		object->FixedUpdate();
 	}
+}
 
-	/*for (auto& object : m_pPersistentObjects)
+void Scene::LateUpdate()
+{
+	for (auto& object : m_pObjects)
 	{
-		object->FixedUpdate();
-	}*/
+		if (object.get() == nullptr) continue;
+		object->LateUpdate();
+	}
 }
 
 void Scene::Render() const
 {
 	for (const auto& object : m_pObjects)
 	{
-		if (object.get() == nullptr) continue;
+		if (object == nullptr) continue;
 		object->Render();
 	}
-	/*for (auto& object : m_pPersistentObjects)
-	{
-		object->Render();
-	}*/
 }
 
 void Scene::RenderUI() const
 {
 	for (const auto& object : m_pObjects)
 	{
-		if (object.get() == nullptr) continue;
+		if (object == nullptr) continue;
 		const auto UIComp{ object->GetComponent<UIBaseComponent>() };
 		if(UIComp)
 		{
 			UIComp->RenderUI();
 		}
 	}
-	/*for (const auto& object : m_pPersistentObjects)
-	{
-		const auto UIComp{ object->GetComponent<UIBaseComponent>() };
-		if (UIComp)
-		{
-			UIComp->RenderUI();
-		}
-	}*/
 }
 

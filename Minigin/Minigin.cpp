@@ -123,6 +123,7 @@ void dae::Minigin::Run(const std::function<void()>& load)
 		if(!m_IsPaused)
 		{
 			sceneManager.Update();
+			sceneManager.LateUpdate();
 		}
 		renderer.Render();
 

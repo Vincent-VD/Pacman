@@ -32,6 +32,7 @@
 #include "ServiceLocator.h"
 #include "SoundLogger.h"
 #include "TileCollisionComponent.h"
+#include "TransitionComponent.h"
 #include "UIMenuComponent.h"
 
 pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
@@ -50,7 +51,6 @@ void pac::PacmanGame::LoadMain()
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("main");
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
-	std::unique_ptr<dae::GameObject> menu{};
 	auto parent = std::make_unique<dae::GameObject>("parent", static_cast<int>(Layers::UI));
 	auto fps = std::make_shared<dae::FPSComponent>(parent.get());
 
@@ -60,14 +60,17 @@ void pac::PacmanGame::LoadMain()
 
 	scene.AddPersistent(std::move(parent));
 
-	menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
+	auto menu = std::make_unique<dae::GameObject>("menu", static_cast<int>(Layers::UI));
 	menu->GetTransform()->SetPosition(dae::Minigin::m_WindowInfo.m_Height / 2.f, dae::Minigin::m_WindowInfo.m_Width / 2.f, 0.f);
 	auto ui = std::make_shared<UIMenuComponent>(menu.get(), "Main Menu", ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize);
+	auto comp = std::make_shared<TransitionComponent>(menu.get());
 	menu->AddComponent(ui);
+	menu->AddComponent(comp);
 
 	m_pMenu = menu.get();
 
 	scene.AddPersistent(std::move(menu));
+
 
 	std::cout << "In solo mode both keyboard and mouse can be used\n";
 	std::cout << "In 1 v 1 and co-op, keyboard input is disabled\n";
@@ -190,7 +193,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	auto& scene = dae::SceneManager::GetInstance().CreateScene("level_" + std::to_string(m_Levels));
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
-	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() }; 
+	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() };
 	dae::GameObject* menu{};
 	
 
@@ -371,7 +374,6 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 	auto ghost = std::make_unique<dae::GameObject>("enemy", static_cast<int>(Layers::enemy));
 	ghost->GetTransform()->SetPosition(position);
 	const auto collision = std::make_shared<GhostCollisionComponent>(ghost.get(), dae::Rectf{ position.x, position.y, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
-	//const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
 	const auto acceptInput{ (m_GameMode == GameMode::Versus ? true : false) };
 	const auto ghostComp = std::make_shared<GhostComponent>(ghost.get(), type, acceptInput);
 	float spriteOffset{ (static_cast<int>(type) + 1) * 32.f };
@@ -380,7 +382,6 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 		dae::Rectf{ spriteOffset, spriteOffset, 32.f, 32.f },
 		4, true, false);
 	ghost->AddComponent(collision);
-	//ghost->AddComponent(move);
 	ghost->AddComponent(texture);
 	ghost->AddComponent(ghostComp);
 
@@ -406,13 +407,6 @@ void pac::PacmanGame::CreateGhost(glm::vec3 position, GhostTypes type, dae::Scen
 		m_pPlayers.emplace_back(ghost.get());
 		m_CanAddGhosts = false;
 	}
-	/*else
-	{
-		const auto move = std::make_shared<GhostMoveComponent>(ghost.get());
-		ghost->AddComponent(move);
-	}*/
-
-	//LevelManager::GetInstance().RegisterGhost(position, m_CurrLevel);
 
 	GhostManager::GetInstance().RegisterGhost(ghost.get());
 
@@ -448,8 +442,6 @@ void pac::PacmanGame::CreatePowerPellet(glm::vec2 position, dae::Scene& scene)
 	go->GetTransform()->SetPosition(position.x, position.y, 0.f);
 	go->AddComponent(textureComp);
 	go->AddComponent(collisionComp);
-
-	//LevelManager::GetInstance().RegisterPowerPellet(position, m_CurrLevel);
 
 	scene.Add(std::move(go));
 }

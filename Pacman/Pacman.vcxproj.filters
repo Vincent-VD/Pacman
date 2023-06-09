@@ -78,6 +78,9 @@
     <ClCompile Include="GhostManager.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
+    <ClCompile Include="TransitionComponent.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="HeroComponent.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="GhostManager.h">
       <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransitionComponent.h">
+      <Filter>Components</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

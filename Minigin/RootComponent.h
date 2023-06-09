@@ -20,6 +20,7 @@ namespace dae
 
 		virtual void Update() = 0;
 		virtual void FixedUpdate() = 0;
+		virtual void LateUpdate() {}
 		virtual void Render() const {}
 
 		GameObject* GetOwner() const { return m_pGameObject; }
