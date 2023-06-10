@@ -139,17 +139,18 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 	scoresInFile.emplace_back(std::make_tuple(maxScore, name));
 
 	{
+		//Open file for read
 		std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::fstream::in);
 		if (obj.eof()) {
 			std::cerr << "Cannot open score file" << std::endl;
 		}
 
+		//Read file
 		std::string line;
 		while (std::getline(obj, line))
 		{
 			std::stringstream stream{};
-			std::string nameInFile{};
-			int score{};
+			std::string nameInFile, score;
 			stream << line;
 			stream >> nameInFile;
 			for (int iter{}; iter < 4; ++iter)
@@ -159,18 +160,20 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 			stream >> score;
 			std::cout << nameInFile << " -- " << score << std::endl;
 
-			scoresInFile.emplace_back(std::make_tuple(score, nameInFile));
+			scoresInFile.emplace_back(std::make_tuple(std::stoi(score), nameInFile));
 		}
 		obj.close();
 
+		//Sort
 		std::sort(scoresInFile.begin(), scoresInFile.end());
 
+		//Open file again for write
 		obj.open(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::fstream::out);
 		int iter{};
 		for (auto& [score, nameInFile] : scoresInFile)
 		{
 			if (iter == 10) break; //Save max of 10 scores
-			obj << nameInFile.c_str() << " -- " << score << "\n";
+			obj << nameInFile << " -- " << score << "\n";
 			++iter;
 		}
 		obj.close();
@@ -197,8 +200,6 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 
 	auto font{ dae::ResourceManager::GetInstance().LoadFont("Lingua.otf", 12) };
 	const auto currSceneObjs{ dae::SceneManager::GetInstance().GetCurrScene()->GetPersisentObjects() };
-	dae::GameObject* menu{};
-	
 
 	std::fstream obj(dae::ResourceManager::GetInstance().GetDataPath() + levelPath);
 	if (obj.eof()) {
@@ -222,15 +223,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 				CreateTile({ x, y }, scene);
 				break;
 			case 'P':
-				//if (m_Levels > 1) continue;
-				for (const auto& currSceneObj : currSceneObjs)
-				{
-					if(const auto& menuComp{currSceneObj->GetComponent<UIMenuComponent>()})
-					{
-						menu = currSceneObj.get();
-					}
-				}
-				CreatePlayer(glm::vec3(x, y, 0.f), playerEnc++, font, scene, menu);
+				CreatePlayer(glm::vec3(x, y, 0.f), playerEnc++, font, scene);
 				break;
 			case 'B':
 				CreateGhost({ x, y, 0.f }, GhostTypes::Blinky, scene);
@@ -261,7 +254,7 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	++m_Levels;
 }
 
-void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu)
+void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene)
 {
 	if(!m_pPlayers.empty() && !m_CanAddPlayers)
 	{
@@ -316,7 +309,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
 	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
 	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
-	hero->m_Menu.AddObserver(menu->GetComponent<UIMenuComponent>().get());
+	hero->m_Menu.AddObserver(m_pMenu->GetComponent<UIMenuComponent>().get());
 	hero->m_Pickup.AddObserver(&GhostManager::GetInstance());
 	player->AddComponent(texture);
 	player->AddComponent(input);
@@ -327,7 +320,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 
 	const bool useKeyboard{ (m_GameMode == GameMode::Solo) ? true : false };
 
-	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(menu);
+	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(m_pMenu);
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::Start), InputType::pressed, pauseCommand);
 	if (useKeyboard) InputManager::GetInstance().AddKeyboardCommand(input->GetPlayerID(), SDLK_ESCAPE, InputType::pressed, pauseCommand);
 

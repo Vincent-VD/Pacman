@@ -28,18 +28,15 @@ void pac::PlayerCollisionComponent::OnCollision(BaseCollisionComponent* other)
 	if (other->GetOwner()->GetTag() == "enemy")
 	{
 		const auto& hero{ GetOwner()->GetComponent<HeroComponent>() };
-		if(!hero->IsPowerModeActive())
+		const auto& ghost{ other->GetOwner()->GetComponent<GhostComponent>() };
+		if(ghost->IsNormal())
 		{
 			hero->Damage();
 		}
-		else
+		else if(other->GetOwner()->GetComponent<GhostComponent>()->IsWeak())
 		{
-			if(other->GetOwner()->GetComponent<GhostComponent>()->IsWeak())
-			{
-				soundManager.PlaySound({ 2, 1.f, false });
-				hero->Pickup(PickupType::ghost);
-			}
+			soundManager.PlaySound({ 2, 1.f, false });
+			hero->Pickup(PickupType::ghost);
 		}
-		
 	}
 }

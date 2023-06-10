@@ -34,6 +34,7 @@ namespace pac
 		void OnCollision();
 
 		bool IsWeak() const;
+		bool IsNormal() const;
 
 		virtual void Update() override;
 		virtual void FixedUpdate() override {}

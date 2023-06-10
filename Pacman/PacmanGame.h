@@ -66,7 +66,7 @@ namespace pac
 		static void ReadLevelFromFile(const std::string& levelPath/*, dae::GameObject* menu*/);
 
 		//Creates player and respective UI elements
-		static void CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
+		static void CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene);
 		
 		static void CreateTile(glm::vec2 position, dae::Scene& scene);
 

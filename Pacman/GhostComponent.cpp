@@ -44,6 +44,15 @@ bool pac::GhostComponent::IsWeak() const
 	return false;
 }
 
+bool pac::GhostComponent::IsNormal() const
+{
+	if (dynamic_cast<NormalState*>(m_pState))
+	{
+		return true;
+	}
+	return false;
+}
+
 void pac::GhostComponent::Update()
 {
 	const float elapsedTime{ dae::GameTime::GetInstance().GetDeltaTime() };

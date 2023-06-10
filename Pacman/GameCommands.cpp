@@ -113,8 +113,3 @@ void pac::Next::Execute()
 {
 	pac::PacmanGame::GoToNextLevel();
 }
-
-void pac::GhostMove::Execute()
-{
-
-}
