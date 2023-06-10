@@ -36,17 +36,26 @@ void pac::MoveCommand::Execute(const dae::InputAction& inputAction)
 		}
 
 		auto nextPos{ currentPos + m_Speed * dir * elapsedSec };
+		if (nextPos.x < m_GameField.leftBound)
+		{
+			nextPos.x = m_GameField.rightBound;
+		}
+		if (nextPos.x > m_GameField.rightBound)
+		{
+			nextPos.x = m_GameField.leftBound;
+		}
 		const auto tag{GetActor()->GetTag()};
 		if(tag == "player")
 		{
-			if (!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
+			if (!GetActor()->GetComponent<PlayerCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, static_cast<int>(Layers::level)))
 			{
+
 				GetActor()->GetTransform()->SetPosition(nextPos);
 			}
 		}
 		if(tag == "enemy")
 		{
-			if (!GetActor()->GetComponent<GhostCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, (int)Layers::level))
+			if (!GetActor()->GetComponent<GhostCollisionComponent>()->CheckLayerCollisionAtPosition(nextPos, static_cast<int>(Layers::level)))
 			{
 				GetActor()->GetTransform()->SetPosition(nextPos);
 

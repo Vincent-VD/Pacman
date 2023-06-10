@@ -35,7 +35,7 @@
 #include "TransitionComponent.h"
 #include "UIMenuComponent.h"
 
-pac::PacmanGame::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f };
+pac::GameField pac::PacmanGame::m_GameField{ 19.f, 19.f, 24.f, 0.f, 0.f };
 std::vector<dae::GameObject*> pac::PacmanGame::m_pPlayers{};
 dae::GameObject* pac::PacmanGame::m_pMenu{nullptr};
 int pac::PacmanGame::m_Levels{ 1 };
@@ -206,6 +206,8 @@ void pac::PacmanGame::ReadLevelFromFile(const std::string& levelPath/*, dae::Gam
 	}
 
 	int playerEnc{}; //time P has been encountered already in the file
+	m_GameField.leftBound = dae::Minigin::m_WindowInfo.m_Width / 2.f - (m_GameField.cols / 2.f) * m_GameField.tileSize;
+	m_GameField.rightBound = dae::Minigin::m_WindowInfo.m_Width / 2.f + (m_GameField.cols / 2.f) * m_GameField.tileSize;
 	float y{ dae::Minigin::m_WindowInfo.m_Height / 2.f - (m_GameField.rows / 2.f) * m_GameField.tileSize };
 	std::string line;
 	while (std::getline(obj, line))

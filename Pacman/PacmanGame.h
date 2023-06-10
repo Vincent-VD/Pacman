@@ -18,6 +18,15 @@ namespace pac
 {
 	enum class GhostTypes;
 
+	struct GameField
+	{
+		float rows;
+		float cols;
+		float tileSize;
+		float leftBound;
+		float rightBound;
+	};
+
 	class PacmanGame
 	{
 	public:
@@ -39,6 +48,8 @@ namespace pac
 		static void LoadLevel();
 		static void SaveGame(const std::string& name);
 
+		static GameField GetGameField() { return m_GameField; }
+
 		static void SetGameMode(GameMode gameMode) { m_GameMode = gameMode; }
 		static GameMode GetGameMode() { return m_GameMode; }
 
@@ -58,13 +69,6 @@ namespace pac
 		static void CreatePlayer(glm::vec3 position, int playerEnc, const std::shared_ptr<dae::Font>& font, dae::Scene& scene, dae::GameObject* menu);
 		
 		static void CreateTile(glm::vec2 position, dae::Scene& scene);
-
-		struct GameField
-		{
-			float rows;
-			float cols;
-			float tileSize;
-		};
 
 		static GameField m_GameField;
 

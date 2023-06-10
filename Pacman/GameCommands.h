@@ -2,13 +2,14 @@
 #define GAME_COMMAND
 
 #include "Command.h"
+#include "PacmanGame.h"
 
 namespace pac
 {
 	class MoveCommand : public dae::GameObjectCommand
 	{
 	public:
-		MoveCommand(dae::GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : GameObjectCommand(pActor), m_Speed(speed), m_Direction(direction) {}
+		MoveCommand(dae::GameObject* pActor, const float speed, const glm::vec2& direction = glm::vec2{}) : GameObjectCommand(pActor), m_Speed(speed), m_Direction(direction), m_GameField(PacmanGame::GetGameField()) {}
 		virtual ~MoveCommand() override = default;
 
 		virtual void Execute() override {}
@@ -17,6 +18,7 @@ namespace pac
 	private:
 		const float m_Speed{};
 		const glm::vec2 m_Direction{};
+		const GameField m_GameField{};
 	};
 
 	class HitCommand : public dae::GameObjectCommand
@@ -80,16 +82,6 @@ namespace pac
 	public:
 		Next() : Command() {}
 		virtual ~Next() override = default;
-
-		virtual void Execute() override;
-		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
-	};
-
-	class GhostMove : public dae::GameObjectCommand
-	{
-	public:
-		GhostMove(dae::GameObject* pActor) : GameObjectCommand(pActor) {}
-		virtual ~GhostMove() override = default;
 
 		virtual void Execute() override;
 		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
