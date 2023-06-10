@@ -90,6 +90,17 @@ public:
 		}
 	}
 
+	void SetVolume(int soundId, float volume)
+	{
+		for (auto& [id, pChannel] : m_pChannels)
+		{
+			if (id == soundId)
+			{
+				pChannel->setVolume(volume);
+			}
+		}
+	}
+
 	void ResetSound(int soundId)
 	{
 		for (auto& [id, pChannel] : m_pChannels)
@@ -162,6 +173,11 @@ void FmodSoundSystem::PlaySound(SoundDesc soundDesc)
 void FmodSoundSystem::PlayPause(int soundId, bool pause)
 {
 	m_pImpl->PlayPauseSound(soundId, pause);
+}
+
+void FmodSoundSystem::SetVolume(int soundId, float volume)
+{
+	m_pImpl->SetVolume(soundId, volume);
 }
 
 void FmodSoundSystem::Update()

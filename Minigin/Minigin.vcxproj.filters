@@ -28,9 +28,6 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{8d5e6132-6818-4d80-aea5-26629b1fbc4e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="UIWindows\TrashTheCache">
-      <UniqueIdentifier>{cce53358-1403-4b7e-885f-f6cd102f6d16}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Sound">
       <UniqueIdentifier>{53774d65-6b9a-4304-aca2-2d398b25fb55}</UniqueIdentifier>
     </Filter>
@@ -131,15 +128,6 @@
     </ClInclude>
     <ClInclude Include="Font.h">
       <Filter>Core</Filter>
-    </ClInclude>
-    <ClInclude Include="Exercise1.h">
-      <Filter>UIWindows\TrashTheCache</Filter>
-    </ClInclude>
-    <ClInclude Include="Exercise2.h">
-      <Filter>UIWindows\TrashTheCache</Filter>
-    </ClInclude>
-    <ClInclude Include="TrashTheCache.h">
-      <Filter>UIWindows\TrashTheCache</Filter>
     </ClInclude>
     <ClInclude Include="InputComponent.h">
       <Filter>Component</Filter>
@@ -268,15 +256,6 @@
     </ClCompile>
     <ClCompile Include="Font.cpp">
       <Filter>Core</Filter>
-    </ClCompile>
-    <ClCompile Include="Exercise1.cpp">
-      <Filter>UIWindows\TrashTheCache</Filter>
-    </ClCompile>
-    <ClCompile Include="Exercise2.cpp">
-      <Filter>UIWindows\TrashTheCache</Filter>
-    </ClCompile>
-    <ClCompile Include="TrashTheCache.cpp">
-      <Filter>UIWindows\TrashTheCache</Filter>
     </ClCompile>
     <ClCompile Include="InputComponent.cpp">
       <Filter>Component</Filter>

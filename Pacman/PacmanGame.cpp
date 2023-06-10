@@ -74,7 +74,8 @@ void pac::PacmanGame::LoadMain()
 	std::cout << "In solo mode both keyboard and mouse can be used\n";
 	std::cout << "In 1 v 1 and co-op, keyboard input is disabled\n";
 	std::cout << "Controls:\n\t Start/Enter: Pause game \n\t Left analogue stick/D-pad/WASD: move character\n";
-	std::cout << "For testing purposes, press 'N' to got to the next level\n";
+	std::cout << "Press 'M' to mute/unmute the game\n";
+	std::cout << "For testing purposes, press 'N' to go to the next level\n";
 
 	//Register sounds
 	dae::ServiceLocator::RegisterSoundSystem(new dae::SoundLogger(new dae::FmodSoundSystem));
@@ -91,9 +92,11 @@ void pac::PacmanGame::LoadMain()
 
 	auto pauseCommand{ std::make_shared<pac::MusicPauseCommand>() };
 	auto soundCommand{ std::make_shared<pac::SoundCommand>() };
+	auto muteCommand{ std::make_shared<pac::MuteCommand>() };
 	auto nextLevel{ std::make_shared<pac::Next>() };
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_p, dae::InputType::pressed, pauseCommand);
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_o, dae::InputType::pressed, soundCommand);
+	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_m, dae::InputType::pressed, muteCommand);
 	dae::InputManager::GetInstance().AddKeyboardCommand(-1, SDLK_n, dae::InputType::pressed, nextLevel);
 
 	std::cout << "Press 'p' to pause background music\n";
@@ -153,7 +156,7 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 			std::string nameInFile, score;
 			stream << line;
 			stream >> nameInFile;
-			for (int iter{}; iter < 4; ++iter)
+			for (int iter{}; iter < 4; ++iter) //ignore the ' -- ' part of the file
 			{
 				stream.ignore();
 			}
@@ -318,7 +321,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 	player->AddComponent(scoreComp);
 	player->AddComponent(collisionComp);
 
-	const bool useKeyboard{ (m_GameMode == GameMode::Solo) ? true : false };
+	const bool useKeyboard{ (playerId > 0) ? true : false };
 
 	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(m_pMenu);
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::Start), InputType::pressed, pauseCommand);

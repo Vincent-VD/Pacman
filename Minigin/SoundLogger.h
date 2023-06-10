@@ -18,6 +18,7 @@ namespace dae
 		virtual int AddSound(const std::string& soundPath) override;
 		virtual void PlaySound(SoundDesc soundDesc) override;
 		virtual void PlayPause(int soundId, bool pause) override;
+		virtual void SetVolume(int soundId, float volume) override;
 		virtual void Update() override;
 	private:
 		SoundSystem* m_pSoundSystem;

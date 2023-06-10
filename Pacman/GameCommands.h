@@ -66,6 +66,19 @@ namespace pac
 		bool m_IsPaused{ false };
 	};
 
+	class MuteCommand : public dae::Command
+	{
+	public:
+		MuteCommand() : Command() {}
+		virtual ~MuteCommand() override = default;
+
+		virtual void Execute() override;
+		virtual void Execute([[maybe_unused]] const dae::InputAction& inputAction) override {}
+
+	private:
+		bool m_IsMuted{false};
+	};
+
 	class GamePauseCommand : public dae::GameObjectCommand
 	{
 	public:

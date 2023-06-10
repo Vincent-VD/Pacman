@@ -38,6 +38,13 @@ void dae::SoundLogger::PlayPause(int soundId, bool pause)
 	std::cout << "Sound ID: " << soundId << status << std::endl;
 }
 
+void dae::SoundLogger::SetVolume(int soundId, float volume)
+{
+	m_pSoundSystem->SetVolume(soundId, volume);
+
+	std::cout << "Sound ID: " << soundId << " set to vol level: " << volume << std::endl;
+}
+
 void dae::SoundLogger::Update()
 {
 	m_pSoundSystem->Update();

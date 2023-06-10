@@ -239,8 +239,6 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
     <ClInclude Include="CircularMoveComponent.h" />
     <ClInclude Include="Command.h" />
     <ClInclude Include="EventManager.h" />
-    <ClInclude Include="Exercise1.h" />
-    <ClInclude Include="Exercise2.h" />
     <ClInclude Include="Font.h" />
     <ClInclude Include="FPSComponent.h" />
     <ClInclude Include="GameObject.h" />
@@ -267,7 +265,6 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
     <ClInclude Include="TextureComponent2D.h" />
     <ClInclude Include="GameTime.h" />
     <ClInclude Include="TransformComponent.h" />
-    <ClInclude Include="TrashTheCache.h" />
     <ClInclude Include="UIBaseComponent.h" />
     <ClInclude Include="UIManager.h" />
     <ClInclude Include="UIWindow.h" />
@@ -288,8 +285,6 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
     <ClCompile Include="CircularMoveComponent.cpp" />
     <ClCompile Include="Command.cpp" />
     <ClCompile Include="EventManager.cpp" />
-    <ClCompile Include="Exercise1.cpp" />
-    <ClCompile Include="Exercise2.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="FPSComponent.cpp" />
     <ClCompile Include="GameObject.cpp" />
@@ -313,7 +308,6 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
     <ClCompile Include="TextureComponent2D.cpp" />
     <ClCompile Include="GameTime.cpp" />
     <ClCompile Include="TransformComponent.cpp" />
-    <ClCompile Include="TrashTheCache.cpp" />
     <ClCompile Include="UIBaseComponent.cpp" />
     <ClCompile Include="UIManager.cpp" />
     <ClCompile Include="UIWindow.cpp" />

@@ -97,6 +97,27 @@ void pac::SoundCommand::Execute()
 	dae::ServiceLocator::GetSoundSystem().PlaySound(dae::SoundDesc{1, 1.f});
 }
 
+void pac::MuteCommand::Execute()
+{
+	auto& soundSystem{ dae::ServiceLocator::GetSoundSystem() };
+	if(m_IsMuted)
+	{
+		for (int iter = 0; iter < 5; ++iter)
+		{
+			soundSystem.SetVolume(iter, 1.f);
+		}
+		m_IsMuted = false;
+	}
+	else
+	{
+		for (int iter = 0; iter < 5; ++iter)
+		{
+			soundSystem.SetVolume(iter, 0.f);
+		}
+		m_IsMuted = true;
+	}
+}
+
 void pac::GamePauseCommand::Execute()
 {
 	const auto menu{ GetActor()->GetComponent<UIMenuComponent>() };

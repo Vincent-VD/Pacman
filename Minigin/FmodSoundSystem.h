@@ -29,6 +29,8 @@ namespace dae
 
 		virtual void PlayPause(int soundId, bool pause) override;
 
+		virtual void SetVolume(int soundId, float volume) override;
+
 		virtual void Update() override;
 
 	private:

@@ -30,6 +30,8 @@ namespace dae
 
 		virtual void PlayPause(int soundId, bool pause) = 0;
 
+		virtual void SetVolume(int soundId, float volume) = 0;
+
 		virtual void Update() = 0;
 	};
 }
