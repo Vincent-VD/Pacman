@@ -167,7 +167,7 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 		obj.close();
 
 		//Sort
-		std::sort(scoresInFile.begin(), scoresInFile.end());
+		std::sort(scoresInFile.begin(), scoresInFile.end(), [](const auto& a, const auto& b) {return std::get<0>(a) > std::get<0>(b); });
 
 		//Open file again for write
 		obj.open(dae::ResourceManager::GetInstance().GetDataPath() + "scores.txt", std::fstream::out);
