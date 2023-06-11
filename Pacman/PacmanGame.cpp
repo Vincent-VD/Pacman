@@ -14,7 +14,6 @@
 #include "GhostCollisionComponent.h"
 #include "GhostComponent.h"
 #include "GhostManager.h"
-#include "GhostMoveComponent.h"
 #include "HealthDisplayComponent.h"
 #include "InputComponent.h"
 #include "InputManager.h"
