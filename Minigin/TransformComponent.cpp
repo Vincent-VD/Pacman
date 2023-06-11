@@ -95,7 +95,7 @@ void dae::TransformComponent::UpdateTransforms()
 		}
 		else
 		{
-			m_WorldTransform = parent->GetTransform()->GetWorldTransform() * m_LocalTransform;
+			m_WorldTransform = parent->GetTransform()->GetWorldTransform() + m_LocalTransform;
 		}
 		m_IsWorldDirty = false;
 	}
