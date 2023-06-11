@@ -175,7 +175,7 @@ void pac::PacmanGame::SaveGame(const std::string& name)
 		for (auto& [score, nameInFile] : scoresInFile)
 		{
 			if (iter == 10) break; //Save max of 10 scores
-			obj << nameInFile << " -- " << score << "\n";
+			obj << nameInFile.c_str() << " -- " << score << "\n";
 			++iter;
 		}
 		obj.close();
