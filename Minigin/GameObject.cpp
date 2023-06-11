@@ -29,6 +29,10 @@ void dae::GameObject::FixedUpdate()
 	{
 		pComponent->FixedUpdate();
 	}
+	for (auto& pChild : m_pChildren)
+	{
+		pChild->FixedUpdate();
+	}
 }
 
 void dae::GameObject::LateUpdate()
@@ -37,6 +41,10 @@ void dae::GameObject::LateUpdate()
 	{
 		pComponent->LateUpdate();
 	}
+	for (auto& pChild : m_pChildren)
+	{
+		pChild->LateUpdate();
+	}
 }
 
 void dae::GameObject::Render() const
@@ -44,6 +52,10 @@ void dae::GameObject::Render() const
 	for (auto& pComponent : m_pComponents)
 	{
 		pComponent->Render();
+	}
+	for (auto& pChild : m_pChildren)
+	{
+		pChild->Render();
 	}
 }
 
@@ -58,9 +70,9 @@ void dae::GameObject::SetParent(GameObject* parent, bool keepWorldTransform)
 		GetTransform()->SetPosition(GetTransform()->GetWorldPosition());
 	else {
 		if (keepWorldTransform)
-			GetTransform()->SetPosition(GetTransform()->GetWorldPosition() - GetParent()->GetTransform()->GetWorldPosition());
-		GetTransform()->SetDirty();
+			GetTransform()->SetPosition(GetTransform()->GetWorldPosition() - parent->GetTransform()->GetWorldPosition());
 	}
+
 	std::unique_ptr<GameObject> child;
 	if (m_pParent != nullptr)
 	{
