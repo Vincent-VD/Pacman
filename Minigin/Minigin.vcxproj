@@ -118,7 +118,7 @@
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /E /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -148,7 +148,7 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /E /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -182,7 +182,7 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /E /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -216,7 +216,7 @@ xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R
 xcopy "$(SolutionDir)3rdParty\SDL2_image\lib\$(PlatformTarget)\SDL2_image.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\SDL2_ttf\lib\$(PlatformTarget)\SDL2_ttf.dll" "$(OutputPath)" /R /Y
 xcopy "$(SolutionDir)3rdParty\FMOD\core\lib\$(PlatformTarget)\fmod.dll" "$(OutputPath)" /R /Y
-xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /R /Y</Command>
+xcopy "$(SolutionDir)Data" "$(SolutionDir)$(Platform)\$(Configuration)\Data\" /E /Y</Command>
     </PostBuildEvent>
     <Lib>
       <AdditionalDependencies>xinput.lib;fmod_vc.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
