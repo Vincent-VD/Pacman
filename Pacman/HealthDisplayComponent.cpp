@@ -10,6 +10,7 @@ pac::HealthDisplayComponent::HealthDisplayComponent(dae::GameObject* pOwner, Her
 	, m_pTextRenderComponent(pTextRenderComponent)
 {
 	m_pHero->m_HealthChanged.AddObserver(this);
+	m_pTextRenderComponent->SetText(std::to_string(m_pHero->GetHealth()));
 }
 
 void pac::HealthDisplayComponent::OnNotify()
