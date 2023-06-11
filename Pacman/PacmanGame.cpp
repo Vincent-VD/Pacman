@@ -291,13 +291,26 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 
 	auto lives = std::make_unique<GameObject>("lives", static_cast<int>(Layers::UI));
 	lives->GetTransform()->SetPosition(0.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f), 0.f);
-	const auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives: 3", font);
+	const auto livesText = std::make_shared<TextRenderComponent>(lives.get(), "Lives:", font);
+
+	auto livesCount = new GameObject{ "lives", static_cast<int>(Layers::UI) };
+	livesCount->GetTransform()->SetPosition(40.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f), 0.f);
+	const auto livesCountComp = std::make_shared<TextRenderComponent>(livesCount, "3", font);
 	lives->AddComponent(livesText);
+	livesCount->AddComponent(livesCountComp);
+	livesCount->SetParent(lives.get(), true);
 
 	auto score = std::make_unique<GameObject>("score", static_cast<int>(Layers::UI));
 	score->GetTransform()->SetPosition(0.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f) + 10.f, 0.f);
-	const auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score: 0", font);
+	const auto scoreText = std::make_shared<TextRenderComponent>(score.get(), "Score:", font);
+
+	auto scoreCount = new GameObject{ "score", static_cast<int>(Layers::UI) };
+	scoreCount->GetTransform()->SetPosition(40.f, static_cast<float>(playerId + 1) * (Minigin::m_WindowInfo.m_Height / 3.f) + 10.f, 0.f);
+	const auto scoreTextCount = std::make_shared<TextRenderComponent>(scoreCount, "0", font);
+
 	score->AddComponent(scoreText);
+	scoreCount->AddComponent(scoreTextCount);
+	scoreCount->SetParent(score.get(), true);
 
 	auto player = std::make_unique<GameObject>("player", static_cast<int>(Layers::player));
 	player->GetTransform()->SetPosition(position);
@@ -308,8 +321,8 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 															  Rectf{ spriteOffset, spriteOffset, 32.f, 32.f },
 															  2, true, true);
 	const auto hero = std::make_shared<pac::HeroComponent>(player.get());
-	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesText.get());
-	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreText.get());
+	const auto lifeComp = std::make_shared<pac::HealthDisplayComponent>(player.get(), hero.get(), livesCountComp.get());
+	const auto scoreComp = std::make_shared<pac::ScoreComponent>(player.get(), hero.get(), scoreTextCount.get());
 	const auto collisionComp = std::make_shared<PlayerCollisionComponent>(player.get(), Rectf{ position.x + 1.f, position.y + 1.f, m_GameField.tileSize - 3.f, m_GameField.tileSize - 3.f });
 	hero->m_Menu.AddObserver(m_pMenu->GetComponent<UIMenuComponent>().get());
 	hero->m_Pickup.AddObserver(&GhostManager::GetInstance());
