@@ -321,7 +321,7 @@ void pac::PacmanGame::CreatePlayer(glm::vec3 position, int playerEnc, const std:
 	player->AddComponent(scoreComp);
 	player->AddComponent(collisionComp);
 
-	const bool useKeyboard{ (playerId > 0) ? true : false };
+	const bool useKeyboard{ (m_GameMode == GameMode::Solo || playerId > 0) ? true : false };
 
 	auto pauseCommand = std::make_shared<pac::GamePauseCommand>(m_pMenu);
 	InputManager::GetInstance().AddControllerCommand(input->GetPlayerID(), static_cast<unsigned int>(XInputController::ControllerButton::Start), InputType::pressed, pauseCommand);
